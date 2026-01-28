@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Refined Light theme - Editorial Design */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 8%;
+    --primary: 211 100% 50%;
+    --secondary: 40 10% 92%;
+    --accent: 40 18% 72%;
+    --muted: 0 0% 97%;
+    --muted-foreground: 0 0% 45%;
+    --border: 0 0% 92%;
+    --radius: 0rem;
+  }
+
+  .dark {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 96%;
+    --primary: 211 100% 60%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 55%;
+    --border: 0 0% 15%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Times New Roman', Georgia, serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Times New Roman', Georgia, serif;
+    font-weight: 400;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.2);
+  }
+}
+
+@layer components {
+  .text-display {
+    @apply text-6xl md:text-8xl lg:text-[10rem] leading-[0.85] tracking-tighter uppercase;
+    font-family: 'Times New Roman', Georgia, serif;
+  }
+
+  .text-headline {
+    @apply text-4xl md:text-6xl font-normal tracking-tight leading-[0.95];
+  }
+
+  .container-wide {
+    @apply mx-auto px-6 md:px-12 lg:px-20;
+    max-width: 1600px;
+  }
+
+  .text-label {
+    @apply text-xs md:text-sm uppercase tracking-[0.2em] text-muted-foreground;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .hover-highlight {
+    @apply transition-colors duration-300;
+  }
+
+  .hover-highlight:hover {
+    color: hsl(var(--primary));
+  }
+
+  .image-reveal {
+    @apply overflow-hidden;
+  }
+
+  .image-reveal img {
+    @apply transition-transform duration-700 ease-out;
+  }
+
+  .image-reveal:hover img {
+    @apply scale-105;
+  }
+
+  /* Editorial link style */
+  .link-editorial {
+    @apply relative inline-block;
+  }
+
+  .link-editorial::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-px bg-current;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .link-editorial:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out forwards;
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  /* Smooth transitions for all interactive elements */
+  .transition-smooth {
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}

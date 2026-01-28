@@ -1,0 +1,62 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "neue-haas-grotesk-display",
+      "count": 9
+    },
+    {
+      "family": "sans-serif",
+      "count": 9
+    },
+    {
+      "family": "Times New Roman",
+      "count": 5
+    }
+  ],
+  "colors": {
+    "primary": "#007BFF",
+    "accent": "#C5BDAD",
+    "background": "#FFFFFF",
+    "textPrimary": "#808080",
+    "link": "#C5BDAD"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Times New Roman",
+      "heading": "Times New Roman"
+    },
+    "fontStacks": {
+      "body": [
+        "Times New Roman"
+      ],
+      "heading": [
+        "Times New Roman"
+      ],
+      "paragraph": [
+        "Times New Roman"
+      ]
+    },
+    "fontSizes": {
+      "h1": "10px",
+      "h2": "10px",
+      "body": "10px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "12px"
+  },
+  "components": {},
+  "images": {
+    "logo": null,
+    "favicon": "https://15th.plus-ex.com/favicon_512.png",
+    "ogImage": "https://15th.plus-ex.com/OG.png"
+  },
+  "__framework_hints": [],
+  "confidence": {
+    "buttons": 0,
+    "colors": 0,
+    "overall": 0
+  }
+}
