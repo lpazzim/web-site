@@ -314,6 +314,15 @@ const Index = () => {
                 </h2>
               </TextReveal>
               <TextReveal>
+                <div className="mb-8">
+                  <img 
+                    src="/images/lucas-pazzim-about.jpeg" 
+                    alt="Lucas Pazzim" 
+                    className="w-full max-w-sm h-auto grayscale object-cover rounded-sm"
+                  />
+                </div>
+              </TextReveal>
+              <TextReveal>
                 <p className="text-2xl md:text-3xl leading-relaxed">
                   Senior Frontend Engineer based in <span className="text-primary">São Paulo, Brazil</span>, 
                   specialized in React, TypeScript, and JavaScript.
