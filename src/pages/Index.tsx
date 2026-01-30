@@ -383,8 +383,8 @@ const Index = () => {
                 </p>
               </TextReveal>
               <TextReveal>
-                <Link 
-                  to="/contact" 
+                <a 
+                  href="mailto:lpazzim@gmail.com" 
                   className="inline-flex items-center gap-3 text-2xl group"
                   data-testid="link-contact-cta"
                 >
@@ -392,7 +392,7 @@ const Index = () => {
                     Get in Touch
                   </span>
                   <ArrowUpRight className="w-6 h-6 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-                </Link>
+                </a>
               </TextReveal>
             </div>
           </div>
