@@ -139,7 +139,7 @@ export function Header({ revealMode = false }: HeaderProps) {
         }`}
       >
         <div className="absolute inset-0 bg-background" />
-        <nav className="container-wide py-12 flex flex-col gap-8 relative z-10">
+        <nav className="container-wide py-12 flex flex-col gap-8 relative z-10 bg-background/80 backdrop-blur-md">
           {navItems.map((item, index) => (
             <button
               key={item.anchor}
