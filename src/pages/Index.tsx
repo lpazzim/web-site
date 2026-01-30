@@ -178,7 +178,7 @@ const Index = () => {
               <TextReveal>
                 <a 
                   href="#about" 
-                  className="inline-flex items-center gap-3 group text-lg border-b border-foreground pb-2 text-foreground transition-all hover:gap-5"
+                  className="inline-flex items-center gap-3 group text-lg border-b border-foreground pb-2 text-foreground transition-all hover:gap-5 relative z-20"
                   data-testid="link-about-story"
                 >
                   More about me 
@@ -385,7 +385,7 @@ const Index = () => {
               <TextReveal>
                 <a 
                   href="mailto:lpazzim@gmail.com" 
-                  className="inline-flex items-center gap-3 text-2xl group"
+                  className="inline-flex items-center gap-3 text-2xl group relative z-20"
                   data-testid="link-contact-cta"
                 >
                   <span className="border-b-2 border-foreground pb-1 transition-colors group-hover:border-primary group-hover:text-primary">
