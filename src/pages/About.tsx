@@ -40,7 +40,15 @@ const About = () => {
             transition={{ duration: 0.8 }}
           >
             <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">About</div>
-            <h1 className="text-5xl md:text-7xl uppercase tracking-tighter mb-16">Lucas Pazzim</h1>
+            <h1 className="text-5xl md:text-7xl uppercase tracking-tighter mb-8">Lucas Pazzim</h1>
+            
+            <div className="mb-16">
+              <img 
+                src="/images/lucas-pazzim-about.jpeg" 
+                alt="Lucas Pazzim" 
+                className="w-full max-w-md h-auto grayscale object-cover rounded-sm"
+              />
+            </div>
           </motion.div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
