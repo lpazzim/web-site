@@ -1,0 +1,99 @@
+Contexto do projeto (ja existente)
+- App React + TypeScript (Vite) + Tailwind/shadcn.
+- Rotas via react-router-dom em `src/App.tsx`.
+- Home e `src/pages/Index.tsx` (visual editorial, classes utilitarias como `container-wide`, `text-label`, etc. em `src/index.css`).
+- Dependencias relevantes: framer-motion e tanstack/react-query (QueryClientProvider ja existe no App).
+
+Atualizacao importante (restricao obrigatoria: sem backend)
+- NAO criar nada no backend. Sem servidor Node/Express, sem endpoints /api, sem serverless functions novas.
+- Todo o gerenciamento e fonte de verdade dos posts e o Notion. O projeto deve SOMENTE consumir e exibir os posts gerados no Notion.
+- Usar a integracao do Notion que ja esta previamente cadastrada (a mencionada pelo usuario). Reutilizar exatamente essa integracao/proxy/connector existente.
+- NUNCA expor token/segredos do Notion no bundle do frontend (nada de colocar token em codigo client, nem `VITE_...` com segredo).
+- Se o caminho de consumo seguro (via a integracao ja cadastrada) estiver ambiguo, primeiro localizar no projeto/Replit onde ela esta configurada e reutilizar. Nao inventar backend novo.
+
+Objetivo
+1) Criar pagina de listagem de posts do blog: `/blog`
+2) Criar pagina de leitura do post: `/blog/:slug` renderizando o conteudo vindo do Notion
+3) Adicionar na Home (`src/pages/Index.tsx`) uma secao com os 3 ultimos posts do blog (somente publicados)
+4) Respeitar o campo `Published` (checkbox) do Notion para decidir se o artigo aparece no site:
+   - Home e `/blog`: somente posts com Published=true
+   - `/blog/:slug`: se o post nao existir ou Published=false, retornar 404 (pode reutilizar `src/pages/NotFound.tsx` ou uma tela 404 consistente)
+
+Fonte de dados (Notion) — propriedades do database (como no print)
+- Title (title)
+- Date (date)
+- Published (checkbox)
+- Slug (rich_text)
+- Description (rich_text)
+- Canonical (url) opcional
+- Image (url) opcional
+- Author (people) opcional
+Regras:
+- Ordenar por Date desc (mais recente primeiro). Se Date estiver vazio, usar `last_edited_time` como fallback.
+- Slug e usado na rota `/blog/:slug` e deve ser unico.
+
+Camada de consumo (sem backend novo)
+- Implementar um modulo client-side (ou adapter) que consome o Notion atraves da integracao ja cadastrada.
+- Esse adapter deve prover 2 funcoes:
+  1) `listPosts({ limit? })` -> retorna posts publicados (Published=true) ordenados
+  2) `getPostBySlug(slug)` -> retorna post + conteudo; se Published=false, tratar como nao encontrado
+- Adicionar um cache simples no client (react-query recomendado) para evitar re-fetch excessivo.
+
+Conteudo do post (renderizacao)
+- Buscar o page + blocks do Notion via integracao existente.
+- Converter blocks para um formato renderizavel:
+  - Preferencia: converter para Markdown e renderizar com `react-markdown` + `remark-gfm`.
+  - Alternativa: renderizar blocks diretamente (se ja houver renderer pronto), garantindo boa tipografia e suportando headings, paragrafos, listas, links, imagens e code.
+- Garantir layout de leitura:
+  - Largura confortavel (ex.: container central com max-width), espaçamento entre paragrafos, estilos para headings/listas/blockquote/code.
+  - Se houver Image do post, usar como hero/cover no topo.
+
+Rotas e paginas (frontend)
+1) Criar `src/pages/Blog.tsx` (listagem)
+- Usar `<Layout>` existente.
+- UI editorial consistente com o resto do site:
+  - Header com titulo “Blog” e um label pequeno.
+  - Lista de posts como cards/linhas com: Title, Date, Description, Author (se existir), imagem (se existir).
+  - Cada item linka para `/blog/:slug`.
+- Carregar dados via react-query (ou fetch + state) chamando `listPosts()`.
+- Renderizar apenas Published=true (mesmo que a integracao retorne mais).
+
+2) Criar `src/pages/BlogPost.tsx` (leitura)
+- Usar `<Layout>` existente.
+- Ler `slug` via `useParams()`.
+- Buscar dados via `getPostBySlug(slug)`.
+- Se nao existir ou Published=false, mostrar NotFound (404).
+- Render do conteudo do Notion (markdown/blocks) com estilos de leitura.
+- (Opcional) Se Canonical existir, adicionar `<link rel="canonical" ...>` e metadata (se o projeto ja tiver infra de SEO; se nao tiver, ignorar sem criar backend).
+
+3) Atualizar rotas em `src/App.tsx`
+- Adicionar:
+  - `<Route path="/blog" element={<Blog />} />`
+  - `<Route path="/blog/:slug" element={<BlogPost />} />`
+
+Home: secao com 3 ultimos posts
+- Atualizar `src/pages/Index.tsx` adicionando uma secao “Latest Posts” (ou equivalente) em posicao coerente (ex.: antes do footer/Contact CTA).
+- Buscar `listPosts({ limit: 3 })` e renderizar 3 itens.
+- Ter link “View all” para `/blog`.
+- Visual consistente:
+  - Usar `TextReveal`/framer-motion (opcional) como as outras secoes.
+  - Borda superior/inferior e tipografia semelhante as secoes “Selected Work”.
+
+Regras de exibicao (Published)
+- Listagem `/blog` e secao da Home: filtrar Published=true.
+- Pagina `/blog/:slug`: se Published=false, comportar como 404 (nao vazar conteudo nao publicado).
+- Se Published for alterado no Notion, o site deve refletir na proxima carga (cache com TTL curto ou invalidacao simples).
+
+Criterios de aceite
+- `npm run dev` funciona.
+- `npm run build` funciona.
+- Home mostra exatamente 3 posts mais recentes com Published=true.
+- `/blog` lista somente Published=true em ordem correta.
+- `/blog/:slug` renderiza conteudo do Notion com boa legibilidade.
+- Nenhum segredo/token aparece no client bundle.
+- Nao foi criado backend/servidor novo; foi reutilizada a integracao Notion ja cadastrada.
+
+Entrega esperada
+- Novos arquivos: `src/pages/Blog.tsx`, `src/pages/BlogPost.tsx` (e um adapter de Notion em `src/lib/...` ou `src/services/...`).
+- Atualizacao de `src/App.tsx` e `src/pages/Index.tsx`.
+- Dependencias novas apenas se necessario para render (ex.: `react-markdown`, `remark-gfm`); evitar excesso.
