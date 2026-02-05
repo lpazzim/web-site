@@ -4,6 +4,16 @@
 
 A personal portfolio website for Lucas Pazzim, a Frontend Engineer. The site showcases projects, provides information about the developer, and offers contact details. Built as a modern, responsive single-page application with dark/light theme support, sophisticated parallax effects, and editorial typography inspired by https://15th.plus-ex.com/.
 
+## Recent Changes (February 2026)
+
+- Implemented Notion-powered blog system with Express API server
+- Blog listing page (/blog) displays published articles from Notion database
+- Blog post detail pages (/blog/:slug) with full markdown content rendering
+- Latest 3 posts section integrated into home page
+- React Query caching with 5-minute stale time for blog data
+- Profile image on About page with grayscale styling
+- Contact button updated to mailto:lpazzim@gmail.com
+
 ## Recent Changes (January 2026)
 
 - Enhanced hero section with large stacked typography and scroll-based opacity/scale animations
@@ -72,9 +82,19 @@ src/
 - Radix UI primitives for accessible, unstyled components (accordion, dialog, dropdown, tabs, tooltip, etc.)
 - Lucide React for icons
 
+### Backend (Express API Server)
+- **Express.js** server running on port 3001 as API proxy
+- **Notion API integration** for blog content management
+- Endpoints: `/api/posts` (list), `/api/posts/:slug` (detail)
+- Located in `server/` directory with `notion.ts` for Notion SDK integration
+
 ### Third-Party Services
 - **Google Fonts** for Syne and Inter font families (loaded via CDN in index.html)
-- No backend services, databases, or APIs currently integrated
+- **Notion API** for blog content (requires NOTION_API_TOKEN and NOTION_DATABASE_ID env vars)
+
+### Environment Variables
+- `NOTION_API_TOKEN` - Notion integration API token (secret)
+- `NOTION_DATABASE_ID` - Notion database ID for blog posts
 
 ### Build & Development
 - Vite dev server configured on port 5000 with host `0.0.0.0`

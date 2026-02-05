@@ -1,28 +1,36 @@
-const NOTION_API_BASE = 'https://api.notion.com/v1';
+import { Client } from "@notionhq/client";
 
-async function notionFetch(endpoint: string, options: RequestInit = {}) {
-  const accessToken = process.env.NOTION_API_TOKEN;
-  
-  if (!accessToken) {
-    throw new Error('NOTION_API_TOKEN not configured');
+const notion = new Client({ auth: process.env.NOTION_API_TOKEN });
+
+const DATABASE_ID = process.env.NOTION_DATABASE_ID ?? (() => {
+  throw new Error("NOTION_DATABASE_ID ausente nas variáveis de ambiente");
+})();
+
+type AnyProp = any;
+
+function textFrom(prop: AnyProp): string | undefined {
+  if (!prop) return undefined;
+
+  switch (prop.type) {
+    case "title":
+      return (prop.title ?? []).map((t: any) => t.plain_text).join("") || undefined;
+    case "rich_text":
+      return (prop.rich_text ?? []).map((t: any) => t.plain_text).join("") || undefined;
+    case "date":
+      return prop.date?.start;
+    case "url":
+      return prop.url || undefined;
+    case "people": {
+      const names = (prop.people ?? []).map((u: any) => u?.name).filter(Boolean);
+      return names.length ? names.join(", ") : undefined;
+    }
+    case "created_by":
+      return prop.created_by?.name || undefined;
+    case "last_edited_by":
+      return prop.last_edited_by?.name || undefined;
+    default:
+      return undefined;
   }
-  
-  const response = await fetch(`${NOTION_API_BASE}${endpoint}`, {
-    ...options,
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Notion-Version': '2022-06-28',
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-  
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(`Notion API error: ${response.status} - ${error.message || 'Unknown error'}`);
-  }
-  
-  return response.json();
 }
 
 export interface BlogPost {
@@ -37,97 +45,104 @@ export interface BlogPost {
   author?: string;
 }
 
+function mapPageToPost(page: any): BlogPost {
+  const p = page.properties ?? {};
+  return {
+    id: page.id,
+    title: textFrom(p.Title) ?? "Sem título",
+    slug: textFrom(p.Slug) ?? page.id.replace(/-/g, ""),
+    description: textFrom(p.Description) ?? "",
+    date: textFrom(p.Date) ?? "",
+    published: p.Published?.checkbox ?? false,
+    image: textFrom(p.Image),
+    canonical: textFrom(p.Canonical),
+    author: textFrom(p.Author),
+  };
+}
+
 export async function listPosts(limit?: number): Promise<BlogPost[]> {
-  const databaseId = process.env.NOTION_DATABASE_ID;
-  
-  if (!databaseId) {
-    throw new Error('NOTION_DATABASE_ID not set');
+  try {
+    const res = await (notion as any).dataSources.query({
+      data_source_id: DATABASE_ID,
+      filter: { property: "Published", checkbox: { equals: true } },
+      sorts: [{ property: "Date", direction: "descending" }],
+      page_size: limit || 100,
+    });
+    return (res.results as any[]).map(mapPageToPost);
+  } catch (error: any) {
+    // Fallback to databases.query if dataSources is not available
+    if (error.message?.includes('dataSources') || error.code === 'ERR_INVALID_ARG_TYPE') {
+      const res = await notion.databases.query({
+        database_id: DATABASE_ID,
+        filter: { property: "Published", checkbox: { equals: true } },
+        sorts: [{ property: "Date", direction: "descending" }],
+        page_size: limit || 100,
+      });
+      return (res.results as any[]).map(mapPageToPost);
+    }
+    throw error;
   }
-
-  const response = await notionFetch(`/databases/${databaseId}/query`, {
-    method: 'POST',
-    body: JSON.stringify({
-      filter: {
-        property: 'Published',
-        checkbox: {
-          equals: true
-        }
-      },
-      sorts: [
-        {
-          property: 'Date',
-          direction: 'descending'
-        }
-      ],
-      page_size: limit || 100
-    })
-  });
-
-  return response.results.map((page: any) => {
-    const props = page.properties;
-    return {
-      id: page.id,
-      title: props.Title?.title?.[0]?.plain_text || 'Untitled',
-      slug: props.Slug?.rich_text?.[0]?.plain_text || page.id,
-      description: props.Description?.rich_text?.[0]?.plain_text || '',
-      date: props.Date?.date?.start || page.last_edited_time?.split('T')[0] || '',
-      published: props.Published?.checkbox || false,
-      image: props.Image?.url || undefined,
-      canonical: props.Canonical?.url || undefined,
-      author: props.Author?.people?.[0]?.name || undefined
-    };
-  });
 }
 
 export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; content: string } | null> {
-  const databaseId = process.env.NOTION_DATABASE_ID;
+  let page: any;
   
-  if (!databaseId) {
-    throw new Error('NOTION_DATABASE_ID not set');
-  }
-
-  const response = await notionFetch(`/databases/${databaseId}/query`, {
-    method: 'POST',
-    body: JSON.stringify({
+  try {
+    const res = await (notion as any).dataSources.query({
+      data_source_id: DATABASE_ID,
       filter: {
-        property: 'Slug',
-        rich_text: {
-          equals: slug
-        }
-      }
-    })
-  });
-
-  if (response.results.length === 0) {
-    return null;
+        and: [
+          { property: "Published", checkbox: { equals: true } },
+          { property: "Slug", rich_text: { equals: slug } },
+        ],
+      },
+      page_size: 1,
+    });
+    page = (res.results as any[])[0];
+  } catch (error: any) {
+    // Fallback to databases.query
+    if (error.message?.includes('dataSources') || error.code === 'ERR_INVALID_ARG_TYPE') {
+      const res = await notion.databases.query({
+        database_id: DATABASE_ID,
+        filter: {
+          and: [
+            { property: "Published", checkbox: { equals: true } },
+            { property: "Slug", rich_text: { equals: slug } },
+          ],
+        },
+        page_size: 1,
+      });
+      page = (res.results as any[])[0];
+    } else {
+      throw error;
+    }
   }
 
-  const page: any = response.results[0];
-  const props = page.properties;
-  
-  if (!props.Published?.checkbox) {
-    return null;
-  }
+  if (!page) return null;
 
-  const post: BlogPost = {
-    id: page.id,
-    title: props.Title?.title?.[0]?.plain_text || 'Untitled',
-    slug: props.Slug?.rich_text?.[0]?.plain_text || page.id,
-    description: props.Description?.rich_text?.[0]?.plain_text || '',
-    date: props.Date?.date?.start || page.last_edited_time?.split('T')[0] || '',
-    published: props.Published?.checkbox || false,
-    image: props.Image?.url || undefined,
-    canonical: props.Canonical?.url || undefined,
-    author: props.Author?.people?.[0]?.name || undefined
-  };
+  const post = mapPageToPost(page);
+  const blocks = await getBlocks(page.id);
+  const content = blocksToMarkdown(blocks);
 
-  const blocksResponse = await notionFetch(`/blocks/${page.id}/children?page_size=100`, {
-    method: 'GET'
-  });
-
-  const content = blocksToMarkdown(blocksResponse.results);
-  
   return { post, content };
+}
+
+async function getBlocks(blockId: string): Promise<any[]> {
+  const blocks: any[] = [];
+  let cursor: string | undefined = undefined;
+
+  do {
+    const res = await notion.blocks.children.list({
+      block_id: blockId,
+      page_size: 100,
+      start_cursor: cursor,
+    });
+
+    blocks.push(...res.results);
+    cursor = res.next_cursor ?? undefined;
+  } while (cursor);
+
+  return blocks;
 }
 
 function blocksToMarkdown(blocks: any[]): string {
