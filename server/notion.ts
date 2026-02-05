@@ -1,44 +1,28 @@
-import { Client } from '@notionhq/client';
+const NOTION_API_BASE = 'https://api.notion.com/v1';
 
-let connectionSettings: any;
-
-async function getAccessToken() {
-  if (connectionSettings && connectionSettings.settings.expires_at && new Date(connectionSettings.settings.expires_at).getTime() > Date.now()) {
-    return connectionSettings.settings.access_token;
+async function notionFetch(endpoint: string, options: RequestInit = {}) {
+  const accessToken = process.env.NOTION_API_TOKEN;
+  
+  if (!accessToken) {
+    throw new Error('NOTION_API_TOKEN not configured');
   }
   
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME
-  const xReplitToken = process.env.REPL_IDENTITY 
-    ? 'repl ' + process.env.REPL_IDENTITY 
-    : process.env.WEB_REPL_RENEWAL 
-    ? 'depl ' + process.env.WEB_REPL_RENEWAL 
-    : null;
-
-  if (!xReplitToken) {
-    throw new Error('X_REPLIT_TOKEN not found for repl/depl');
+  const response = await fetch(`${NOTION_API_BASE}${endpoint}`, {
+    ...options,
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Notion-Version': '2022-06-28',
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(`Notion API error: ${response.status} - ${error.message || 'Unknown error'}`);
   }
-
-  connectionSettings = await fetch(
-    'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=notion',
-    {
-      headers: {
-        'Accept': 'application/json',
-        'X_REPLIT_TOKEN': xReplitToken
-      }
-    }
-  ).then(res => res.json()).then(data => data.items?.[0]);
-
-  const accessToken = connectionSettings?.settings?.access_token || connectionSettings.settings?.oauth?.credentials?.access_token;
-
-  if (!connectionSettings || !accessToken) {
-    throw new Error('Notion not connected');
-  }
-  return accessToken;
-}
-
-export async function getUncachableNotionClient() {
-  const accessToken = await getAccessToken();
-  return new Client({ auth: accessToken });
+  
+  return response.json();
 }
 
 export interface BlogPost {
@@ -60,23 +44,23 @@ export async function listPosts(limit?: number): Promise<BlogPost[]> {
     throw new Error('NOTION_DATABASE_ID not set');
   }
 
-  const notion = await getUncachableNotionClient();
-  
-  const response = await notion.databases.query({
-    database_id: databaseId,
-    filter: {
-      property: 'Published',
-      checkbox: {
-        equals: true
-      }
-    },
-    sorts: [
-      {
-        property: 'Date',
-        direction: 'descending'
-      }
-    ],
-    page_size: limit || 100
+  const response = await notionFetch(`/databases/${databaseId}/query`, {
+    method: 'POST',
+    body: JSON.stringify({
+      filter: {
+        property: 'Published',
+        checkbox: {
+          equals: true
+        }
+      },
+      sorts: [
+        {
+          property: 'Date',
+          direction: 'descending'
+        }
+      ],
+      page_size: limit || 100
+    })
   });
 
   return response.results.map((page: any) => {
@@ -102,16 +86,16 @@ export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; con
     throw new Error('NOTION_DATABASE_ID not set');
   }
 
-  const notion = await getUncachableNotionClient();
-  
-  const response = await notion.databases.query({
-    database_id: databaseId,
-    filter: {
-      property: 'Slug',
-      rich_text: {
-        equals: slug
+  const response = await notionFetch(`/databases/${databaseId}/query`, {
+    method: 'POST',
+    body: JSON.stringify({
+      filter: {
+        property: 'Slug',
+        rich_text: {
+          equals: slug
+        }
       }
-    }
+    })
   });
 
   if (response.results.length === 0) {
@@ -137,9 +121,8 @@ export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; con
     author: props.Author?.people?.[0]?.name || undefined
   };
 
-  const blocksResponse = await notion.blocks.children.list({
-    block_id: page.id,
-    page_size: 100
+  const blocksResponse = await notionFetch(`/blocks/${page.id}/children?page_size=100`, {
+    method: 'GET'
   });
 
   const content = blocksToMarkdown(blocksResponse.results);
