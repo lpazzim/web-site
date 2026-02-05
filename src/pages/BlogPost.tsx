@@ -4,8 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPostBySlug } from "@/lib/blog";
 import { useParams, Navigate } from "react-router-dom";
 import { format } from "date-fns";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { NotionRenderer } from "@/components/NotionRenderer";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -35,7 +34,7 @@ const BlogPost = () => {
     return <Navigate to="/404" replace />;
   }
 
-  const { post, content } = data;
+  const { post, blocks } = data;
 
   return (
     <Layout>
@@ -84,21 +83,8 @@ const BlogPost = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="prose prose-invert prose-lg max-w-none
-              prose-headings:font-serif prose-headings:tracking-tight prose-headings:uppercase
-              prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl
-              prose-p:text-muted-foreground prose-p:leading-relaxed
-              prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-foreground
-              prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-              prose-pre:bg-muted prose-pre:border prose-pre:border-border
-              prose-blockquote:border-primary prose-blockquote:text-muted-foreground
-              prose-li:text-muted-foreground
-              prose-img:rounded-sm"
           >
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {content}
-            </ReactMarkdown>
+            <NotionRenderer blocks={blocks} />
           </motion.div>
 
           <motion.div

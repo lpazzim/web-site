@@ -10,9 +10,9 @@ export interface BlogPost {
   author?: string;
 }
 
-export interface PostWithContent {
+export interface PostWithBlocks {
   post: BlogPost;
-  content: string;
+  blocks: any[];
 }
 
 const API_BASE = '/api';
@@ -28,7 +28,7 @@ export async function listPosts(limit?: number): Promise<BlogPost[]> {
   return response.json();
 }
 
-export async function getPostBySlug(slug: string): Promise<PostWithContent | null> {
+export async function getPostBySlug(slug: string): Promise<PostWithBlocks | null> {
   const response = await fetch(`${API_BASE}/posts/${slug}`);
   
   if (response.status === 404) {

@@ -84,7 +84,7 @@ export async function listPosts(limit?: number): Promise<BlogPost[]> {
   }
 }
 
-export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; content: string } | null> {
+export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; blocks: any[] } | null> {
   let page: any;
   
   try {
@@ -100,34 +100,28 @@ export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; con
     });
     page = (res.results as any[])[0];
   } catch (error: any) {
-    // Fallback to databases.query
-    if (error.message?.includes('dataSources') || error.code === 'ERR_INVALID_ARG_TYPE') {
-      const res = await notion.databases.query({
-        database_id: DATABASE_ID,
-        filter: {
-          and: [
-            { property: "Published", checkbox: { equals: true } },
-            { property: "Slug", rich_text: { equals: slug } },
-          ],
-        },
-        page_size: 1,
-      });
-      page = (res.results as any[])[0];
-    } else {
-      throw error;
-    }
+    const res = await notion.databases.query({
+      database_id: DATABASE_ID,
+      filter: {
+        and: [
+          { property: "Published", checkbox: { equals: true } },
+          { property: "Slug", rich_text: { equals: slug } },
+        ],
+      },
+      page_size: 1,
+    });
+    page = (res.results as any[])[0];
   }
 
   if (!page) return null;
 
   const post = mapPageToPost(page);
-  const blocks = await getBlocks(page.id);
-  const content = blocksToMarkdown(blocks);
+  const blocks = await getBlocksWithChildren(page.id);
 
-  return { post, content };
+  return { post, blocks };
 }
 
-async function getBlocks(blockId: string): Promise<any[]> {
+async function getBlocksWithChildren(blockId: string): Promise<any[]> {
   const blocks: any[] = [];
   let cursor: string | undefined = undefined;
 
