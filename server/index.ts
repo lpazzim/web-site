@@ -1,10 +1,17 @@
 import express from 'express';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { listPosts, getPostBySlug } from './notion';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const isProduction = process.env.NODE_ENV === 'production';
 
 const cache = new Map<string, { data: any; timestamp: number }>();
 const CACHE_TTL = 5 * 60 * 1000;
@@ -68,7 +75,16 @@ app.get('/api/posts/:slug', async (req, res) => {
   }
 });
 
-const PORT = 3001;
+if (isProduction) {
+  const distPath = path.join(__dirname, '..', 'dist');
+  app.use(express.static(distPath));
+  
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(distPath, 'index.html'));
+  });
+}
+
+const PORT = isProduction ? 5000 : 3001;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`API server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT} (${isProduction ? 'production' : 'development'})`);
 });
