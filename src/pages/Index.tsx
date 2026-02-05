@@ -4,6 +4,9 @@ import { Layout } from "@/components/Layout";
 import { projects } from "@/data/projects";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { listPosts, BlogPost } from "@/lib/blog";
+import { format } from "date-fns";
 
 const TextReveal = ({ children, className = "" }: { children: ReactNode; className?: string }) => {
   const ref = useRef(null);
@@ -50,6 +53,12 @@ const Index = () => {
 
   const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
+
+  const { data: latestPosts } = useQuery({
+    queryKey: ['latestPosts'],
+    queryFn: () => listPosts(3),
+    staleTime: 1000 * 60 * 5,
+  });
 
   return (
     <Layout hideFooter noPadding>
@@ -364,6 +373,67 @@ const Index = () => {
         <section className="py-12 border-t border-border overflow-hidden">
           <ParallaxText baseVelocity={-1}>React • TypeScript • Vite • Docker • Styled Components • JavaScript •</ParallaxText>
         </section>
+
+        {/* Latest Posts Section */}
+        {latestPosts && latestPosts.length > 0 && (
+          <section className="py-32 md:py-48 container-wide border-t border-border">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-20">
+              <div>
+                <TextReveal>
+                  <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">Blog</div>
+                </TextReveal>
+                <TextReveal>
+                  <h2 className="text-3xl md:text-4xl uppercase tracking-tighter leading-[0.95]">
+                    Latest Articles
+                  </h2>
+                </TextReveal>
+              </div>
+              <div className="lg:col-span-3 space-y-8">
+                {latestPosts.map((post: BlogPost, index: number) => (
+                  <motion.article
+                    key={post.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                  >
+                    <Link to={`/blog/${post.slug}`} className="group block">
+                      <div className="py-6 border-b border-border hover:bg-muted/20 transition-colors -mx-4 px-4">
+                        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+                          <div className="text-sm text-muted-foreground font-sans min-w-[100px]">
+                            {post.date && format(new Date(post.date), 'MMM dd, yyyy')}
+                          </div>
+                          <div className="flex-1">
+                            <h3 className="text-xl md:text-2xl group-hover:text-primary transition-colors mb-2">
+                              {post.title}
+                            </h3>
+                            {post.description && (
+                              <p className="text-muted-foreground line-clamp-2">
+                                {post.description}
+                              </p>
+                            )}
+                          </div>
+                          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2 hidden md:block" />
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.article>
+                ))}
+                <TextReveal>
+                  <Link 
+                    to="/blog" 
+                    className="inline-flex items-center gap-3 text-lg group mt-8 relative z-20"
+                  >
+                    <span className="border-b border-foreground pb-1 transition-colors group-hover:border-primary group-hover:text-primary">
+                      View all articles
+                    </span>
+                    <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </TextReveal>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Contact CTA */}
         <section id="contact" className="py-32 container-wide border-t border-border scroll-mt-24">

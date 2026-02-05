@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 const navItems = [
   { label: "Projects", anchor: "#projects" },
   { label: "About", anchor: "#about" },
+  { label: "Blog", anchor: "/blog", isRoute: true },
   { label: "Contact", anchor: "#contact" },
 ];
 
@@ -43,8 +44,13 @@ export function Header({ revealMode = false }: HeaderProps) {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
-  const handleNavClick = (anchor: string) => {
+  const handleNavClick = (anchor: string, isRoute?: boolean) => {
     setIsMenuOpen(false);
+    
+    if (isRoute) {
+      navigate(anchor);
+      return;
+    }
     
     if (location.pathname !== "/") {
       navigate("/");
@@ -93,7 +99,7 @@ export function Header({ revealMode = false }: HeaderProps) {
             {navItems.map((item) => (
               <button
                 key={item.anchor}
-                onClick={() => handleNavClick(item.anchor)}
+                onClick={() => handleNavClick(item.anchor, item.isRoute)}
                 className="text-xs font-sans tracking-widest uppercase transition-all duration-300 hover:tracking-[0.2em] text-foreground/80 hover:text-foreground"
                 data-testid={`nav-${item.label.toLowerCase()}`}
               >
@@ -143,7 +149,7 @@ export function Header({ revealMode = false }: HeaderProps) {
           {navItems.map((item, index) => (
             <button
               key={item.anchor}
-              onClick={() => handleNavClick(item.anchor)}
+              onClick={() => handleNavClick(item.anchor, item.isRoute)}
               className={`text-4xl font-display text-foreground text-left transition-all duration-500 ${
                 isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
               }`}
