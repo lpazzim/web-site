@@ -1,5 +1,3 @@
-import { Client } from '@notionhq/client';
-
 let connectionSettings: any;
 
 async function getAccessToken() {
@@ -48,9 +46,26 @@ async function getAccessToken() {
   return accessToken;
 }
 
-export async function getNotionClient() {
+const NOTION_API_BASE = 'https://api.notion.com/v1';
+
+async function notionFetch(endpoint: string, options: RequestInit = {}) {
   const accessToken = await getAccessToken();
-  return new Client({ auth: accessToken });
+  const response = await fetch(`${NOTION_API_BASE}${endpoint}`, {
+    ...options,
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Notion-Version': '2022-06-28',
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
+  });
+  
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new Error(`Notion API error: ${response.status} - ${error.message || 'Unknown error'}`);
+  }
+  
+  return response.json();
 }
 
 export interface BlogPost {
@@ -66,28 +81,29 @@ export interface BlogPost {
 }
 
 export async function listPosts(limit?: number): Promise<BlogPost[]> {
-  const notion = await getNotionClient();
   const databaseId = process.env.NOTION_DATABASE_ID;
   
   if (!databaseId) {
     throw new Error('NOTION_DATABASE_ID not set');
   }
 
-  const response = await (notion as any).databases.query({
-    database_id: databaseId,
-    filter: {
-      property: 'Published',
-      checkbox: {
-        equals: true
-      }
-    },
-    sorts: [
-      {
-        property: 'Date',
-        direction: 'descending'
-      }
-    ],
-    page_size: limit || 100
+  const response = await notionFetch(`/databases/${databaseId}/query`, {
+    method: 'POST',
+    body: JSON.stringify({
+      filter: {
+        property: 'Published',
+        checkbox: {
+          equals: true
+        }
+      },
+      sorts: [
+        {
+          property: 'Date',
+          direction: 'descending'
+        }
+      ],
+      page_size: limit || 100
+    })
   });
 
   return response.results.map((page: any) => {
@@ -107,21 +123,22 @@ export async function listPosts(limit?: number): Promise<BlogPost[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; content: string } | null> {
-  const notion = await getNotionClient();
   const databaseId = process.env.NOTION_DATABASE_ID;
   
   if (!databaseId) {
     throw new Error('NOTION_DATABASE_ID not set');
   }
 
-  const response = await (notion as any).databases.query({
-    database_id: databaseId,
-    filter: {
-      property: 'Slug',
-      rich_text: {
-        equals: slug
+  const response = await notionFetch(`/databases/${databaseId}/query`, {
+    method: 'POST',
+    body: JSON.stringify({
+      filter: {
+        property: 'Slug',
+        rich_text: {
+          equals: slug
+        }
       }
-    }
+    })
   });
 
   if (response.results.length === 0) {
@@ -147,12 +164,11 @@ export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; con
     author: props.Author?.people?.[0]?.name || undefined
   };
 
-  const blocks = await notion.blocks.children.list({
-    block_id: page.id,
-    page_size: 100
+  const blocksResponse = await notionFetch(`/blocks/${page.id}/children?page_size=100`, {
+    method: 'GET'
   });
 
-  const content = blocksToMarkdown(blocks.results);
+  const content = blocksToMarkdown(blocksResponse.results);
   
   return { post, content };
 }
