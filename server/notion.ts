@@ -1,71 +1,44 @@
+import { Client } from '@notionhq/client';
+
 let connectionSettings: any;
 
 async function getAccessToken() {
-  if (connectionSettings?.settings?.expires_at && new Date(connectionSettings.settings.expires_at).getTime() > Date.now()) {
+  if (connectionSettings && connectionSettings.settings.expires_at && new Date(connectionSettings.settings.expires_at).getTime() > Date.now()) {
     return connectionSettings.settings.access_token;
   }
   
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
+  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME
   const xReplitToken = process.env.REPL_IDENTITY 
     ? 'repl ' + process.env.REPL_IDENTITY 
     : process.env.WEB_REPL_RENEWAL 
     ? 'depl ' + process.env.WEB_REPL_RENEWAL 
     : null;
 
-  if (!xReplitToken || !hostname) {
-    throw new Error('Notion connector not configured. Please ensure the Notion integration is set up in Replit.');
+  if (!xReplitToken) {
+    throw new Error('X_REPLIT_TOKEN not found for repl/depl');
   }
 
-  try {
-    const response = await fetch(
-      'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=notion',
-      {
-        headers: {
-          'Accept': 'application/json',
-          'X_REPLIT_TOKEN': xReplitToken
-        }
+  connectionSettings = await fetch(
+    'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=notion',
+    {
+      headers: {
+        'Accept': 'application/json',
+        'X_REPLIT_TOKEN': xReplitToken
       }
-    );
-    
-    const data = await response.json();
-    connectionSettings = data.items?.[0];
-  } catch (error) {
-    throw new Error('Failed to connect to Notion. Please check your integration setup.');
-  }
+    }
+  ).then(res => res.json()).then(data => data.items?.[0]);
 
-  if (!connectionSettings) {
-    throw new Error('Notion not connected. Please set up the Notion integration in Replit.');
-  }
+  const accessToken = connectionSettings?.settings?.access_token || connectionSettings.settings?.oauth?.credentials?.access_token;
 
-  const accessToken = connectionSettings?.settings?.access_token || connectionSettings?.settings?.oauth?.credentials?.access_token;
-
-  if (!accessToken) {
-    throw new Error('Notion access token not found. Please reconnect your Notion integration.');
+  if (!connectionSettings || !accessToken) {
+    throw new Error('Notion not connected');
   }
-  
   return accessToken;
 }
 
-const NOTION_API_BASE = 'https://api.notion.com/v1';
-
-async function notionFetch(endpoint: string, options: RequestInit = {}) {
+export async function getUncachableNotionClient() {
   const accessToken = await getAccessToken();
-  const response = await fetch(`${NOTION_API_BASE}${endpoint}`, {
-    ...options,
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Notion-Version': '2022-06-28',
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-  });
-  
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-    throw new Error(`Notion API error: ${response.status} - ${error.message || 'Unknown error'}`);
-  }
-  
-  return response.json();
+  return new Client({ auth: accessToken });
 }
 
 export interface BlogPost {
@@ -87,23 +60,23 @@ export async function listPosts(limit?: number): Promise<BlogPost[]> {
     throw new Error('NOTION_DATABASE_ID not set');
   }
 
-  const response = await notionFetch(`/databases/${databaseId}/query`, {
-    method: 'POST',
-    body: JSON.stringify({
-      filter: {
-        property: 'Published',
-        checkbox: {
-          equals: true
-        }
-      },
-      sorts: [
-        {
-          property: 'Date',
-          direction: 'descending'
-        }
-      ],
-      page_size: limit || 100
-    })
+  const notion = await getUncachableNotionClient();
+  
+  const response = await notion.databases.query({
+    database_id: databaseId,
+    filter: {
+      property: 'Published',
+      checkbox: {
+        equals: true
+      }
+    },
+    sorts: [
+      {
+        property: 'Date',
+        direction: 'descending'
+      }
+    ],
+    page_size: limit || 100
   });
 
   return response.results.map((page: any) => {
@@ -129,16 +102,16 @@ export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; con
     throw new Error('NOTION_DATABASE_ID not set');
   }
 
-  const response = await notionFetch(`/databases/${databaseId}/query`, {
-    method: 'POST',
-    body: JSON.stringify({
-      filter: {
-        property: 'Slug',
-        rich_text: {
-          equals: slug
-        }
+  const notion = await getUncachableNotionClient();
+  
+  const response = await notion.databases.query({
+    database_id: databaseId,
+    filter: {
+      property: 'Slug',
+      rich_text: {
+        equals: slug
       }
-    })
+    }
   });
 
   if (response.results.length === 0) {
@@ -164,8 +137,9 @@ export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; con
     author: props.Author?.people?.[0]?.name || undefined
   };
 
-  const blocksResponse = await notionFetch(`/blocks/${page.id}/children?page_size=100`, {
-    method: 'GET'
+  const blocksResponse = await notion.blocks.children.list({
+    block_id: page.id,
+    page_size: 100
   });
 
   const content = blocksToMarkdown(blocksResponse.results);
