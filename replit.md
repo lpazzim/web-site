@@ -8,7 +8,8 @@ A personal portfolio website for Lucas Pazzim, a Frontend Engineer. The site sho
 
 - Implemented Notion-powered blog system with Express API server
 - Blog listing page (/blog) displays published articles from Notion database
-- Blog post detail pages (/blog/:slug) with full markdown content rendering
+- Blog post detail pages (/blog/:slug) with NotionRenderer component for rich content
+- Server-side caching (5 min TTL) for improved API response times
 - Latest 3 posts section integrated into home page
 - React Query caching with 5-minute stale time for blog data
 - Profile image on About page with grayscale styling
