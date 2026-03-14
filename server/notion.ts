@@ -2,9 +2,9 @@ import { Client } from "@notionhq/client";
 
 const notion = new Client({ auth: process.env.NOTION_API_TOKEN });
 
-const DATABASE_ID = process.env.NOTION_DATABASE_ID ?? (() => {
+const DATABASE_ID = (process.env.NOTION_DATABASE_ID ?? (() => {
   throw new Error("NOTION_DATABASE_ID ausente nas variáveis de ambiente");
-})();
+})()).trim();
 
 type AnyProp = any;
 
