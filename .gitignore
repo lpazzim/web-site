@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Replit config (contains environment variables)
+.replit
+replit.nix
