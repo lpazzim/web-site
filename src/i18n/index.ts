@@ -14,16 +14,21 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    // Register resources under every common variant of the language code so
+    // i18next finds them regardless of how the code is normalized internally
+    // (pt-BR, pt-br, pt).
     resources: {
       en: { translation: en },
       "pt-BR": { translation: ptBR },
+      "pt-br": { translation: ptBR },
+      pt: { translation: ptBR },
     },
-    // English is the explicit default. We only look at localStorage so that the
-    // browser's preferred language never overrides EN on first visit. Users
-    // pick PT-BR via the in-app switcher and the choice is persisted.
+    // English is the explicit default. Only localStorage is consulted so the
+    // browser's preferred language never overrides EN on first visit.
     fallbackLng: "en",
-    supportedLngs: SUPPORTED_LANGUAGES as unknown as string[],
-    nonExplicitSupportedLngs: true,
+    supportedLngs: ["en", "pt-BR", "pt-br", "pt"],
+    lowerCaseLng: false,
+    cleanCode: false,
     interpolation: {
       escapeValue: false,
     },
@@ -33,6 +38,12 @@ i18n
       caches: ["localStorage"],
     },
     returnObjects: false,
+    react: {
+      // Re-render bound components on these i18next events
+      bindI18n: "languageChanged loaded",
+      bindI18nStore: "added removed",
+      useSuspense: false,
+    },
   });
 
 export default i18n;
