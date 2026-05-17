@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { SUPPORTED_LANGUAGES, type SupportedLanguage } from "@/i18n";
 
@@ -6,6 +7,21 @@ const LANGUAGE_LABELS: Record<SupportedLanguage, string> = {
   "pt-BR": "PT-BR",
 };
 
+// Resolve whatever i18next gives us (e.g. "pt-br", "pt-BR", "pt") back to one
+// of our explicitly supported codes. Comparisons are case-insensitive and we
+// fall back to the primary subtag (e.g. "pt" -> "pt-BR").
+function resolveLanguage(raw?: string): SupportedLanguage {
+  if (!raw) return "en";
+  const lower = raw.toLowerCase();
+  const exact = SUPPORTED_LANGUAGES.find((lng) => lng.toLowerCase() === lower);
+  if (exact) return exact;
+  const primary = lower.split("-")[0];
+  const byPrimary = SUPPORTED_LANGUAGES.find(
+    (lng) => lng.toLowerCase().split("-")[0] === primary,
+  );
+  return byPrimary ?? "en";
+}
+
 interface LanguageSwitcherProps {
   className?: string;
 }
@@ -13,13 +29,24 @@ interface LanguageSwitcherProps {
 export function LanguageSwitcher({ className = "" }: LanguageSwitcherProps) {
   const { i18n, t } = useTranslation();
 
-  const currentLang = (SUPPORTED_LANGUAGES.find((lng) =>
-    i18n.resolvedLanguage === lng || i18n.language === lng
-  ) ?? "en") as SupportedLanguage;
+  // Track the active language as local state so we always re-render when
+  // i18next fires `languageChanged`, regardless of how the code is normalized
+  // internally (pt-BR / pt-br / pt).
+  const [currentLang, setCurrentLang] = useState<SupportedLanguage>(() =>
+    resolveLanguage(i18n.resolvedLanguage ?? i18n.language),
+  );
+
+  useEffect(() => {
+    const onChange = (lng: string) => setCurrentLang(resolveLanguage(lng));
+    i18n.on("languageChanged", onChange);
+    return () => {
+      i18n.off("languageChanged", onChange);
+    };
+  }, [i18n]);
 
   const handleChange = (lang: SupportedLanguage) => {
     if (lang === currentLang) return;
-    i18n.changeLanguage(lang);
+    void i18n.changeLanguage(lang);
   };
 
   return (
