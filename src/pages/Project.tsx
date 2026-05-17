@@ -1,12 +1,14 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
 import { projects } from "@/data/projects";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const Project = () => {
   const { id } = useParams();
+  const { t } = useTranslation();
   const project = projects.find((p) => p.id === id);
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -20,6 +22,11 @@ const Project = () => {
   }
 
   const nextProject = projects[(projects.indexOf(project) + 1) % projects.length];
+
+  // Project-specific translations with safe fallback to static data
+  const category = t(`projects.${project.id}.category`, { defaultValue: project.category });
+  const client = t(`projects.${project.id}.client`, { defaultValue: project.client });
+  const description = t(`projects.${project.id}.description`, { defaultValue: project.description });
 
   return (
     <Layout noPadding headerRevealMode showEchelonFooter>
@@ -52,7 +59,7 @@ const Project = () => {
           <div className="absolute bottom-8 left-0 right-0 z-10 container-wide">
             <div className="flex justify-between items-end border-t border-foreground/20 pt-8">
               <div className="text-label text-foreground">
-                {project.year} — {project.category}
+                {project.year} — {category}
               </div>
               <div className="flex gap-4">
                 {project.tags.map((tag) => (
@@ -70,17 +77,17 @@ const Project = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
             <div className="lg:col-span-4 space-y-12">
               <div>
-                <p className="text-label mb-4">Client</p>
-                <p className="text-2xl">{project.client}</p>
+                <p className="text-label mb-4">{t("project.client")}</p>
+                <p className="text-2xl">{client}</p>
               </div>
               <div>
-                <p className="text-label mb-4">Focus</p>
-                <p className="text-lg text-muted-foreground">{project.category}</p>
+                <p className="text-label mb-4">{t("project.focus")}</p>
+                <p className="text-lg text-muted-foreground">{category}</p>
               </div>
             </div>
             <div className="lg:col-span-8">
               <p className="text-3xl md:text-5xl leading-[1.1] font-normal tracking-tight">
-                {project.description}
+                {description}
               </p>
             </div>
           </div>
@@ -116,12 +123,12 @@ const Project = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
             >
-              <div className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-12">Next Project</div>
+              <div className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-12">{t("project.nextProject")}</div>
               <h2 className="text-display group-hover:text-primary transition-all duration-500 transform group-hover:scale-[1.02]">
                 {nextProject.title}
               </h2>
               <div className="mt-16 inline-flex items-center gap-4 text-xl border-b border-foreground pb-2">
-                View Case Study <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-3" />
+                {t("project.viewCaseStudy")} <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-3" />
               </div>
             </motion.div>
           </Link>
@@ -131,10 +138,10 @@ const Project = () => {
         <section className="container-wide py-12 border-t flex justify-between items-center">
           <Link to="/work" className="inline-flex items-center gap-3 text-sm uppercase tracking-widest hover:text-primary transition-colors group">
             <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-2" />
-            Back to Archive
+            {t("project.backToArchive")}
           </Link>
           <div className="text-[10px] uppercase tracking-widest opacity-30">
-            © 2020-2025 Lucas Pazzim
+            {t("project.copyright")}
           </div>
         </section>
       </div>

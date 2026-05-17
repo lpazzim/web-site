@@ -1,7 +1,10 @@
+import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
 import { Mail, Phone, Instagram } from "lucide-react";
 
 const Contact = () => {
+  const { t } = useTranslation();
+
   return (
     <Layout showEchelonFooter>
       <section className="container-wide py-16 md:py-24 min-h-[calc(100vh-200px)]">
@@ -10,10 +13,10 @@ const Contact = () => {
           <div className="space-y-12">
             <div>
               <h1 className="text-display mb-6 animate-fade-in-up">
-                Let's work<br />together.
+                {t("contact.titleLine1")}<br />{t("contact.titleLine2")}
               </h1>
               <p className="text-xl text-muted-foreground animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-                Interested in collaborating? Let's talk about your next project.
+                {t("contact.intro")}
               </p>
             </div>
 
@@ -45,8 +48,8 @@ const Contact = () => {
 
             {/* Location */}
             <div className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-              <p className="text-label mb-2">Based in</p>
-              <p className="text-lg">São Paulo, Brazil</p>
+              <p className="text-label mb-2">{t("contact.basedIn")}</p>
+              <p className="text-lg">{t("contact.location")}</p>
             </div>
           </div>
 

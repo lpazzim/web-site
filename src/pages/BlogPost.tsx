@@ -4,12 +4,16 @@ import { useQuery } from "@tanstack/react-query";
 import { getPostBySlug } from "@/lib/blog";
 import { useParams, Navigate } from "react-router-dom";
 import { format } from "date-fns";
+import { enUS, ptBR } from "date-fns/locale";
 import { NotionRenderer } from "@/components/NotionRenderer";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const BlogPost = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.resolvedLanguage === "pt-BR" ? ptBR : enUS;
   
   const { data, isLoading, error } = useQuery({
     queryKey: ['post', slug],
@@ -23,7 +27,7 @@ const BlogPost = () => {
       <Layout>
         <section className="container-wide py-16 md:py-24">
           <div className="max-w-3xl mx-auto text-muted-foreground">
-            Loading...
+            {t("blogPost.loading")}
           </div>
         </section>
       </Layout>
@@ -50,11 +54,11 @@ const BlogPost = () => {
               className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
             >
               <ArrowLeft className="w-4 h-4" />
-              Back to Blog
+              {t("blogPost.back")}
             </Link>
 
             <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">
-              {post.date && format(new Date(post.date), 'MMMM dd, yyyy')}
+              {post.date && format(new Date(post.date), 'MMMM dd, yyyy', { locale: dateLocale })}
               {post.author && ` • ${post.author}`}
             </div>
             
@@ -98,7 +102,7 @@ const BlogPost = () => {
               className="inline-flex items-center gap-2 text-lg hover:text-primary transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
-              Back to all articles
+              {t("blogPost.backAll")}
             </Link>
           </motion.div>
         </div>

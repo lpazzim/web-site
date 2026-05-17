@@ -1,0 +1,197 @@
+{
+  "nav": {
+    "projects": "Projetos",
+    "about": "Sobre",
+    "blog": "Blog",
+    "contact": "Contato",
+    "toggleTheme": "Alternar tema",
+    "toggleMenu": "Alternar menu",
+    "toggleLanguage": "Alternar idioma"
+  },
+  "home": {
+    "hero": {
+      "line1": "Construindo",
+      "line2": "Interfaces",
+      "line3": "Que",
+      "line4": "Importam",
+      "intro": "Engenheiro Frontend Sênior baseado em São Paulo, Brasil. Especializado em React, TypeScript e JavaScript. Atualmente desenvolvendo soluções que transformam experiências digitais.",
+      "yearsLabel": "2018 — 2025",
+      "yearsSubtitle": "Trabalhos Selecionados"
+    },
+    "marquee": "Código Limpo • Pixel Perfeito • Performance Primeiro • Foco no Usuário •",
+    "approach": {
+      "label": "Abordagem",
+      "title1": "Transformando",
+      "title2": "Problemas Complexos",
+      "title3": "em Soluções Elegantes",
+      "quote": "\"Os detalhes não são detalhes. Eles fazem o design.\""
+    },
+    "philosophy": {
+      "label": "Filosofia",
+      "line1": "Código que escala,",
+      "line2": "interfaces que inspiram,",
+      "line3": "experiências que duram.",
+      "description": "Acredito que um ótimo software se constrói sobre uma arquitetura limpa e uma atenção obsessiva aos detalhes. Do design de componentes à otimização de performance, cada decisão molda a experiência final.",
+      "cta": "Mais sobre mim"
+    },
+    "keywords": [
+      "Curiosidade", "Inquisitivo", "Empático", "Criativo",
+      "Racional", "Duradouro", "Ótimo", "Articulado",
+      "Consistência", "Intuitivo"
+    ],
+    "projects": {
+      "label": "Trabalhos Selecionados",
+      "title": "Projetos em Destaque",
+      "viewAll": "Ver Todos"
+    },
+    "vision": {
+      "label": "Visão",
+      "line1": "Cada Pixel",
+      "line2": "Tem Propósito",
+      "line3": "Cada Linha"
+    },
+    "about": {
+      "label": "Sobre Mim",
+      "name": "Lucas Pazzim",
+      "tagline": "Engenheiro Frontend Sênior baseado em <0>São Paulo, Brasil</0>, especializado em React, TypeScript e JavaScript.",
+      "para1": "Sou apaixonado por tecnologia, inovação e desenvolvimento orientado a detalhes. Meu foco é criar experiências de usuário excepcionais através de código limpo, arquitetura cuidadosa e atenção aos menores detalhes.",
+      "para2": "Atualmente trabalho desenvolvendo soluções que transformam experiências digitais. Desenvolvo e mantenho componentes complexos que permitem aos usuários construir aplicações de forma intuitiva, colaborando com equipes de DevOps usando Docker, Vite e ferramentas modernas."
+    },
+    "latestArticles": {
+      "label": "Blog",
+      "title": "Últimos Artigos",
+      "viewAll": "Ver todos os artigos"
+    },
+    "cta": {
+      "title": "Tem um Projeto em Mente?",
+      "description": "Estou sempre aberto a discutir novos projetos, ideias criativas ou oportunidades de fazer parte da sua visão.",
+      "button": "Entre em Contato"
+    },
+    "footer": {
+      "copyright": "Lucas Pazzim © 2018—2025"
+    }
+  },
+  "work": {
+    "title": "Projetos"
+  },
+  "project": {
+    "client": "Cliente",
+    "focus": "Foco",
+    "nextProject": "Próximo Projeto",
+    "viewCaseStudy": "Ver Estudo de Caso",
+    "backToArchive": "Voltar ao Arquivo",
+    "copyright": "© 2020-2025 Lucas Pazzim"
+  },
+  "about": {
+    "label": "Sobre",
+    "name": "Lucas Pazzim",
+    "tagline": "Engenheiro Frontend Sênior baseado em <0>São Paulo, Brasil</0>, especializado em React, TypeScript e JavaScript.",
+    "para1": "Sou apaixonado por tecnologia, inovação e desenvolvimento orientado a detalhes. Meu foco é criar experiências de usuário excepcionais através de código limpo, arquitetura cuidadosa e atenção aos menores detalhes.",
+    "para2": "Atualmente trabalho desenvolvendo soluções que transformam experiências digitais. Desenvolvo e mantenho componentes complexos que permitem aos usuários construir aplicações de forma intuitiva, colaborando com equipes de DevOps usando Docker para containerização, Vite para desenvolvimento rápido e pnpm para gerenciamento de pacotes.",
+    "para3": "Minha abordagem de trabalho é orientada a detalhes e de mente aberta, com forte foco em criar código eficiente e fácil de manter, sempre buscando aprimorar a experiência do usuário através de excelência técnica.",
+    "locationLabel": "Localização",
+    "locationValue": "São Paulo, SP\nBrasil",
+    "educationLabel": "Formação",
+    "educationValue": "Universidade Cruzeiro do Sul",
+    "contactLabel": "Contato",
+    "experienceLabel": "Experiência",
+    "experience": [
+      {
+        "role": "Engenheiro de Software Sênior",
+        "company": "Posição Atual",
+        "period": "Atual",
+        "description": "Desenvolvimento e manutenção de componentes complexos que permitem aos usuários construir aplicações de forma intuitiva. Implementação de otimizações de performance e funcionalidades inovadoras em colaboração com equipes multidisciplinares."
+      },
+      {
+        "role": "Desenvolvedor Frontend",
+        "company": "Experiência Anterior",
+        "period": "2018 - 2022",
+        "description": "Construção de sites responsivos usando HTML, CSS3, JavaScript, jQuery e Bootstrap. Colaboração com engenheiros de backend para otimizar chamadas de API e manutenção de aplicações legadas."
+      }
+    ],
+    "techStackLabel": "Stack de Tecnologias"
+  },
+  "contact": {
+    "titleLine1": "Vamos trabalhar",
+    "titleLine2": "juntos.",
+    "intro": "Interessado em colaborar? Vamos conversar sobre o seu próximo projeto.",
+    "basedIn": "Localizado em",
+    "location": "São Paulo, Brasil"
+  },
+  "blog": {
+    "label": "Blog",
+    "title": "Artigos",
+    "intro": "Reflexões sobre desenvolvimento frontend, React e criação de ótimas experiências de usuário.",
+    "loading": "Carregando posts...",
+    "error": "Falha ao carregar os posts. Tente novamente mais tarde.",
+    "empty": "Nenhum post ainda.",
+    "readArticle": "Ler artigo",
+    "dateLocale": "pt-BR"
+  },
+  "blogPost": {
+    "loading": "Carregando...",
+    "back": "Voltar para o Blog",
+    "backAll": "Voltar para todos os artigos"
+  },
+  "footer": {
+    "locationLabel": "Localização",
+    "locationValue": "São Paulo, SP\nBrasil",
+    "galleryLabel": "Galeria",
+    "projectsLink": "Projetos",
+    "aboutLink": "Sobre",
+    "contactLink": "Contato",
+    "contactLabel": "Contato",
+    "legalLabel": "Legal",
+    "rights": "© {{year}} Todos os Direitos Reservados",
+    "tagline": "Design & Ilustração",
+    "workLink": "Trabalhos",
+    "copyright": "© {{year}} Lucas Pazzim",
+    "city": "São Paulo, Brasil"
+  },
+  "notFound": {
+    "subtitle": "Ops! Página não encontrada",
+    "return": "Voltar para o Início"
+  },
+  "projects": {
+    "react-dashboard": {
+      "category": "Aplicação Web",
+      "client": "Projeto Pessoal",
+      "description": "Um dashboard de analytics moderno construído com React, TypeScript e Tailwind CSS. Apresenta visualização de dados em tempo real, design responsivo e suporte ao modo escuro."
+    },
+    "design-system": {
+      "category": "Biblioteca de Componentes",
+      "client": "Código Aberto",
+      "description": "Um design system abrangente e biblioteca de componentes construída com React e Storybook. Inclui mais de 50 componentes acessíveis e personalizáveis seguindo princípios de atomic design."
+    },
+    "ecommerce-platform": {
+      "category": "Aplicação Web",
+      "client": "Startup",
+      "description": "Uma plataforma de e-commerce performática com renderização no servidor, fluxo de checkout otimizado e integração de pagamento via Stripe."
+    },
+    "developer-tools": {
+      "category": "Ferramentas",
+      "client": "Projeto Pessoal",
+      "description": "Uma coleção de ferramentas de produtividade para desenvolvedores incluindo utilitários CLI, extensões para VS Code e scripts de automação para agilizar fluxos de desenvolvimento."
+    },
+    "api-gateway": {
+      "category": "Backend",
+      "client": "Empresarial",
+      "description": "Um API gateway escalável que gerencia autenticação, rate limiting e roteamento de requisições para arquitetura de microsserviços atendendo milhões de requisições."
+    },
+    "data-visualization": {
+      "category": "Interativo",
+      "client": "Conferência de Tecnologia",
+      "description": "Projetos interativos de visualização de dados que exploram datasets complexos através de gráficos animados e narrativas visuais criativas."
+    },
+    "performance-audit": {
+      "category": "Artigo",
+      "client": "Blog de Tecnologia",
+      "description": "Artigo técnico aprofundado sobre técnicas de otimização de performance web, abordando Core Web Vitals, code splitting e estratégias de lazy loading."
+    },
+    "debugging-guide": {
+      "category": "Artigo",
+      "client": "Comunidade Dev",
+      "description": "Guia completo de debugging para aplicações JavaScript, abordando DevTools do navegador, React DevTools e técnicas avançadas de debugging."
+    }
+  }
+}

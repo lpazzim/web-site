@@ -1,20 +1,6 @@
 import { Layout } from "@/components/Layout";
 import { motion } from "framer-motion";
-
-const experience = [
-  {
-    role: "Senior Software Engineer",
-    company: "Current Position",
-    period: "Present",
-    description: "Development and maintenance of complex components that enable users to build applications intuitively. Implementation of performance optimizations and innovative features in collaboration with cross-functional teams."
-  },
-  {
-    role: "Frontend Developer",
-    company: "Previous Experience",
-    period: "2018 - 2022",
-    description: "Building responsive websites using HTML, CSS3, JavaScript, jQuery, and Bootstrap. Collaboration with backend engineers to optimize API calls and maintenance of legacy applications."
-  }
-];
+import { Trans, useTranslation } from "react-i18next";
 
 const skills = [
   "React",
@@ -29,7 +15,18 @@ const skills = [
   "Vitest"
 ];
 
+interface ExperienceItem {
+  role: string;
+  company: string;
+  period: string;
+  description: string;
+}
+
 const About = () => {
+  const { t } = useTranslation();
+  // returnObjects pulls the array straight from the active locale
+  const experience = t("about.experience", { returnObjects: true }) as ExperienceItem[];
+
   return (
     <Layout showEchelonFooter>
       <section className="container-wide py-16 md:py-24">
@@ -39,8 +36,8 @@ const About = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">About</div>
-            <h1 className="text-5xl md:text-7xl uppercase tracking-tighter mb-8">Lucas Pazzim</h1>
+            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">{t("about.label")}</div>
+            <h1 className="text-5xl md:text-7xl uppercase tracking-tighter mb-8">{t("about.name")}</h1>
             
             <div className="mb-16">
               <img 
@@ -59,27 +56,16 @@ const About = () => {
               className="lg:col-span-2 space-y-8"
             >
               <p className="text-2xl md:text-3xl leading-relaxed">
-                Senior Frontend Engineer based in <span className="text-primary">São Paulo, Brazil</span>, 
-                specialized in React, TypeScript, and JavaScript.
+                <Trans i18nKey="about.tagline">
+                  Senior Frontend Engineer based in <span className="text-primary">São Paulo, Brazil</span>, 
+                  specialized in React, TypeScript, and JavaScript.
+                </Trans>
               </p>
               
               <div className="space-y-6 text-lg text-muted-foreground leading-relaxed">
-                <p>
-                  I'm passionate about technology, innovation, and detail-oriented development. 
-                  My focus is on creating exceptional user experiences through clean code, 
-                  thoughtful architecture, and attention to the smallest details.
-                </p>
-                <p>
-                  Currently working, crafting solutions that transform digital experiences. 
-                  I develop and maintain complex components that enable users to build applications intuitively, 
-                  collaborating with DevOps teams using Docker for containerization, Vite for 
-                  fast development, and pnpm for package management.
-                </p>
-                <p>
-                  My work approach is detail-oriented and open-minded, with a strong focus on creating 
-                  efficient and maintainable code, always seeking to enhance user experience 
-                  through technical excellence.
-                </p>
+                <p>{t("about.para1")}</p>
+                <p>{t("about.para2")}</p>
+                <p>{t("about.para3")}</p>
               </div>
             </motion.div>
 
@@ -90,17 +76,17 @@ const About = () => {
               className="space-y-12"
             >
               <div>
-                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">Location</div>
-                <p className="text-lg">São Paulo, SP<br />Brazil</p>
+                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">{t("about.locationLabel")}</div>
+                <p className="text-lg whitespace-pre-line">{t("about.locationValue")}</p>
               </div>
               
               <div>
-                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">Education</div>
-                <p className="text-lg">Universidade Cruzeiro do Sul</p>
+                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">{t("about.educationLabel")}</div>
+                <p className="text-lg">{t("about.educationValue")}</p>
               </div>
               
               <div>
-                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">Contact</div>
+                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">{t("about.contactLabel")}</div>
                 <div className="space-y-2">
                   <a 
                     href="https://www.linkedin.com/in/lpazzim" 
@@ -131,7 +117,7 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mt-24 pt-16 border-t border-border"
           >
-            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">Experience</div>
+            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">{t("about.experienceLabel")}</div>
             <div className="space-y-12">
               {experience.map((exp, index) => (
                 <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -152,7 +138,7 @@ const About = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="mt-24 pt-16 border-t border-border"
           >
-            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">Tech Stack</div>
+            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">{t("about.techStackLabel")}</div>
             <div className="flex flex-wrap gap-3">
               {skills.map((skill) => (
                 <span

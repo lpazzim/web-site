@@ -4,9 +4,14 @@ import { useQuery } from "@tanstack/react-query";
 import { listPosts, BlogPost } from "@/lib/blog";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
+import { enUS, ptBR } from "date-fns/locale";
 import { ArrowRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const Blog = () => {
+  const { t, i18n } = useTranslation();
+  const dateLocale = i18n.resolvedLanguage === "pt-BR" ? ptBR : enUS;
+
   const { data: posts, isLoading, error } = useQuery({
     queryKey: ['posts'],
     queryFn: () => listPosts(),
@@ -22,23 +27,23 @@ const Blog = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">Blog</div>
-            <h1 className="text-5xl md:text-7xl uppercase tracking-tighter mb-8">Articles</h1>
+            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">{t("blog.label")}</div>
+            <h1 className="text-5xl md:text-7xl uppercase tracking-tighter mb-8">{t("blog.title")}</h1>
             <p className="text-xl text-muted-foreground mb-16">
-              Thoughts on frontend development, React, and building great user experiences.
+              {t("blog.intro")}
             </p>
           </motion.div>
 
           {isLoading && (
-            <div className="text-muted-foreground">Loading posts...</div>
+            <div className="text-muted-foreground">{t("blog.loading")}</div>
           )}
 
           {error && (
-            <div className="text-red-500">Failed to load posts. Please try again later.</div>
+            <div className="text-red-500">{t("blog.error")}</div>
           )}
 
           {posts && posts.length === 0 && (
-            <div className="text-muted-foreground">No posts yet.</div>
+            <div className="text-muted-foreground">{t("blog.empty")}</div>
           )}
 
           <div className="space-y-12">
@@ -53,7 +58,7 @@ const Blog = () => {
                 <Link to={`/blog/${post.slug}`} className="block">
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-8 border-t border-border hover:bg-muted/20 transition-colors -mx-4 px-4">
                     <div className="text-sm text-muted-foreground font-sans">
-                      {post.date && format(new Date(post.date), 'MMM dd, yyyy')}
+                      {post.date && format(new Date(post.date), 'MMM dd, yyyy', { locale: dateLocale })}
                       {post.author && <div className="mt-1">{post.author}</div>}
                     </div>
                     <div className="md:col-span-3">
@@ -66,7 +71,7 @@ const Blog = () => {
                         </p>
                       )}
                       <span className="inline-flex items-center gap-2 text-sm text-primary">
-                        Read article <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        {t("blog.readArticle")} <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                       </span>
                     </div>
                   </div>

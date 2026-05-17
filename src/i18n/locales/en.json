@@ -1,0 +1,197 @@
+{
+  "nav": {
+    "projects": "Projects",
+    "about": "About",
+    "blog": "Blog",
+    "contact": "Contact",
+    "toggleTheme": "Toggle theme",
+    "toggleMenu": "Toggle menu",
+    "toggleLanguage": "Toggle language"
+  },
+  "home": {
+    "hero": {
+      "line1": "Building",
+      "line2": "Interfaces",
+      "line3": "That",
+      "line4": "Matter",
+      "intro": "Senior Frontend Engineer based in São Paulo, Brazil. Specialized in React, TypeScript, and JavaScript. Currently working, crafting solutions that transform digital experiences.",
+      "yearsLabel": "2018 — 2025",
+      "yearsSubtitle": "Selected Works"
+    },
+    "marquee": "Clean Code • Pixel Perfect • Performance First • User Focused •",
+    "approach": {
+      "label": "Approach",
+      "title1": "Turning Complex",
+      "title2": "Problems Into",
+      "title3": "Elegant Solutions",
+      "quote": "\"The details are not the details. They make the design.\""
+    },
+    "philosophy": {
+      "label": "Philosophy",
+      "line1": "Code that scales,",
+      "line2": "interfaces that inspire,",
+      "line3": "experiences that last.",
+      "description": "I believe great software is built on the foundation of clean architecture and obsessive attention to detail. From component design to performance optimization, every decision shapes the final experience.",
+      "cta": "More about me"
+    },
+    "keywords": [
+      "Curiosity", "Inquisitive", "Empathetic", "Creatively",
+      "Rational", "Long-lasting", "Optimal", "Articulate",
+      "Consistency", "Intuitive"
+    ],
+    "projects": {
+      "label": "Selected Work",
+      "title": "Featured Projects",
+      "viewAll": "View All"
+    },
+    "vision": {
+      "label": "Vision",
+      "line1": "Every Pixel",
+      "line2": "Has Purpose",
+      "line3": "Every Line"
+    },
+    "about": {
+      "label": "About Me",
+      "name": "Lucas Pazzim",
+      "tagline": "Senior Frontend Engineer based in <0>São Paulo, Brazil</0>, specialized in React, TypeScript, and JavaScript.",
+      "para1": "I'm passionate about technology, innovation, and detail-oriented development. My focus is on creating exceptional user experiences through clean code, thoughtful architecture, and attention to the smallest details.",
+      "para2": "Currently working, crafting solutions that transform digital experiences. I develop and maintain complex components that enable users to build applications intuitively, collaborating with DevOps teams using Docker, Vite, and modern tooling."
+    },
+    "latestArticles": {
+      "label": "Blog",
+      "title": "Latest Articles",
+      "viewAll": "View all articles"
+    },
+    "cta": {
+      "title": "Have a Project in Mind?",
+      "description": "I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.",
+      "button": "Get in Touch"
+    },
+    "footer": {
+      "copyright": "Lucas Pazzim © 2018—2025"
+    }
+  },
+  "work": {
+    "title": "Projects"
+  },
+  "project": {
+    "client": "Client",
+    "focus": "Focus",
+    "nextProject": "Next Project",
+    "viewCaseStudy": "View Case Study",
+    "backToArchive": "Back to Archive",
+    "copyright": "© 2020-2025 Lucas Pazzim"
+  },
+  "about": {
+    "label": "About",
+    "name": "Lucas Pazzim",
+    "tagline": "Senior Frontend Engineer based in <0>São Paulo, Brazil</0>, specialized in React, TypeScript, and JavaScript.",
+    "para1": "I'm passionate about technology, innovation, and detail-oriented development. My focus is on creating exceptional user experiences through clean code, thoughtful architecture, and attention to the smallest details.",
+    "para2": "Currently working, crafting solutions that transform digital experiences. I develop and maintain complex components that enable users to build applications intuitively, collaborating with DevOps teams using Docker for containerization, Vite for fast development, and pnpm for package management.",
+    "para3": "My work approach is detail-oriented and open-minded, with a strong focus on creating efficient and maintainable code, always seeking to enhance user experience through technical excellence.",
+    "locationLabel": "Location",
+    "locationValue": "São Paulo, SP\nBrazil",
+    "educationLabel": "Education",
+    "educationValue": "Universidade Cruzeiro do Sul",
+    "contactLabel": "Contact",
+    "experienceLabel": "Experience",
+    "experience": [
+      {
+        "role": "Senior Software Engineer",
+        "company": "Current Position",
+        "period": "Present",
+        "description": "Development and maintenance of complex components that enable users to build applications intuitively. Implementation of performance optimizations and innovative features in collaboration with cross-functional teams."
+      },
+      {
+        "role": "Frontend Developer",
+        "company": "Previous Experience",
+        "period": "2018 - 2022",
+        "description": "Building responsive websites using HTML, CSS3, JavaScript, jQuery, and Bootstrap. Collaboration with backend engineers to optimize API calls and maintenance of legacy applications."
+      }
+    ],
+    "techStackLabel": "Tech Stack"
+  },
+  "contact": {
+    "titleLine1": "Let's work",
+    "titleLine2": "together.",
+    "intro": "Interested in collaborating? Let's talk about your next project.",
+    "basedIn": "Based in",
+    "location": "São Paulo, Brazil"
+  },
+  "blog": {
+    "label": "Blog",
+    "title": "Articles",
+    "intro": "Thoughts on frontend development, React, and building great user experiences.",
+    "loading": "Loading posts...",
+    "error": "Failed to load posts. Please try again later.",
+    "empty": "No posts yet.",
+    "readArticle": "Read article",
+    "dateLocale": "en-US"
+  },
+  "blogPost": {
+    "loading": "Loading...",
+    "back": "Back to Blog",
+    "backAll": "Back to all articles"
+  },
+  "footer": {
+    "locationLabel": "Location",
+    "locationValue": "São Paulo, SP\nBrazil",
+    "galleryLabel": "Gallery",
+    "projectsLink": "Projects",
+    "aboutLink": "About",
+    "contactLink": "Contact",
+    "contactLabel": "Contact",
+    "legalLabel": "Legal",
+    "rights": "© {{year}} All Rights Reserved",
+    "tagline": "Design & Illustration",
+    "workLink": "Work",
+    "copyright": "© {{year}} Lucas Pazzim",
+    "city": "São Paulo, Brazil"
+  },
+  "notFound": {
+    "subtitle": "Oops! Page not found",
+    "return": "Return to Home"
+  },
+  "projects": {
+    "react-dashboard": {
+      "category": "Web Application",
+      "client": "Personal Project",
+      "description": "A modern analytics dashboard built with React, TypeScript, and Tailwind CSS. Features real-time data visualization, responsive design, and dark mode support."
+    },
+    "design-system": {
+      "category": "Component Library",
+      "client": "Open Source",
+      "description": "A comprehensive design system and component library built with React and Storybook. Includes 50+ accessible, customizable components following atomic design principles."
+    },
+    "ecommerce-platform": {
+      "category": "Web Application",
+      "client": "Startup",
+      "description": "A performant e-commerce platform with server-side rendering, optimized checkout flow, and seamless payment integration using Stripe."
+    },
+    "developer-tools": {
+      "category": "Tooling",
+      "client": "Personal Project",
+      "description": "A collection of developer productivity tools including CLI utilities, VS Code extensions, and automation scripts to streamline development workflows."
+    },
+    "api-gateway": {
+      "category": "Backend",
+      "client": "Enterprise",
+      "description": "A scalable API gateway handling authentication, rate limiting, and request routing for microservices architecture serving millions of requests."
+    },
+    "data-visualization": {
+      "category": "Interactive",
+      "client": "Tech Conference",
+      "description": "Interactive data visualization projects exploring complex datasets through animated charts, graphs, and creative visual storytelling."
+    },
+    "performance-audit": {
+      "category": "Article",
+      "client": "Tech Blog",
+      "description": "In-depth technical article on web performance optimization techniques, covering Core Web Vitals, code splitting, and lazy loading strategies."
+    },
+    "debugging-guide": {
+      "category": "Article",
+      "client": "Dev Community",
+      "description": "Comprehensive guide to debugging JavaScript applications, covering browser DevTools, React DevTools, and advanced debugging techniques."
+    }
+  }
+}

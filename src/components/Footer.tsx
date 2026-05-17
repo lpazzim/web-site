@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface FooterProps {
   variant?: "default" | "echelon";
@@ -6,6 +7,7 @@ interface FooterProps {
 
 export function Footer({ variant = "default" }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const { t } = useTranslation();
 
   if (variant === "echelon") {
     return (
@@ -15,26 +17,25 @@ export function Footer({ variant = "default" }: FooterProps) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             {/* Location */}
             <div className="space-y-3">
-              <p className="text-label">Location</p>
-              <div className="text-sm text-foreground space-y-1">
-                <p>São Paulo, SP</p>
-                <p>Brazil</p>
+              <p className="text-label">{t("footer.locationLabel")}</p>
+              <div className="text-sm text-foreground space-y-1 whitespace-pre-line">
+                {t("footer.locationValue")}
               </div>
             </div>
 
             {/* Gallery */}
             <div className="space-y-3">
-              <p className="text-label">Gallery</p>
+              <p className="text-label">{t("footer.galleryLabel")}</p>
               <div className="text-sm space-y-1">
-                <Link to="/work" className="block text-foreground hover:text-accent transition-colors">Projects</Link>
-                <Link to="/about" className="block text-foreground hover:text-accent transition-colors">About</Link>
-                <Link to="/contact" className="block text-foreground hover:text-accent transition-colors">Contact</Link>
+                <Link to="/work" className="block text-foreground hover:text-accent transition-colors">{t("footer.projectsLink")}</Link>
+                <Link to="/about" className="block text-foreground hover:text-accent transition-colors">{t("footer.aboutLink")}</Link>
+                <Link to="/contact" className="block text-foreground hover:text-accent transition-colors">{t("footer.contactLink")}</Link>
               </div>
             </div>
 
             {/* Contact */}
             <div className="space-y-3">
-              <p className="text-label">Contact</p>
+              <p className="text-label">{t("footer.contactLabel")}</p>
               <div className="text-sm text-foreground space-y-1">
                 <a href="mailto:hello@lucaspazzim.com" className="block hover:text-accent transition-colors">
                   hello@lucaspazzim.com
@@ -45,9 +46,9 @@ export function Footer({ variant = "default" }: FooterProps) {
 
             {/* Copyright */}
             <div className="space-y-3">
-              <p className="text-label">Legal</p>
+              <p className="text-label">{t("footer.legalLabel")}</p>
               <div className="text-sm text-muted-foreground space-y-1">
-                <p>© {currentYear} All Rights Reserved</p>
+                <p>{t("footer.rights", { year: currentYear })}</p>
               </div>
             </div>
           </div>
@@ -79,21 +80,21 @@ export function Footer({ variant = "default" }: FooterProps) {
           <div className="space-y-4">
             <p className="font-display text-xl font-semibold">Lucas Pazzim</p>
             <p className="text-muted-foreground text-sm">
-              Design & Illustration
+              {t("footer.tagline")}
             </p>
           </div>
 
           {/* Center */}
           <div className="flex gap-8 text-sm text-muted-foreground">
-            <Link to="/work" className="hover-highlight">Work</Link>
-            <Link to="/about" className="hover-highlight">About</Link>
-            <Link to="/contact" className="hover-highlight">Contact</Link>
+            <Link to="/work" className="hover-highlight">{t("footer.workLink")}</Link>
+            <Link to="/about" className="hover-highlight">{t("footer.aboutLink")}</Link>
+            <Link to="/contact" className="hover-highlight">{t("footer.contactLink")}</Link>
           </div>
 
           {/* Right */}
           <div className="text-sm text-muted-foreground">
-            <p>© {currentYear} Lucas Pazzim</p>
-            <p className="mt-1">São Paulo, Brazil</p>
+            <p>{t("footer.copyright", { year: currentYear })}</p>
+            <p className="mt-1">{t("footer.city")}</p>
           </div>
         </div>
       </div>
