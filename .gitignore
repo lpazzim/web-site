@@ -26,3 +26,6 @@ dist-ssr
 # Replit config (contains environment variables)
 .replit
 replit.nix
+
+.env*
+!.env.example
