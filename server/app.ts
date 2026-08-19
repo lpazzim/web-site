@@ -23,7 +23,24 @@ function setCache(key: string, data: any): void {
   cache.set(key, { data, timestamp: Date.now() });
 }
 
-app.get('/api/posts', async (req, res) => {
+// Diagnostic health check endpoint
+app.get(['/api/health', '/health'], (req, res) => {
+  const token = process.env.NOTION_API_TOKEN?.trim().replace(/^["']|["']$/g, '');
+  const dbId = process.env.NOTION_DATABASE_ID?.trim().replace(/^["']|["']$/g, '');
+  
+  res.json({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    env: {
+      hasNotionToken: Boolean(token),
+      tokenPrefix: token ? token.substring(0, 7) + '...' : null,
+      hasDatabaseId: Boolean(dbId),
+      databaseIdLength: dbId ? dbId.length : 0,
+    }
+  });
+});
+
+app.get(['/api/posts', '/posts'], async (req, res) => {
   try {
     const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
     const cacheKey = `posts-${limit || 'all'}`;
@@ -42,13 +59,14 @@ app.get('/api/posts', async (req, res) => {
     console.error('Error fetching posts:', error);
     res.status(500).json({
       error: error.message || 'Internal Server Error',
+      name: error.name,
       code: error.code,
       status: error.status,
     });
   }
 });
 
-app.get('/api/posts/:slug', async (req, res) => {
+app.get(['/api/posts/:slug', '/posts/:slug'], async (req, res) => {
   try {
     const cacheKey = `post-${req.params.slug}`;
     
@@ -70,6 +88,7 @@ app.get('/api/posts/:slug', async (req, res) => {
     console.error('Error fetching post:', error);
     res.status(500).json({
       error: error.message || 'Internal Server Error',
+      name: error.name,
       code: error.code,
       status: error.status,
     });

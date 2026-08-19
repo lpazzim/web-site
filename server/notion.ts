@@ -1,15 +1,20 @@
 import { Client } from "@notionhq/client";
 
-function getNotionClient(): Client {
-  const token = process.env.NOTION_API_TOKEN?.trim();
+function sanitizeEnv(val: string | undefined): string | undefined {
+  if (!val) return undefined;
+  return val.trim().replace(/^["']|["']$/g, '');
+}
+
+export function getNotionClient(): Client {
+  const token = sanitizeEnv(process.env.NOTION_API_TOKEN);
   if (!token) {
     throw new Error("NOTION_API_TOKEN ausente nas variáveis de ambiente");
   }
   return new Client({ auth: token });
 }
 
-function getDatabaseId(): string {
-  const dbId = process.env.NOTION_DATABASE_ID?.trim();
+export function getDatabaseId(): string {
+  const dbId = sanitizeEnv(process.env.NOTION_DATABASE_ID);
   if (!dbId) {
     throw new Error("NOTION_DATABASE_ID ausente nas variáveis de ambiente");
   }
@@ -74,8 +79,8 @@ export async function listPosts(limit?: number): Promise<BlogPost[]> {
   const notion = getNotionClient();
   const databaseId = getDatabaseId();
 
-  const res = await notion.databases.query({
-    database_id: databaseId,
+  const res = await (notion as any).dataSources.query({
+    data_source_id: databaseId,
     filter: { property: "Published", checkbox: { equals: true } },
     sorts: [{ property: "Date", direction: "descending" }],
     page_size: limit || 100,
@@ -88,8 +93,8 @@ export async function getPostBySlug(slug: string): Promise<{ post: BlogPost; blo
   const notion = getNotionClient();
   const databaseId = getDatabaseId();
 
-  const res = await notion.databases.query({
-    database_id: databaseId,
+  const res = await (notion as any).dataSources.query({
+    data_source_id: databaseId,
     filter: {
       and: [
         { property: "Published", checkbox: { equals: true } },
