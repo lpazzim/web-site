@@ -40,7 +40,11 @@ app.get('/api/posts', async (req, res) => {
     res.json(posts);
   } catch (error: any) {
     console.error('Error fetching posts:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message || 'Internal Server Error',
+      code: error.code,
+      status: error.status,
+    });
   }
 });
 
@@ -64,7 +68,11 @@ app.get('/api/posts/:slug', async (req, res) => {
     res.json(result);
   } catch (error: any) {
     console.error('Error fetching post:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      error: error.message || 'Internal Server Error',
+      code: error.code,
+      status: error.status,
+    });
   }
 });
 
