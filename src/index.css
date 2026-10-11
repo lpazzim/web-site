@@ -213,3 +213,52 @@
 @utility glow-text {
   text-shadow: 0 0 24px var(--glow);
 }
+
+/* Page transitions (View Transitions API, started by <Link viewTransition>).
+   The old page dims and lifts away while the new one is wiped in from the top.
+   The header has its own name so it stays put instead of cross-fading. */
+.site-header {
+  view-transition-name: site-header;
+}
+
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  animation: vt-out 0.4s ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: vt-in 0.75s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0.2;
+    transform: translateY(-2%);
+    filter: blur(3px);
+  }
+}
+
+@keyframes vt-in {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}

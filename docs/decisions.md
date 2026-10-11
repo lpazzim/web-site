@@ -84,3 +84,11 @@ holds, add a new entry that supersedes it instead of silently reverting it.
 - **Why**: consistent, license-free imagery that reads as technology. Pure seeded functions keep pre-rendered HTML and
   hydration identical (no `Math.random()`), numbers are rounded to one decimal, and the generator is shared with the
   script so the social card and the site cannot drift apart.
+
+## 12. Page transitions with the View Transitions API
+
+- **Decision**: `LocaleLink` and the header `NavLink` pass `viewTransition` to React Router. The CSS in `index.css`
+  dims the old page and wipes the new one in from the top; the header has its own `view-transition-name` so it stays
+  put. Reduced motion disables the animations, and browsers without the API navigate instantly.
+- **Why**: native, zero-dependency transitions that fit the scan/HUD language. The background canvas is deliberately not
+  given its own name: named groups paint above the page snapshot and would draw the animated lines over the content.

@@ -81,7 +81,7 @@ export function Header({ revealMode = false }: HeaderProps) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-100 transition-all duration-500 ${
+      className={`site-header fixed top-0 left-0 right-0 z-100 transition-all duration-500 ${
         // No transform while visible: it would make this header the containing block of the fixed mobile menu.
         isVisible ? "opacity-100" : "opacity-0 -translate-y-full pointer-events-none"
       } border-b border-border ${isMenuOpen ? "bg-background" : "bg-background/70 backdrop-blur-md"}`}
@@ -105,6 +105,7 @@ export function Header({ revealMode = false }: HeaderProps) {
               <NavLink
                 key={item.key}
                 to={localize(item.path)}
+                viewTransition
                 className={({ isActive }) =>
                   `group text-hud flex items-center gap-2 transition-colors duration-300 hover:text-foreground ${
                     isActive ? "text-foreground!" : ""
