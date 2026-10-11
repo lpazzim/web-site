@@ -155,6 +155,7 @@
     "navLabel": "Navegação"
   },
   "notFound": {
+    "code": "Erro · Rota não encontrada",
     "subtitle": "Ops! Página não encontrada",
     "return": "Voltar para o Início"
   },

@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
+import { HudFrame } from "@/components/tech/HudFrame";
 import { Mail } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons/brand";
 import { getI18n, languageFromPath } from "@/i18n";
@@ -50,9 +51,9 @@ export default function Contact() {
                   key={href}
                   href={href}
                   {...(external && { target: "_blank", rel: "noopener noreferrer" })}
-                  className="flex items-center gap-4 text-lg hover-highlight group"
+                  className="flex items-center gap-4 border-b border-separator pb-4 text-lg hover-highlight group"
                 >
-                  <Icon size={20} className="text-muted-foreground group-hover:text-accent transition-colors" />
+                  <Icon size={20} className="text-muted-foreground group-hover:text-primary transition-colors" />
                   <span>{label}</span>
                 </a>
               ))}
@@ -67,14 +68,16 @@ export default function Contact() {
 
           {/* Image */}
           <div className="hidden lg:block">
-            <div className="aspect-4/5 bg-secondary overflow-hidden">
-              <img
-                src="/images/lucas-pazzim-about.jpeg"
-                alt="Lucas Pazzim"
-                loading="lazy"
-                className="w-full h-full object-cover grayscale"
-              />
-            </div>
+            <HudFrame className="p-3">
+              <div className="scanlines aspect-4/5 bg-secondary overflow-hidden">
+                <img
+                  src="/images/lucas-pazzim-about.jpeg"
+                  alt="Lucas Pazzim"
+                  loading="lazy"
+                  className="w-full h-full object-cover grayscale"
+                />
+              </div>
+            </HudFrame>
           </div>
         </div>
       </section>

@@ -28,7 +28,7 @@ function colorStyle(color: string): CSSProperties | undefined {
 function RichSpan({ item }: { item: RichTextItemResponse }) {
   const { annotations } = item;
   let node: ReactNode = item.plain_text;
-  if (annotations.code) node = <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">{node}</code>;
+  if (annotations.code) node = <code className="bg-muted px-1.5 py-0.5 text-sm font-mono text-primary">{node}</code>;
   if (annotations.bold) node = <strong>{node}</strong>;
   if (annotations.italic) node = <em>{node}</em>;
   if (annotations.underline) node = <u>{node}</u>;

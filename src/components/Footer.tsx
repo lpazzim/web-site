@@ -11,7 +11,7 @@ export function Footer({ variant = "default" }: FooterProps) {
 
   if (variant === "echelon") {
     return (
-      <footer className="border-t border-separator mt-auto">
+      <footer className="border-t border-separator mt-auto bg-background/60 backdrop-blur-sm">
         {/* Main Footer Content */}
         <div className="container-wide py-12 md:py-16">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
@@ -25,13 +25,13 @@ export function Footer({ variant = "default" }: FooterProps) {
             <div className="space-y-3">
               <p className="text-label">{t("footer.navLabel")}</p>
               <div className="text-sm space-y-1">
-                <LocaleLink to="/work" className="block text-foreground hover:text-accent transition-colors">
+                <LocaleLink to="/work" className="block text-foreground hover:text-primary transition-colors">
                   {t("footer.projectsLink")}
                 </LocaleLink>
-                <LocaleLink to="/about" className="block text-foreground hover:text-accent transition-colors">
+                <LocaleLink to="/about" className="block text-foreground hover:text-primary transition-colors">
                   {t("footer.aboutLink")}
                 </LocaleLink>
-                <LocaleLink to="/contact" className="block text-foreground hover:text-accent transition-colors">
+                <LocaleLink to="/contact" className="block text-foreground hover:text-primary transition-colors">
                   {t("footer.contactLink")}
                 </LocaleLink>
               </div>
@@ -41,14 +41,14 @@ export function Footer({ variant = "default" }: FooterProps) {
             <div className="space-y-3">
               <p className="text-label">{t("footer.contactLabel")}</p>
               <div className="text-sm text-foreground space-y-1">
-                <a href="mailto:lpazzim@gmail.com" className="block hover:text-accent transition-colors">
+                <a href="mailto:lpazzim@gmail.com" className="block hover:text-primary transition-colors">
                   lpazzim@gmail.com
                 </a>
                 <a
                   href="https://www.linkedin.com/in/lpazzim"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block hover:text-accent transition-colors"
+                  className="block hover:text-primary transition-colors"
                 >
                   LinkedIn
                 </a>
@@ -71,7 +71,7 @@ export function Footer({ variant = "default" }: FooterProps) {
             {Array.from({ length: 8 }).map((_, i) => (
               <span
                 key={i}
-                className="font-display text-6xl md:text-8xl lg:text-[10rem] font-bold text-foreground mx-12"
+                className="font-display text-6xl md:text-8xl lg:text-[10rem] font-bold text-foreground/10 mx-12"
               >
                 @LUCASPAZZIM
               </span>
@@ -84,7 +84,7 @@ export function Footer({ variant = "default" }: FooterProps) {
 
   // Default footer
   return (
-    <footer className="border-t border-separator">
+    <footer className="border-t border-separator bg-background/60 backdrop-blur-sm">
       <div className="container-wide py-12 md:py-16">
         <div className="flex flex-col md:flex-row justify-between gap-8">
           {/* Left */}

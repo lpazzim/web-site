@@ -1,4 +1,5 @@
 import { Layout } from "@/components/Layout";
+import { SectionLabel } from "@/components/tech/SectionLabel";
 import { motion } from "motion/react";
 import { useQuery } from "@tanstack/react-query";
 import { listPosts } from "@/lib/blog";
@@ -48,10 +49,8 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
       <section className="container-wide py-16 md:py-24">
         <div className="max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">
-              {t("blog.label")}
-            </div>
-            <h1 className="text-5xl md:text-7xl uppercase tracking-tighter mb-8">{t("blog.title")}</h1>
+            <SectionLabel className="mb-6">{t("blog.label")}</SectionLabel>
+            <h1 className="text-5xl md:text-7xl font-semibold uppercase tracking-tighter mb-8">{t("blog.title")}</h1>
             <p className="text-xl text-muted-foreground mb-16">{t("blog.intro")}</p>
           </motion.div>
 
@@ -72,7 +71,7 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
               >
                 <LocaleLink to={`/blog/${post.slug}`} className="block">
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-8 border-t border-border hover:bg-muted/20 transition-colors -mx-4 px-4">
-                    <div className="text-sm text-muted-foreground font-sans">
+                    <div className="text-hud">
                       {post.date && format(parseISO(post.date), "MMM dd, yyyy", { locale: dateLocale })}
                       {post.author && <div className="mt-1">{post.author}</div>}
                     </div>

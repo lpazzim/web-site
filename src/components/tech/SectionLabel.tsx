@@ -1,6 +1,6 @@
 interface SectionLabelProps {
-  /** 1-based position of the section on the page, rendered as "01". */
-  index: number;
+  /** 1-based position of the section on the page, rendered as "01". Pages without a sequence show "//". */
+  index?: number;
   children: string;
   className?: string;
 }
@@ -10,7 +10,7 @@ export function SectionLabel({ index, children, className = "" }: SectionLabelPr
   return (
     <div className={`text-hud flex items-center gap-3 ${className}`}>
       <span aria-hidden="true" className="text-primary">
-        {String(index).padStart(2, "0")}
+        {index === undefined ? "//" : String(index).padStart(2, "0")}
       </span>
       <span aria-hidden="true" className="h-px w-8 bg-separator" />
       <span>{children}</span>
