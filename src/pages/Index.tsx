@@ -1,19 +1,22 @@
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "motion/react";
 import { useRef, type ReactNode } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
-import { projects } from "@/data/projects";
+import { projects } from "@/content/projects";
+import { profile } from "@/content/profile";
+import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
+import { useLocale } from "@/i18n/useLocale";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { listPosts, BlogPost } from "@/lib/blog";
+import { listPosts } from "@/lib/blog";
 import { format } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
 
 const TextReveal = ({ children, className = "" }: { children: ReactNode; className?: string }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  
+
   return (
     <div ref={ref} className={`overflow-hidden ${className}`}>
       <motion.div
@@ -48,20 +51,24 @@ const ParallaxText = ({ children, baseVelocity = 1 }: { children: ReactNode; bas
 const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
-  const { t, i18n } = useTranslation();
-  const dateLocale = i18n.resolvedLanguage === "pt-BR" ? ptBR : enUS;
+  const { t } = useTranslation();
+  const locale = useLocale();
+  const dateLocale = locale === "pt-BR" ? ptBR : enUS;
+  const featuredProjects = projects.filter((p) => p.featured).slice(0, 4);
   const keywords = t("home.keywords", { returnObjects: true }) as string[];
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end end"],
   });
 
   const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
+  // The hero stays sticky behind the page; once faded out it must not swallow clicks.
+  const heroPointerEvents = useTransform(heroOpacity, (opacity) => (opacity < 0.05 ? "none" : "auto"));
 
   const { data: latestPosts } = useQuery({
-    queryKey: ['latestPosts'],
+    queryKey: ["latestPosts"],
     queryFn: () => listPosts(3),
     staleTime: 1000 * 60 * 5,
   });
@@ -70,9 +77,9 @@ const Index = () => {
     <Layout hideFooter noPadding>
       <div ref={containerRef} className="bg-background">
         {/* Hero Section - Full Screen */}
-        <motion.section 
+        <motion.section
           ref={heroRef}
-          style={{ opacity: heroOpacity, scale: heroScale }}
+          style={{ opacity: heroOpacity, scale: heroScale, pointerEvents: heroPointerEvents }}
           className="min-h-screen flex flex-col justify-between pt-24 pb-12 container-wide sticky top-0 z-10"
         >
           <div className="flex-1 flex flex-col justify-center">
@@ -124,11 +131,11 @@ const Index = () => {
             transition={{ delay: 1, duration: 1 }}
             className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pt-12 border-t border-border"
           >
-            <p className="text-lg md:text-xl max-w-md text-muted-foreground leading-relaxed">
-              {t("home.hero.intro")}
-            </p>
+            <p className="text-lg md:text-xl max-w-md text-muted-foreground leading-relaxed">{t("home.hero.intro")}</p>
             <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground font-sans">
-              {t("home.hero.yearsLabel")}<br />{t("home.hero.yearsSubtitle")}
+              {t("home.hero.yearsLabel", { year: new Date().getFullYear() })}
+              <br />
+              {t("home.hero.yearsSubtitle")}
             </div>
           </motion.div>
         </motion.section>
@@ -150,9 +157,15 @@ const Index = () => {
             transition={{ duration: 1 }}
             className="container-wide text-center py-32"
           >
-            <div className="text-xs tracking-[0.3em] uppercase mb-12 opacity-60 font-sans">{t("home.approach.label")}</div>
+            <div className="text-xs tracking-[0.3em] uppercase mb-12 opacity-60 font-sans">
+              {t("home.approach.label")}
+            </div>
             <h2 className="text-4xl md:text-6xl lg:text-7xl uppercase tracking-tighter leading-[0.95] mb-12">
-              {t("home.approach.title1")}<br />{t("home.approach.title2")}<br />{t("home.approach.title3")}
+              {t("home.approach.title1")}
+              <br />
+              {t("home.approach.title2")}
+              <br />
+              {t("home.approach.title3")}
             </h2>
             <p className="text-xl md:text-2xl opacity-60 max-w-2xl mx-auto italic font-serif">
               {t("home.approach.quote")}
@@ -165,7 +178,9 @@ const Index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
             <div>
               <TextReveal>
-                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">{t("home.philosophy.label")}</div>
+                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">
+                  {t("home.philosophy.label")}
+                </div>
               </TextReveal>
               <TextReveal>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase tracking-tighter leading-[0.95]">
@@ -190,14 +205,14 @@ const Index = () => {
                 </p>
               </TextReveal>
               <TextReveal>
-                <a 
-                  href="#about" 
+                <Link
+                  to="/about"
                   className="inline-flex items-center gap-3 group text-lg border-b border-foreground pb-2 text-foreground transition-all hover:gap-5 relative z-20"
                   data-testid="link-about-story"
                 >
-                  {t("home.philosophy.cta")} 
+                  {t("home.philosophy.cta")}
                   <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                </a>
+                </Link>
               </TextReveal>
             </div>
           </div>
@@ -228,14 +243,16 @@ const Index = () => {
           <div className="container-wide mb-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
             <div>
               <TextReveal>
-                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">{t("home.projects.label")}</div>
+                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">
+                  {t("home.projects.label")}
+                </div>
               </TextReveal>
               <TextReveal>
                 <h2 className="text-5xl md:text-7xl uppercase tracking-tighter">{t("home.projects.title")}</h2>
               </TextReveal>
             </div>
-            <Link 
-              to="/work" 
+            <Link
+              to="/work"
               className="text-sm uppercase tracking-[0.2em] hover:text-primary transition-colors font-sans flex items-center gap-2 group"
               data-testid="link-view-all-projects"
             >
@@ -243,54 +260,58 @@ const Index = () => {
               <ArrowUpRight className="w-4 h-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            {projects.slice(0, 4).map((project, index) => {
-              const projectCategory = t(`projects.${project.id}.category`, { defaultValue: project.category });
-              return (
-                <motion.div
-                  key={project.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  className="group relative aspect-[4/3] overflow-hidden border-b border-r border-border"
-                >
-                  <Link to={`/project/${project.id}`} className="block h-full w-full" data-testid={`card-project-${project.id}`}>
-                    <img
-                      src={project.coverImage}
-                      alt={project.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    {/* Strong gradient overlay for text readability */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                    
-                    <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 text-white">
-                      <div className="flex justify-between items-end">
-                        <div>
-                          <motion.div 
-                            className="text-xs uppercase tracking-[0.3em] mb-4 opacity-70 font-sans"
-                            initial={{ opacity: 0, y: 10 }}
-                            whileInView={{ opacity: 0.7, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2 }}
-                          >
-                            {projectCategory}
-                          </motion.div>
-                          <h3 className="text-3xl md:text-4xl lg:text-5xl tracking-tight leading-none">{project.title}</h3>
-                        </div>
-                        <div className="text-sm font-sans opacity-50">{project.year}</div>
-                      </div>
-                    </div>
 
-                    {/* Hover arrow indicator */}
-                    <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <ArrowUpRight className="w-8 h-8 text-white" />
+          <div className="grid grid-cols-1 md:grid-cols-2">
+            {featuredProjects.map((project, index) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                className="group relative aspect-4/3 overflow-hidden border-b border-r border-border"
+              >
+                <Link
+                  to={`/work/${project.id}`}
+                  className="block h-full w-full"
+                  data-testid={`card-project-${project.id}`}
+                >
+                  <ProjectCover
+                    project={project}
+                    bare
+                    className="transition-transform duration-700 group-hover:scale-105"
+                  />
+                  {/* Strong gradient overlay for text readability */}
+                  <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
+
+                  <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 text-white">
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <motion.div
+                          className="text-xs uppercase tracking-[0.3em] mb-4 opacity-70 font-sans"
+                          initial={{ opacity: 0, y: 10 }}
+                          whileInView={{ opacity: 0.7, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: 0.2 }}
+                        >
+                          {project.category[locale]}
+                        </motion.div>
+                        <h3 className="text-3xl md:text-4xl lg:text-5xl tracking-tight leading-none">
+                          {project.title}
+                        </h3>
+                        {project.draft && <DraftBadge className="mt-3" />}
+                      </div>
+                      <div className="text-sm font-sans opacity-50">{project.period}</div>
                     </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
+                  </div>
+
+                  {/* Hover arrow indicator */}
+                  <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <ArrowUpRight className="w-8 h-8 text-white" />
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
           </div>
         </section>
 
@@ -304,7 +325,9 @@ const Index = () => {
               transition={{ duration: 1 }}
               className="text-center"
             >
-              <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-12 font-sans">{t("home.vision.label")}</div>
+              <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-12 font-sans">
+                {t("home.vision.label")}
+              </div>
               <h2 className="text-[10vw] md:text-[8vw] lg:text-[6vw] uppercase tracking-tighter leading-[0.85]">
                 {t("home.vision.line1")}
               </h2>
@@ -323,45 +346,40 @@ const Index = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
             <div>
               <TextReveal>
-                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">{t("home.about.label")}</div>
+                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">
+                  {t("home.about.label")}
+                </div>
               </TextReveal>
               <TextReveal>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase tracking-tighter leading-[0.95] mb-8">
-                  {t("home.about.name")}
+                  {t("about.name")}
                 </h2>
               </TextReveal>
               <TextReveal>
                 <div className="mb-8">
-                  <img 
-                    src="/images/lucas-pazzim-about.jpeg" 
-                    alt="Lucas Pazzim" 
+                  <img
+                    src="/images/lucas-pazzim-about.jpeg"
+                    alt="Lucas Pazzim"
                     className="w-full max-w-sm h-auto grayscale object-cover rounded-sm"
                   />
                 </div>
               </TextReveal>
               <TextReveal>
                 <p className="text-2xl md:text-3xl leading-relaxed">
-                  <Trans i18nKey="home.about.tagline">
-                    Senior Frontend Engineer based in <span className="text-primary">São Paulo, Brazil</span>, 
-                    specialized in React, TypeScript, and JavaScript.
-                  </Trans>
+                  <Trans i18nKey="about.tagline" components={[<span className="text-primary" />]} />
                 </p>
               </TextReveal>
             </div>
             <div className="flex flex-col justify-center">
               <TextReveal>
-                <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                  {t("home.about.para1")}
-                </p>
+                <p className="text-xl text-muted-foreground leading-relaxed mb-8">{t("about.para1")}</p>
               </TextReveal>
               <TextReveal>
-                <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                  {t("home.about.para2")}
-                </p>
+                <p className="text-xl text-muted-foreground leading-relaxed mb-8">{t("about.para2")}</p>
               </TextReveal>
               <TextReveal>
                 <div className="flex flex-wrap gap-3 mt-4">
-                  {["React", "TypeScript", "JavaScript", "Vite", "Docker", "Styled Components"].map((skill) => (
+                  {profile.skills.slice(0, 8).map((skill) => (
                     <span
                       key={skill}
                       className="text-sm border border-border px-4 py-2 hover:border-primary hover:text-primary transition-colors"
@@ -377,7 +395,9 @@ const Index = () => {
 
         {/* Scrolling Marquee Bottom */}
         <section className="py-12 border-t border-border overflow-hidden">
-          <ParallaxText baseVelocity={-1}>React • TypeScript • Vite • Docker • Styled Components • JavaScript •</ParallaxText>
+          <ParallaxText baseVelocity={-1}>
+            React • TypeScript • Vite • Docker • Styled Components • JavaScript •
+          </ParallaxText>
         </section>
 
         {/* Latest Posts Section */}
@@ -386,7 +406,9 @@ const Index = () => {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-20">
               <div>
                 <TextReveal>
-                  <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">{t("home.latestArticles.label")}</div>
+                  <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">
+                    {t("home.latestArticles.label")}
+                  </div>
                 </TextReveal>
                 <TextReveal>
                   <h2 className="text-3xl md:text-4xl uppercase tracking-tighter leading-[0.95]">
@@ -395,7 +417,7 @@ const Index = () => {
                 </TextReveal>
               </div>
               <div className="lg:col-span-3 space-y-8">
-                {latestPosts.map((post: BlogPost, index: number) => (
+                {latestPosts.map((post, index) => (
                   <motion.article
                     key={post.id}
                     initial={{ opacity: 0, y: 30 }}
@@ -407,16 +429,14 @@ const Index = () => {
                       <div className="py-6 border-b border-border hover:bg-muted/20 transition-colors -mx-4 px-4">
                         <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
                           <div className="text-sm text-muted-foreground font-sans min-w-[100px]">
-                            {post.date && format(new Date(post.date), 'MMM dd, yyyy', { locale: dateLocale })}
+                            {post.date && format(new Date(post.date), "MMM dd, yyyy", { locale: dateLocale })}
                           </div>
                           <div className="flex-1">
                             <h3 className="text-xl md:text-2xl group-hover:text-primary transition-colors mb-2">
                               {post.title}
                             </h3>
                             {post.description && (
-                              <p className="text-muted-foreground line-clamp-2">
-                                {post.description}
-                              </p>
+                              <p className="text-muted-foreground line-clamp-2">{post.description}</p>
                             )}
                           </div>
                           <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2 hidden md:block" />
@@ -426,10 +446,7 @@ const Index = () => {
                   </motion.article>
                 ))}
                 <TextReveal>
-                  <Link 
-                    to="/blog" 
-                    className="inline-flex items-center gap-3 text-lg group mt-8 relative z-20"
-                  >
+                  <Link to="/blog" className="inline-flex items-center gap-3 text-lg group mt-8 relative z-20">
                     <span className="border-b border-foreground pb-1 transition-colors group-hover:border-primary group-hover:text-primary">
                       {t("home.latestArticles.viewAll")}
                     </span>
@@ -453,13 +470,11 @@ const Index = () => {
             </div>
             <div className="flex flex-col justify-end">
               <TextReveal>
-                <p className="text-xl text-muted-foreground mb-8">
-                  {t("home.cta.description")}
-                </p>
+                <p className="text-xl text-muted-foreground mb-8">{t("home.cta.description")}</p>
               </TextReveal>
               <TextReveal>
-                <a 
-                  href="mailto:lpazzim@gmail.com" 
+                <a
+                  href="mailto:lpazzim@gmail.com"
                   className="inline-flex items-center gap-3 text-2xl group relative z-20"
                   data-testid="link-contact-cta"
                 >
@@ -477,13 +492,25 @@ const Index = () => {
         <footer className="py-12 container-wide border-t border-border relative z-20">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             <div className="text-sm text-muted-foreground font-sans">
-              {t("home.footer.copyright")}
+              {t("home.footer.copyright", { year: new Date().getFullYear() })}
             </div>
             <div className="flex gap-8 text-sm font-sans relative z-20">
-              <a href="https://www.linkedin.com/in/lpazzim" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer" data-testid="link-linkedin">
+              <a
+                href="https://www.linkedin.com/in/lpazzim"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                data-testid="link-linkedin"
+              >
                 LinkedIn
               </a>
-              <a href="https://github.com/lpazzim" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer" data-testid="link-github">
+              <a
+                href="https://github.com/lpazzim"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                data-testid="link-github"
+              >
                 GitHub
               </a>
             </div>

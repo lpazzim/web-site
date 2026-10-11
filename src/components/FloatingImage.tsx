@@ -7,10 +7,7 @@ interface FloatingImageProps {
 
 export function FloatingImage({ src, alt, className = "", style }: FloatingImageProps) {
   return (
-    <div 
-      className={`absolute overflow-hidden ${className}`}
-      style={style}
-    >
+    <div className={`absolute overflow-hidden ${className}`} style={style}>
       <img
         src={src}
         alt={alt}

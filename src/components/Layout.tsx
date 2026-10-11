@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 
@@ -10,9 +10,9 @@ interface LayoutProps {
   headerRevealMode?: boolean;
 }
 
-export function Layout({ 
-  children, 
-  hideFooter = false, 
+export function Layout({
+  children,
+  hideFooter = false,
   noPadding = false,
   showEchelonFooter = false,
   headerRevealMode = false,
@@ -20,12 +20,8 @@ export function Layout({
   return (
     <div className="min-h-screen flex flex-col">
       <Header revealMode={headerRevealMode} />
-      <main className={`flex-1 ${noPadding ? '' : 'pt-20 md:pt-24'}`}>
-        {children}
-      </main>
-      {!hideFooter && (
-        <Footer variant={showEchelonFooter ? "echelon" : "default"} />
-      )}
+      <main className={`flex-1 ${noPadding ? "" : "pt-20 md:pt-24"}`}>{children}</main>
+      {!hideFooter && <Footer variant={showEchelonFooter ? "echelon" : "default"} />}
     </div>
   );
 }

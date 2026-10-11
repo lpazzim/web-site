@@ -29,3 +29,10 @@ replit.nix
 
 .env*
 !.env.example
+# Personal LinkedIn export (contains private contact data)
+profile.pdf
+
+# Test artifacts
+coverage
+playwright-report
+test-results

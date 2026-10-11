@@ -5,10 +5,14 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import en from "./locales/en.json";
 import ptBR from "./locales/pt-BR.json";
 
-export const SUPPORTED_LANGUAGES = ["en", "pt-BR"] as const;
-export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
+import { LANGUAGE_STORAGE_KEY, resolveLanguage } from "./languages";
 
-export const LANGUAGE_STORAGE_KEY = "lp-language";
+export { LANGUAGE_STORAGE_KEY, SUPPORTED_LANGUAGES, resolveLanguage, type SupportedLanguage } from "./languages";
+
+// Keep <html lang> in sync for screen readers, hyphenation and search engines.
+i18n.on("languageChanged", (lng) => {
+  document.documentElement.lang = resolveLanguage(lng);
+});
 
 i18n
   .use(LanguageDetector)

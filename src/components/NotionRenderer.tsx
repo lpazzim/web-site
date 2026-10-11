@@ -1,394 +1,290 @@
-import React from "react";
+import { Fragment, type CSSProperties, type ReactNode } from "react";
+import type { RichTextItemResponse } from "@notionhq/client";
+import type { NotionBlock } from "@/lib/blog";
 
-type RichText = {
-  plain_text: string;
-  href?: string | null;
-  annotations?: {
-    bold?: boolean;
-    italic?: boolean;
-    underline?: boolean;
-    strikethrough?: boolean;
-    code?: boolean;
-    color?: string;
-  };
-}[];
+type ListBlock = Extract<NotionBlock, { type: "bulleted_list_item" | "numbered_list_item" }>;
 
-function spanFor(rt: RichText[number]) {
-  const style: React.CSSProperties = {};
-  const color = rt.annotations?.color;
-  if (color && color !== "default") {
-    if (color.endsWith("_background")) {
-      style.background = color.replace("_background", "").replaceAll("_", "-");
-      style.padding = "0 .25em";
-      style.borderRadius = "4px";
-    } else {
-      style.color = color.replaceAll("_", "-");
-    }
+// Only allow link protocols that cannot execute script.
+function safeHref(href: string | null | undefined): string | undefined {
+  if (!href) return undefined;
+  try {
+    const url = new URL(href, window.location.origin);
+    return ["http:", "https:", "mailto:"].includes(url.protocol) ? url.href : undefined;
+  } catch {
+    return undefined;
   }
-  let el: React.ReactNode = rt.plain_text;
-  if (rt.annotations?.code)
-    el = (
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
-        {el}
-      </code>
-    );
-  if (rt.annotations?.bold) el = <strong>{el}</strong>;
-  if (rt.annotations?.italic) el = <em>{el}</em>;
-  if (rt.annotations?.underline) el = <u>{el}</u>;
-  if (rt.annotations?.strikethrough) el = <s>{el}</s>;
-  if (rt.href)
-    el = (
-      <a
-        href={rt.href}
-        target="_blank"
-        rel="noreferrer"
-        className="text-primary underline underline-offset-2 hover:opacity-80"
-      >
-        {el}
-      </a>
-    );
-  return <span style={style}>{el}</span>;
 }
 
-function Rich({ rich_text }: { rich_text: RichText }) {
+function colorStyle(color: string): CSSProperties | undefined {
+  if (color === "default") return undefined;
+  if (color.endsWith("_background")) {
+    return { background: color.replace("_background", ""), padding: "0 .25em", borderRadius: "4px" };
+  }
+  return { color };
+}
+
+function RichSpan({ item }: { item: RichTextItemResponse }) {
+  const { annotations } = item;
+  let node: ReactNode = item.plain_text;
+  if (annotations.code) node = <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">{node}</code>;
+  if (annotations.bold) node = <strong>{node}</strong>;
+  if (annotations.italic) node = <em>{node}</em>;
+  if (annotations.underline) node = <u>{node}</u>;
+  if (annotations.strikethrough) node = <s>{node}</s>;
+
+  const href = safeHref(item.href);
+  if (href) {
+    node = (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-primary underline underline-offset-2 hover:opacity-80"
+      >
+        {node}
+      </a>
+    );
+  }
+  return <span style={colorStyle(annotations.color)}>{node}</span>;
+}
+
+function Rich({ text }: { text: RichTextItemResponse[] }) {
   return (
     <>
-      {rich_text?.map((t, i) => (
-        <React.Fragment key={i}>{spanFor(t)}</React.Fragment>
+      {text.map((item, index) => (
+        <RichSpan key={index} item={item} />
       ))}
     </>
   );
 }
 
-export function NotionRenderer({ blocks }: { blocks: any[] }) {
-  const renderBlocks = (nodes: any[]): React.ReactNode[] => {
-    if (!nodes || !Array.isArray(nodes)) return [];
-    
-    const out: React.ReactNode[] = [];
-    let i = 0;
+const plainText = (text: RichTextItemResponse[]) => text.map((t) => t.plain_text).join("");
 
-    while (i < nodes.length) {
-      const block = nodes[i];
-      const t = block.type;
-      const b = block[t];
+function Children({ block, className = "mt-2 ml-4" }: { block: NotionBlock; className?: string }) {
+  if (!block.children?.length) return null;
+  return <div className={className}>{renderBlocks(block.children)}</div>;
+}
 
-      if (t === "numbered_list_item") {
-        const items: any[] = [];
-        while (i < nodes.length && nodes[i].type === "numbered_list_item") {
-          items.push(nodes[i]);
-          i++;
-        }
-        out.push(
-          <ol
-            key={`ol-${items[0].id}`}
-            className="list-decimal pl-6 my-4 space-y-2"
-          >
-            {items.map((item) => {
-              const bi = item.numbered_list_item || item[item.type];
-              return (
-                <li key={item.id} className="leading-relaxed text-muted-foreground">
-                  <Rich rich_text={bi.rich_text} />
-                  {item.children?.length ? (
-                    <div className="mt-2 ml-4">{renderBlocks(item.children)}</div>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ol>
-        );
-        continue;
-      }
-
-      if (t === "bulleted_list_item") {
-        const items: any[] = [];
-        while (i < nodes.length && nodes[i].type === "bulleted_list_item") {
-          items.push(nodes[i]);
-          i++;
-        }
-        out.push(
-          <ul
-            key={`ul-${items[0].id}`}
-            className="list-disc pl-6 my-4 space-y-2"
-          >
-            {items.map((item) => {
-              const bi = item.bulleted_list_item || item[item.type];
-              return (
-                <li key={item.id} className="leading-relaxed text-muted-foreground">
-                  <Rich rich_text={bi.rich_text} />
-                  {item.children?.length ? (
-                    <div className="mt-2 ml-4">{renderBlocks(item.children)}</div>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
-        );
-        continue;
-      }
-
-      i++;
-
-      switch (t) {
-        case "heading_1":
-          out.push(
-            <h1
-              key={block.id}
-              className="text-3xl md:text-4xl font-serif leading-tight mt-12 mb-4"
-            >
-              <Rich rich_text={b.rich_text} />
-            </h1>
-          );
-          break;
-
-        case "heading_2":
-          out.push(
-            <h2
-              key={block.id}
-              className="text-2xl md:text-3xl font-serif leading-snug mt-10 mb-3"
-            >
-              <Rich rich_text={b.rich_text} />
-            </h2>
-          );
-          break;
-
-        case "heading_3":
-          out.push(
-            <h3
-              key={block.id}
-              className="text-xl md:text-2xl font-serif leading-snug mt-8 mb-2"
-            >
-              <Rich rich_text={b.rich_text} />
-            </h3>
-          );
-          break;
-
-        case "paragraph":
-          out.push(
-            <p
-              key={block.id}
-              className="leading-relaxed my-4 text-muted-foreground text-lg"
-            >
-              <Rich rich_text={b.rich_text} />
-              {block.children?.length ? (
-                <div className="mt-2 ml-4">{renderBlocks(block.children)}</div>
-              ) : null}
-            </p>
-          );
-          break;
-
-        case "quote":
-          out.push(
-            <blockquote
-              key={block.id}
-              className="border-l-4 border-primary pl-6 italic my-6 text-muted-foreground text-lg"
-            >
-              <Rich rich_text={b.rich_text} />
-            </blockquote>
-          );
-          break;
-
-        case "divider":
-          out.push(
-            <hr key={block.id} className="my-8 border-border" />
-          );
-          break;
-
-        case "to_do":
-          out.push(
-            <div
-              key={block.id}
-              className="flex items-start gap-3 my-3"
-            >
-              <input
-                type="checkbox"
-                disabled
-                defaultChecked={b.checked}
-                className="mt-1 h-4 w-4 accent-primary"
-              />
-              <div className="text-muted-foreground">
-                <Rich rich_text={b.rich_text} />
-              </div>
-            </div>
-          );
-          break;
-
-        case "toggle":
-          out.push(
-            <details key={block.id} className="my-4">
-              <summary className="cursor-pointer font-medium hover:text-primary transition-colors">
-                <Rich rich_text={b.rich_text} />
-              </summary>
-              {block.children?.length ? (
-                <div className="ml-4 mt-2">{renderBlocks(block.children)}</div>
-              ) : null}
-            </details>
-          );
-          break;
-
-        case "callout":
-          out.push(
-            <div
-              key={block.id}
-              className="my-6 p-4 rounded-none border border-border bg-muted/30 flex items-start gap-3"
-            >
-              {b.icon?.emoji && (
-                <span className="text-xl shrink-0">{b.icon.emoji}</span>
-              )}
-              <div className="flex-1 min-w-0 text-muted-foreground">
-                <Rich rich_text={b.rich_text} />
-              </div>
-            </div>
-          );
-          break;
-
-        case "code":
-          out.push(
-            <pre
-              key={block.id}
-              className="overflow-x-auto rounded-none p-4 text-sm bg-muted border border-border my-6 font-mono"
-            >
-              <code className="block">
-                {b.rich_text?.map((r: any) => r.plain_text).join("")}
-              </code>
-            </pre>
-          );
-          break;
-
-        case "image": {
-          const src =
-            b.type === "external" ? b.external?.url : b.file?.url;
-          const caption = b.caption?.[0]?.plain_text ?? "";
-          out.push(
-            <figure key={block.id} className="my-8">
-              <img
-                src={src}
-                alt={caption}
-                className="w-full h-auto"
-              />
-              {caption && (
-                <figcaption className="mt-3 text-sm text-center text-muted-foreground">
-                  {caption}
-                </figcaption>
-              )}
-            </figure>
-          );
-          break;
-        }
-
-        case "video": {
-          const src =
-            b.type === "external" ? b.external?.url : b.file?.url;
-          out.push(
-            <div key={block.id} className="my-8 aspect-video">
-              <video
-                src={src}
-                controls
-                className="w-full h-full"
-              />
-            </div>
-          );
-          break;
-        }
-
-        case "embed": {
-          out.push(
-            <div key={block.id} className="my-8">
-              <iframe
-                src={b.url}
-                className="w-full aspect-video border-0"
-                allowFullScreen
-              />
-            </div>
-          );
-          break;
-        }
-
-        case "bookmark": {
-          const url: string = b.url;
-          const caption = b.caption?.[0]?.plain_text ?? "";
-          try {
-            const u = new URL(url);
-            const hostname = u.hostname.replace(/^www\./, "");
-            out.push(
-              <figure key={block.id} className="my-6">
-                <a
-                  href={u.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex gap-4 border border-border p-4 hover:bg-muted/50 transition"
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="text-foreground truncate">{hostname}</div>
-                    <div className="text-sm text-muted-foreground break-all">
-                      {u.href}
-                    </div>
-                  </div>
-                </a>
-                {caption && (
-                  <figcaption className="mt-1 text-xs text-muted-foreground">
-                    {caption}
-                  </figcaption>
-                )}
-              </figure>
-            );
-          } catch {
-            out.push(
-              <a
-                key={block.id}
-                href={url}
-                target="_blank"
-                rel="noreferrer"
-                className="block break-all border border-border p-4 my-4 hover:bg-muted/50"
-              >
-                {url}
-              </a>
-            );
-          }
-          break;
-        }
-
-        case "table": {
-          out.push(
-            <div key={block.id} className="my-6 overflow-x-auto">
-              <table className="w-full border-collapse">
-                <tbody>
-                  {block.children?.map((row: any, rowIndex: number) => (
-                    <tr key={row.id} className={rowIndex === 0 ? "bg-muted" : ""}>
-                      {row.table_row?.cells?.map((cell: any, cellIndex: number) => {
-                        const CellTag = rowIndex === 0 ? "th" : "td";
-                        return (
-                          <CellTag
-                            key={cellIndex}
-                            className="border border-border px-4 py-2 text-left"
-                          >
-                            <Rich rich_text={cell} />
-                          </CellTag>
-                        );
-                      })}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          );
-          break;
-        }
-
-        default:
-          break;
-      }
-    }
-
-    return out;
-  };
-
-  if (!blocks || !Array.isArray(blocks) || blocks.length === 0) {
-    return null;
-  }
-
+function List({ items }: { items: ListBlock[] }) {
+  const ordered = items[0].type === "numbered_list_item";
+  const Tag = ordered ? "ol" : "ul";
   return (
-    <article className="notion-content max-w-none">
-      {renderBlocks(blocks)}
-    </article>
+    <Tag className={`${ordered ? "list-decimal" : "list-disc"} pl-6 my-4 space-y-2`}>
+      {items.map((item) => (
+        <li key={item.id} className="leading-relaxed text-muted-foreground">
+          <Rich
+            text={
+              item.type === "numbered_list_item" ? item.numbered_list_item.rich_text : item.bulleted_list_item.rich_text
+            }
+          />
+          <Children block={item} />
+        </li>
+      ))}
+    </Tag>
   );
+}
+
+function Block({ block }: { block: NotionBlock }): ReactNode {
+  switch (block.type) {
+    case "heading_1":
+      return (
+        <h2 className="text-3xl md:text-4xl font-serif leading-tight mt-12 mb-4">
+          <Rich text={block.heading_1.rich_text} />
+        </h2>
+      );
+    case "heading_2":
+      return (
+        <h3 className="text-2xl md:text-3xl font-serif leading-snug mt-10 mb-3">
+          <Rich text={block.heading_2.rich_text} />
+        </h3>
+      );
+    case "heading_3":
+      return (
+        <h4 className="text-xl md:text-2xl font-serif leading-snug mt-8 mb-2">
+          <Rich text={block.heading_3.rich_text} />
+        </h4>
+      );
+    case "paragraph":
+      return (
+        <>
+          <p className="leading-relaxed my-4 text-muted-foreground text-lg">
+            <Rich text={block.paragraph.rich_text} />
+          </p>
+          <Children block={block} />
+        </>
+      );
+    case "quote":
+      return (
+        <blockquote className="border-l-4 border-primary pl-6 italic my-6 text-muted-foreground text-lg">
+          <Rich text={block.quote.rich_text} />
+          <Children block={block} />
+        </blockquote>
+      );
+    case "divider":
+      return <hr className="my-8 border-border" />;
+    case "to_do":
+      return (
+        <div className="flex items-start gap-3 my-3">
+          <input
+            type="checkbox"
+            disabled
+            defaultChecked={block.to_do.checked}
+            className="mt-1 h-4 w-4 accent-primary"
+            aria-label={plainText(block.to_do.rich_text)}
+          />
+          <div className="text-muted-foreground">
+            <Rich text={block.to_do.rich_text} />
+          </div>
+        </div>
+      );
+    case "toggle":
+      return (
+        <details className="my-4">
+          <summary className="cursor-pointer font-medium hover:text-primary transition-colors">
+            <Rich text={block.toggle.rich_text} />
+          </summary>
+          <Children block={block} />
+        </details>
+      );
+    case "callout":
+      return (
+        <div className="my-6 p-4 border border-border bg-muted/30 flex items-start gap-3">
+          {block.callout.icon?.type === "emoji" && (
+            <span className="text-xl shrink-0" aria-hidden="true">
+              {block.callout.icon.emoji}
+            </span>
+          )}
+          <div className="flex-1 min-w-0 text-muted-foreground">
+            <Rich text={block.callout.rich_text} />
+            <Children block={block} className="mt-2" />
+          </div>
+        </div>
+      );
+    case "code":
+      return (
+        <pre className="overflow-x-auto p-4 text-sm bg-muted border border-border my-6 font-mono">
+          <code className="block" data-language={block.code.language}>
+            {plainText(block.code.rich_text)}
+          </code>
+        </pre>
+      );
+    case "image": {
+      const { image } = block;
+      const src = image.type === "external" ? image.external.url : image.type === "file" ? image.file.url : undefined;
+      const caption = plainText(image.caption);
+      if (!src) return null;
+      return (
+        <figure className="my-8">
+          <img src={src} alt={caption} loading="lazy" decoding="async" className="w-full h-auto" />
+          {caption && <figcaption className="mt-3 text-sm text-center text-muted-foreground">{caption}</figcaption>}
+        </figure>
+      );
+    }
+    case "video": {
+      const { video } = block;
+      const src = video.type === "external" ? video.external.url : video.type === "file" ? video.file.url : undefined;
+      if (!src) return null;
+      return (
+        <div className="my-8 aspect-video">
+          <video src={src} controls preload="metadata" className="w-full h-full" />
+        </div>
+      );
+    }
+    case "embed": {
+      const src = safeHref(block.embed.url);
+      if (!src) return null;
+      return (
+        <div className="my-8">
+          <iframe
+            src={src}
+            title={plainText(block.embed.caption) || new URL(src).hostname}
+            loading="lazy"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-presentation"
+            className="w-full aspect-video border-0"
+            allowFullScreen
+          />
+        </div>
+      );
+    }
+    case "bookmark": {
+      const href = safeHref(block.bookmark.url);
+      if (!href) return null;
+      const caption = plainText(block.bookmark.caption);
+      return (
+        <figure className="my-6">
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block border border-border p-4 hover:bg-muted/50 transition"
+          >
+            <div className="text-foreground truncate">{new URL(href).hostname.replace(/^www\./, "")}</div>
+            <div className="text-sm text-muted-foreground break-all">{href}</div>
+          </a>
+          {caption && <figcaption className="mt-1 text-xs text-muted-foreground">{caption}</figcaption>}
+        </figure>
+      );
+    }
+    case "table": {
+      const rows = (block.children ?? []).filter((row) => row.type === "table_row");
+      const hasHeader = block.table.has_column_header;
+      return (
+        <div className="my-6 overflow-x-auto">
+          <table className="w-full border-collapse">
+            <tbody>
+              {rows.map((row, rowIndex) => {
+                const CellTag = hasHeader && rowIndex === 0 ? "th" : "td";
+                return (
+                  <tr key={row.id} className={CellTag === "th" ? "bg-muted" : undefined}>
+                    {row.table_row.cells.map((cell, cellIndex) => (
+                      <CellTag key={cellIndex} className="border border-border px-4 py-2 text-left">
+                        <Rich text={cell} />
+                      </CellTag>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+    default:
+      return null;
+  }
+}
+
+const isListBlock = (block: NotionBlock): block is ListBlock =>
+  block.type === "bulleted_list_item" || block.type === "numbered_list_item";
+
+// Notion returns list items as siblings; group consecutive items of the same
+// kind into a single <ul>/<ol>.
+function renderBlocks(blocks: NotionBlock[]): ReactNode[] {
+  const out: ReactNode[] = [];
+  for (let i = 0; i < blocks.length;) {
+    const block = blocks[i];
+    if (isListBlock(block)) {
+      const items: ListBlock[] = [];
+      while (i < blocks.length) {
+        const next = blocks[i];
+        if (!isListBlock(next) || next.type !== block.type) break;
+        items.push(next);
+        i++;
+      }
+      out.push(<List key={block.id} items={items} />);
+      continue;
+    }
+    out.push(
+      <Fragment key={block.id}>
+        <Block block={block} />
+      </Fragment>,
+    );
+    i++;
+  }
+  return out;
+}
+
+export function NotionRenderer({ blocks }: { blocks: NotionBlock[] }) {
+  if (blocks.length === 0) return null;
+  return <div className="notion-content max-w-none">{renderBlocks(blocks)}</div>;
 }

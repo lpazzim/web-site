@@ -1,73 +1,75 @@
-# Welcome to your Lovable project
+# lpazzim.com
 
-## Project info
+[![CI](https://github.com/lpazzim/web-site/actions/workflows/ci.yml/badge.svg)](https://github.com/lpazzim/web-site/actions/workflows/ci.yml)
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Personal portfolio and living CV of **Lucas Pazzim**, Senior Frontend Engineer based in São Paulo, Brazil.
 
-## How can I edit this code?
+🌐 **[lpazzim.com](https://lpazzim.com)** · [LinkedIn](https://www.linkedin.com/in/lpazzim) · [GitHub](https://github.com/lpazzim)
 
-There are several ways of editing your application.
+## Stack
 
-**Use Lovable**
+- **React 19** with the **React Compiler**, **TypeScript** (strict) and **Vite 8** (Rolldown)
+- **Tailwind CSS v4** with CSS-first design tokens
+- **Motion** for scroll-driven and reveal animations, honoring `prefers-reduced-motion`
+- **TanStack Query** for data fetching and caching
+- **i18next** for English / Brazilian Portuguese, with typed bilingual content
+- **Notion API** as a headless CMS for the blog, served through **Vercel Functions**
+- **Vitest** + **Testing Library** for unit tests, **Playwright** for end-to-end tests
+- **ESLint 10**, **Prettier** and **GitHub Actions** CI
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Project structure
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+api/            Vercel Functions (Notion-backed blog API); api/_lib holds shared code
+e2e/            Playwright end-to-end tests
+shared/         Types shared by the API and the client
+src/
+  components/   Layout, header, footer, Notion block renderer
+  content/      Typed, bilingual CV content: experience, case studies, profile
+  i18n/         i18next setup and UI strings (en, pt-BR)
+  lib/          Blog API client and utilities
+  pages/        Route components (lazy-loaded, except the home page)
+  theme/        Light/dark theme provider
+vite-plugins/   Dev-only plugin that serves api/ from the Vite dev server
 ```
 
-**Edit a file directly in GitHub**
+Career content lives in `src/content` as typed data. Every field is written once per language, and the test suite fails if a
+translation is missing or empty.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Getting started
 
-**Use GitHub Codespaces**
+Requires Node.js 24+ and [pnpm](https://pnpm.io).
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```sh
+pnpm install
+cp .env.example .env   # then fill in the Notion credentials
+pnpm dev               # http://localhost:5000, also serving /api/* locally
+```
 
-## What technologies are used for this project?
+### Environment variables
 
-This project is built with:
+| Variable             | Description                                    |
+| -------------------- | ---------------------------------------------- |
+| `NOTION_API_TOKEN`   | Notion internal integration token              |
+| `NOTION_DATABASE_ID` | ID of the Notion data source holding the posts |
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Both are read only on the server; they never reach the client bundle.
 
-## How can I deploy this project?
+### Scripts
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+| Command              | Description                                       |
+| -------------------- | ------------------------------------------------- |
+| `pnpm dev`           | Start the dev server (client + API)               |
+| `pnpm build`         | Production build into `dist/`                     |
+| `pnpm preview`       | Preview the production build                      |
+| `pnpm lint`          | Run ESLint                                        |
+| `pnpm typecheck`     | Type-check app, API, tests and tooling            |
+| `pnpm format`        | Format with Prettier                              |
+| `pnpm test`          | Run unit tests                                    |
+| `pnpm test:coverage` | Run unit tests with coverage                      |
+| `pnpm test:e2e`      | Run Playwright tests against the production build |
 
-## Can I connect a custom domain to my Lovable project?
+## Deployment
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Deployed on **Vercel**. Routes under `/api` run as Vercel Functions; every other path is rewritten to the SPA (see
+`vercel.json`). CI runs formatting, lint, type-checking, unit and end-to-end tests on every push and pull request.

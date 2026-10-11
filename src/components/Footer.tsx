@@ -18,18 +18,22 @@ export function Footer({ variant = "default" }: FooterProps) {
             {/* Location */}
             <div className="space-y-3">
               <p className="text-label">{t("footer.locationLabel")}</p>
-              <div className="text-sm text-foreground space-y-1 whitespace-pre-line">
-                {t("footer.locationValue")}
-              </div>
+              <div className="text-sm text-foreground space-y-1 whitespace-pre-line">{t("footer.locationValue")}</div>
             </div>
 
-            {/* Gallery */}
+            {/* Navigation */}
             <div className="space-y-3">
-              <p className="text-label">{t("footer.galleryLabel")}</p>
+              <p className="text-label">{t("footer.navLabel")}</p>
               <div className="text-sm space-y-1">
-                <Link to="/work" className="block text-foreground hover:text-accent transition-colors">{t("footer.projectsLink")}</Link>
-                <Link to="/about" className="block text-foreground hover:text-accent transition-colors">{t("footer.aboutLink")}</Link>
-                <Link to="/contact" className="block text-foreground hover:text-accent transition-colors">{t("footer.contactLink")}</Link>
+                <Link to="/work" className="block text-foreground hover:text-accent transition-colors">
+                  {t("footer.projectsLink")}
+                </Link>
+                <Link to="/about" className="block text-foreground hover:text-accent transition-colors">
+                  {t("footer.aboutLink")}
+                </Link>
+                <Link to="/contact" className="block text-foreground hover:text-accent transition-colors">
+                  {t("footer.contactLink")}
+                </Link>
               </div>
             </div>
 
@@ -37,10 +41,17 @@ export function Footer({ variant = "default" }: FooterProps) {
             <div className="space-y-3">
               <p className="text-label">{t("footer.contactLabel")}</p>
               <div className="text-sm text-foreground space-y-1">
-                <a href="mailto:hello@lucaspazzim.com" className="block hover:text-accent transition-colors">
-                  hello@lucaspazzim.com
+                <a href="mailto:lpazzim@gmail.com" className="block hover:text-accent transition-colors">
+                  lpazzim@gmail.com
                 </a>
-                <p>+55 11 9999-9999</p>
+                <a
+                  href="https://www.linkedin.com/in/lpazzim"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block hover:text-accent transition-colors"
+                >
+                  LinkedIn
+                </a>
               </div>
             </div>
 
@@ -56,7 +67,7 @@ export function Footer({ variant = "default" }: FooterProps) {
 
         {/* Large Scrolling Text */}
         <div className="border-t border-separator overflow-hidden py-6 md:py-8">
-          <div className="flex whitespace-nowrap animate-marquee">
+          <div className="flex w-max whitespace-nowrap animate-marquee">
             {Array.from({ length: 8 }).map((_, i) => (
               <span
                 key={i}
@@ -79,16 +90,20 @@ export function Footer({ variant = "default" }: FooterProps) {
           {/* Left */}
           <div className="space-y-4">
             <p className="font-display text-xl font-semibold">Lucas Pazzim</p>
-            <p className="text-muted-foreground text-sm">
-              {t("footer.tagline")}
-            </p>
+            <p className="text-muted-foreground text-sm">{t("footer.tagline")}</p>
           </div>
 
           {/* Center */}
           <div className="flex gap-8 text-sm text-muted-foreground">
-            <Link to="/work" className="hover-highlight">{t("footer.workLink")}</Link>
-            <Link to="/about" className="hover-highlight">{t("footer.aboutLink")}</Link>
-            <Link to="/contact" className="hover-highlight">{t("footer.contactLink")}</Link>
+            <Link to="/work" className="hover-highlight">
+              {t("footer.workLink")}
+            </Link>
+            <Link to="/about" className="hover-highlight">
+              {t("footer.aboutLink")}
+            </Link>
+            <Link to="/contact" className="hover-highlight">
+              {t("footer.contactLink")}
+            </Link>
           </div>
 
           {/* Right */}
