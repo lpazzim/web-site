@@ -1,9 +1,10 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { THEME_STORAGE_KEY, ThemeContext, type Theme } from "./theme-context";
 
-// The inline script in index.html applies the stored theme before first paint,
-// so the initial state can be read straight from the DOM.
-const readInitialTheme = (): Theme => (document.documentElement.classList.contains("dark") ? "dark" : "light");
+// The inline script in root.tsx applies the stored theme before first paint,
+// so the initial state can be read straight from the DOM (dark while pre-rendering).
+const readInitialTheme = (): Theme =>
+  typeof document === "undefined" || document.documentElement.classList.contains("dark") ? "dark" : "light";
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>(readInitialTheme);

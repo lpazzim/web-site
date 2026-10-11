@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      # Packages that must move together (see .claude/skills/upgrade-deps).
+      react:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+      react-router:
+        patterns: ["react-router", "@react-router/*"]
+      vite:
+        patterns: ["vite", "@vitejs/*", "@rolldown/*", "@tailwindcss/vite", "tailwindcss"]
+      testing:
+        patterns: ["vitest", "@vitest/*", "@testing-library/*", "@playwright/test", "jsdom"]
+      lint:
+        patterns: ["eslint", "@eslint/*", "eslint-plugin-*", "typescript-eslint", "globals", "prettier"]
+    ignore:
+      # Major upgrades are planned manually with the /upgrade-deps skill.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

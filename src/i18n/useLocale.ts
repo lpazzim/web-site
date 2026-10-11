@@ -1,8 +1,13 @@
-import { useTranslation } from "react-i18next";
-import { resolveLanguage, type SupportedLanguage } from "./languages";
+import { useLocation } from "react-router";
+import { languageFromPath, localizePath, type SupportedLanguage } from "./languages";
 
-// Active locale, re-rendering on `languageChanged` (bound in i18n/index.ts).
+/** Active language, derived from the URL ("/pt/..." is Portuguese). */
 export function useLocale(): SupportedLanguage {
-  const { i18n } = useTranslation();
-  return resolveLanguage(i18n.resolvedLanguage ?? i18n.language);
+  return languageFromPath(useLocation().pathname);
+}
+
+/** Returns a function that prefixes app paths with the active language. */
+export function useLocalizedPath(): (path: string) => string {
+  const locale = useLocale();
+  return (path) => localizePath(path, locale);
 }

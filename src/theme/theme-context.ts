@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 
 export type Theme = "light" | "dark";
 
-/** Must match the inline script in index.html. */
+/** Read by the inline theme script in root.tsx before first paint. */
 export const THEME_STORAGE_KEY = "theme";
 
 export interface ThemeContextValue {

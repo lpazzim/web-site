@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { LocaleLink } from "@/i18n/LocaleLink";
 import { useTranslation } from "react-i18next";
 
 interface FooterProps {
@@ -25,15 +25,15 @@ export function Footer({ variant = "default" }: FooterProps) {
             <div className="space-y-3">
               <p className="text-label">{t("footer.navLabel")}</p>
               <div className="text-sm space-y-1">
-                <Link to="/work" className="block text-foreground hover:text-accent transition-colors">
+                <LocaleLink to="/work" className="block text-foreground hover:text-accent transition-colors">
                   {t("footer.projectsLink")}
-                </Link>
-                <Link to="/about" className="block text-foreground hover:text-accent transition-colors">
+                </LocaleLink>
+                <LocaleLink to="/about" className="block text-foreground hover:text-accent transition-colors">
                   {t("footer.aboutLink")}
-                </Link>
-                <Link to="/contact" className="block text-foreground hover:text-accent transition-colors">
+                </LocaleLink>
+                <LocaleLink to="/contact" className="block text-foreground hover:text-accent transition-colors">
                   {t("footer.contactLink")}
-                </Link>
+                </LocaleLink>
               </div>
             </div>
 
@@ -95,15 +95,15 @@ export function Footer({ variant = "default" }: FooterProps) {
 
           {/* Center */}
           <div className="flex gap-8 text-sm text-muted-foreground">
-            <Link to="/work" className="hover-highlight">
+            <LocaleLink to="/work" className="hover-highlight">
               {t("footer.workLink")}
-            </Link>
-            <Link to="/about" className="hover-highlight">
+            </LocaleLink>
+            <LocaleLink to="/about" className="hover-highlight">
               {t("footer.aboutLink")}
-            </Link>
-            <Link to="/contact" className="hover-highlight">
+            </LocaleLink>
+            <LocaleLink to="/contact" className="hover-highlight">
               {t("footer.contactLink")}
-            </Link>
+            </LocaleLink>
           </div>
 
           {/* Right */}

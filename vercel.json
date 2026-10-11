@@ -1,12 +1,28 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm build",
+  "outputDirectory": "build/client",
+  "trailingSlash": false,
   "rewrites": [
+    { "source": "/api/posts/:slug", "destination": "/api/posts?slug=:slug" },
+    { "source": "/blog/:slug", "destination": "/__spa-fallback.html" },
+    { "source": "/pt/blog/:slug", "destination": "/__spa-fallback.html" }
+  ],
+  "headers": [
     {
-      "source": "/api/posts/:slug",
-      "destination": "/api/posts?slug=:slug"
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()" }
+      ]
     }
   ]
 }

@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { NavLink } from "react-router";
 import { Menu, X, Sun, Moon } from "lucide-react";
-import { useTheme } from "@/theme/theme-context";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@/theme/theme-context";
+import { LocaleLink } from "@/i18n/LocaleLink";
+import { useLocalizedPath } from "@/i18n/useLocale";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
 // Both icons render; CSS picks one from the .dark class, so no mount state is needed.
@@ -13,6 +15,15 @@ const ThemeIcon = () => (
   </>
 );
 
+const NAV_ITEMS = [
+  { key: "projects", path: "/work" },
+  { key: "about", path: "/about" },
+  { key: "blog", path: "/blog" },
+  { key: "contact", path: "/contact" },
+] as const;
+
+const MOBILE_MENU_ID = "mobile-menu";
+
 interface HeaderProps {
   revealMode?: boolean;
 }
@@ -20,19 +31,10 @@ interface HeaderProps {
 export function Header({ revealMode = false }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [pointerNearTop, setPointerNearTop] = useState(false);
-  const isVisible = !revealMode || pointerNearTop;
-  const location = useLocation();
-  const navigate = useNavigate();
+  const isVisible = !revealMode || pointerNearTop || isMenuOpen;
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
-
-  // Nav items are derived from translations so they update on language change
-  const navItems = [
-    { key: "projects", label: t("nav.projects"), anchor: "#projects" },
-    { key: "about", label: t("nav.about"), anchor: "#about" },
-    { key: "blog", label: t("nav.blog"), anchor: "/blog", isRoute: true },
-    { key: "contact", label: t("nav.contact"), anchor: "#contact" },
-  ];
+  const localize = useLocalizedPath();
 
   // In reveal mode the header only shows while the pointer is near the top.
   useEffect(() => {
@@ -46,42 +48,32 @@ export function Header({ revealMode = false }: HeaderProps) {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [revealMode]);
 
-  const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
-  };
+  // Close the mobile menu with Escape.
+  useEffect(() => {
+    if (!isMenuOpen) return;
 
-  const handleNavClick = (anchor: string, isRoute?: boolean) => {
-    setIsMenuOpen(false);
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsMenuOpen(false);
+    };
 
-    if (isRoute) {
-      navigate(anchor);
-      return;
-    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isMenuOpen]);
 
-    if (location.pathname !== "/") {
-      navigate("/");
-      setTimeout(() => {
-        const element = document.querySelector(anchor);
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-        }
-      }, 100);
-    } else {
-      const element = document.querySelector(anchor);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
+  const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
+  const closeMenu = () => setIsMenuOpen(false);
 
-  const handleLogoClick = () => {
-    setIsMenuOpen(false);
-    if (location.pathname !== "/") {
-      navigate("/");
-    } else {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
+  const themeButton = (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className="p-2 text-foreground/60 hover:text-foreground transition-colors"
+      aria-label={t("nav.toggleTheme")}
+      data-testid="button-theme-toggle"
+    >
+      <ThemeIcon />
+    </button>
+  );
 
   return (
     <header
@@ -91,53 +83,48 @@ export function Header({ revealMode = false }: HeaderProps) {
     >
       <div className="container-wide relative">
         <div className="flex items-center justify-between h-20 md:h-24">
-          <button
-            onClick={handleLogoClick}
+          <LocaleLink
+            to="/"
+            onClick={closeMenu}
             className="font-display text-lg font-semibold tracking-tight text-foreground hover:opacity-70 transition-opacity"
             data-testid="link-home"
           >
             Lucas Pazzim
-          </button>
+          </LocaleLink>
 
-          <nav className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
-            {navItems.map((item) => (
-              <button
+          <nav aria-label="Main" className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
+            {NAV_ITEMS.map((item) => (
+              <NavLink
                 key={item.key}
-                onClick={() => handleNavClick(item.anchor, item.isRoute)}
-                className="text-xs font-sans tracking-widest uppercase transition-all duration-300 hover:tracking-[0.2em] text-foreground/80 hover:text-foreground"
+                to={localize(item.path)}
+                className={({ isActive }) =>
+                  `text-xs font-sans tracking-widest uppercase transition-all duration-300 hover:tracking-[0.2em] hover:text-foreground ${
+                    isActive ? "text-foreground" : "text-foreground/70"
+                  }`
+                }
                 data-testid={`nav-${item.key}`}
               >
-                {item.label}
-              </button>
+                {t(`nav.${item.key}`)}
+              </NavLink>
             ))}
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
             <LanguageSwitcher />
             <span aria-hidden="true" className="h-4 w-px bg-foreground/20" />
-            <button
-              onClick={toggleTheme}
-              className="p-2 text-foreground/60 hover:text-foreground transition-colors"
-              aria-label={t("nav.toggleTheme")}
-              data-testid="button-theme-toggle"
-            >
-              <ThemeIcon />
-            </button>
+            {themeButton}
           </div>
 
           <div className="md:hidden flex items-center gap-3">
             <LanguageSwitcher />
+            {themeButton}
             <button
-              onClick={toggleTheme}
-              className="p-2 text-foreground/60 hover:text-foreground transition-colors"
-              aria-label={t("nav.toggleTheme")}
-            >
-              <ThemeIcon />
-            </button>
-            <button
+              type="button"
               className="p-2 -mr-2 text-foreground"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={() => setIsMenuOpen((open) => !open)}
               aria-label={t("nav.toggleMenu")}
+              aria-expanded={isMenuOpen}
+              aria-controls={MOBILE_MENU_ID}
               data-testid="button-menu-toggle"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -147,23 +134,29 @@ export function Header({ revealMode = false }: HeaderProps) {
       </div>
 
       <div
+        id={MOBILE_MENU_ID}
+        inert={!isMenuOpen}
         className={`md:hidden fixed inset-x-0 top-20 bottom-0 z-99 transition-all duration-300 ${
           isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
         <div className="absolute inset-0 bg-background" />
-        <nav className="container-wide py-12 flex flex-col gap-8 relative z-10 bg-background/80 backdrop-blur-md">
-          {navItems.map((item, index) => (
-            <button
+        <nav
+          aria-label="Mobile"
+          className="container-wide py-12 flex flex-col gap-8 relative z-10 bg-background/80 backdrop-blur-md"
+        >
+          {NAV_ITEMS.map((item, index) => (
+            <LocaleLink
               key={item.key}
-              onClick={() => handleNavClick(item.anchor, item.isRoute)}
+              to={item.path}
+              onClick={closeMenu}
               className={`text-4xl font-display text-foreground text-left transition-all duration-500 ${
                 isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
               style={{ transitionDelay: isMenuOpen ? `${index * 0.1}s` : "0s" }}
             >
-              {item.label}
-            </button>
+              {t(`nav.${item.key}`)}
+            </LocaleLink>
           ))}
         </nav>
       </div>

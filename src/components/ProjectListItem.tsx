@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { LocaleLink } from "@/i18n/LocaleLink";
 import type { CaseStudy } from "@/content/types";
 import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
 
@@ -12,7 +12,7 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Link
+    <LocaleLink
       to={`/work/${id}`}
       className={`group block border-b border-separator transition-colors duration-300 ${isHovered ? "bg-accent" : ""}`}
       onMouseEnter={() => setIsHovered(true)}
@@ -65,6 +65,6 @@ export function ProjectListItem({ project }: ProjectListItemProps) {
           </div>
         </div>
       </div>
-    </Link>
+    </LocaleLink>
   );
 }

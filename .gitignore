@@ -30,9 +30,18 @@ replit.nix
 .env*
 !.env.example
 # Personal LinkedIn export (contains private contact data)
-profile.pdf
+/*.pdf
 
 # Test artifacts
 coverage
 playwright-report
 test-results
+
+# React Router build output and generated types
+build
+.react-router
+
+# Personal Claude Code files
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/launch.json

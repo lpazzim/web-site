@@ -20,9 +20,9 @@ test.describe("case studies", () => {
     await expect(page.getByRole("heading", { name: /what i did/i })).toBeVisible();
   });
 
-  test("redirect unknown cases back to the archive", async ({ page }) => {
+  test("show the not-found page for unknown cases", async ({ page }) => {
     await page.goto("/work/does-not-exist");
-    await expect(page).toHaveURL(/\/work$/);
+    await expect(page.getByRole("heading", { name: "404" })).toBeVisible();
   });
 });
 
@@ -32,15 +32,24 @@ test("about page shows the full career timeline", async ({ page }) => {
   await expect(timeline.locator(":scope > li")).toHaveCount(11);
 });
 
-test("switching to Portuguese translates the page and persists", async ({ page }) => {
-  await page.goto("/");
+test("language switcher links to the same page in Portuguese", async ({ page }) => {
+  await page.goto("/about");
   await page.getByTestId("button-lang-pt-br").filter({ visible: true }).click();
 
+  await expect(page).toHaveURL(/\/pt\/about$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
-  await expect(page.getByRole("heading", { level: 1 }).first()).toContainText(/construindo/i);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(/lucas pazzim/i);
+  await expect(page.getByText("Engenheiro de Software Frontend Sênior").first()).toBeVisible();
 
-  await page.reload();
+  // Internal links keep the visitor in Portuguese.
+  await expect(page.getByTestId("link-home")).toHaveAttribute("href", "/pt");
+  await expect(page.getByTestId("nav-projects")).toHaveAttribute("href", "/pt/work");
+});
+
+test("Portuguese pages are reachable directly", async ({ page }) => {
+  await page.goto("/pt/work/upx");
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
+  await expect(page.getByRole("heading", { name: /o que eu fiz/i })).toBeVisible();
 });
 
 test("theme toggle switches to light mode and persists", async ({ page }) => {
@@ -58,4 +67,30 @@ test("theme toggle switches to light mode and persists", async ({ page }) => {
 test("unknown routes render the 404 page", async ({ page }) => {
   await page.goto("/this-page-does-not-exist");
   await expect(page.getByRole("heading", { name: "404" })).toBeVisible();
+});
+
+test("pages hydrate without console errors", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") errors.push(message.text());
+  });
+  page.on("pageerror", (error) => errors.push(error.message));
+
+  for (const path of [
+    "/",
+    "/work",
+    "/work/upx",
+    "/about",
+    "/contact",
+    "/blog",
+    "/pt",
+    "/pt/about",
+    "/pt/work/jestor",
+  ]) {
+    await page.goto(path);
+    await page.waitForLoadState("networkidle");
+  }
+
+  // /api is not served by the static preview server; those failures are expected.
+  expect(errors.filter((text) => !text.includes("/api/") && !text.includes("404"))).toEqual([]);
 });

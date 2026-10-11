@@ -2,16 +2,35 @@ import { Layout } from "@/components/Layout";
 import { motion } from "motion/react";
 import { useQuery } from "@tanstack/react-query";
 import { listPosts } from "@/lib/blog";
-import { Link } from "react-router-dom";
-import { format } from "date-fns";
+import { LocaleLink } from "@/i18n/LocaleLink";
+import { format, parseISO } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { getI18n, languageFromPath } from "@/i18n";
+import { useLocale } from "@/i18n/useLocale";
+import { pageMeta } from "@/lib/seo";
+import type { Route } from "./+types/blog";
 
-const Blog = () => {
-  const { t, i18n } = useTranslation();
-  const dateLocale = i18n.resolvedLanguage === "pt-BR" ? ptBR : enUS;
+// Runs at build time, so the pre-rendered page already lists the posts.
+export async function loader() {
+  // Imported inside the loader so it is dropped from every client chunk.
+  const { listPostsForBuild } = await import("@/lib/notion.server");
+  return { posts: await listPostsForBuild() };
+}
 
+export function meta({ location }: Route.MetaArgs) {
+  const locale = languageFromPath(location.pathname);
+  const { t } = getI18n(locale);
+  return pageMeta({ title: t("seo.blog.title"), description: t("seo.blog.description"), path: "/blog", locale });
+}
+
+export default function Blog({ loaderData }: Route.ComponentProps) {
+  const { t } = useTranslation();
+  const dateLocale = useLocale() === "pt-BR" ? ptBR : enUS;
+
+  // Starts from the build-time list and refreshes it in the browser, so posts
+  // published after the last deploy still show up.
   const {
     data: posts,
     isLoading,
@@ -19,6 +38,8 @@ const Blog = () => {
   } = useQuery({
     queryKey: ["posts"],
     queryFn: () => listPosts(),
+    initialData: loaderData.posts,
+    initialDataUpdatedAt: 0,
     staleTime: 1000 * 60 * 5,
   });
 
@@ -49,10 +70,10 @@ const Blog = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="group"
               >
-                <Link to={`/blog/${post.slug}`} className="block">
+                <LocaleLink to={`/blog/${post.slug}`} className="block">
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-8 border-t border-border hover:bg-muted/20 transition-colors -mx-4 px-4">
                     <div className="text-sm text-muted-foreground font-sans">
-                      {post.date && format(new Date(post.date), "MMM dd, yyyy", { locale: dateLocale })}
+                      {post.date && format(parseISO(post.date), "MMM dd, yyyy", { locale: dateLocale })}
                       {post.author && <div className="mt-1">{post.author}</div>}
                     </div>
                     <div className="md:col-span-3">
@@ -66,7 +87,7 @@ const Blog = () => {
                       </span>
                     </div>
                   </div>
-                </Link>
+                </LocaleLink>
               </motion.article>
             ))}
           </div>
@@ -74,6 +95,4 @@ const Blog = () => {
       </section>
     </Layout>
   );
-};
-
-export default Blog;
+}

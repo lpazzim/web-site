@@ -1,53 +1,32 @@
-import i18n from "i18next";
+import { createInstance, type i18n as I18n } from "i18next";
 import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-
 import en from "./locales/en.json";
 import ptBR from "./locales/pt-BR.json";
+import { SUPPORTED_LANGUAGES, type SupportedLanguage } from "./languages";
 
-import { LANGUAGE_STORAGE_KEY, resolveLanguage } from "./languages";
+export * from "./languages";
 
-export { LANGUAGE_STORAGE_KEY, SUPPORTED_LANGUAGES, resolveLanguage, type SupportedLanguage } from "./languages";
+const resources = { en, "pt-BR": ptBR } satisfies Record<SupportedLanguage, unknown>;
 
-// Keep <html lang> in sync for screen readers, hyphenation and search engines.
-i18n.on("languageChanged", (lng) => {
-  document.documentElement.lang = resolveLanguage(lng);
-});
-
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    // Register resources under every common variant of the language code so
-    // i18next finds them regardless of how the code is normalized internally
-    // (pt-BR, pt-br, pt).
-    resources: {
-      en: { translation: en },
-      "pt-BR": { translation: ptBR },
-      "pt-br": { translation: ptBR },
-      pt: { translation: ptBR },
-    },
-    // English is the explicit default. Only localStorage is consulted so the
-    // browser's preferred language never overrides EN on first visit.
+// One synchronously initialized instance per language. The language comes from
+// the URL, so pages render identically at build time (pre-rendering) and in
+// the browser (hydration).
+function createI18n(language: SupportedLanguage): I18n {
+  const instance = createInstance();
+  void instance.use(initReactI18next).init({
+    lng: language,
     fallbackLng: "en",
-    supportedLngs: ["en", "pt-BR", "pt-br", "pt"],
-    lowerCaseLng: false,
-    cleanCode: false,
-    interpolation: {
-      escapeValue: false,
-    },
-    detection: {
-      order: ["localStorage"],
-      lookupLocalStorage: LANGUAGE_STORAGE_KEY,
-      caches: ["localStorage"],
-    },
-    returnObjects: false,
-    react: {
-      // Re-render bound components on these i18next events
-      bindI18n: "languageChanged loaded",
-      bindI18nStore: "added removed",
-      useSuspense: false,
-    },
+    resources: { en: { translation: resources.en }, "pt-BR": { translation: resources["pt-BR"] } },
+    initAsync: false,
+    interpolation: { escapeValue: false },
+    react: { useSuspense: false },
   });
+  return instance;
+}
 
-export default i18n;
+const instances = Object.fromEntries(SUPPORTED_LANGUAGES.map((lng) => [lng, createI18n(lng)])) as Record<
+  SupportedLanguage,
+  I18n
+>;
+
+export const getI18n = (language: SupportedLanguage): I18n => instances[language];
