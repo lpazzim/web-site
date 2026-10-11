@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Sun, Moon } from "lucide-react";
-import { useTheme } from "next-themes";
+import { useTheme } from "@/theme/theme-context";
 import { useTranslation } from "react-i18next";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+
+// Both icons render; CSS picks one from the .dark class, so no mount state is needed.
+const ThemeIcon = () => (
+  <>
+    <Sun size={18} className="hidden dark:block" />
+    <Moon size={18} className="dark:hidden" />
+  </>
+);
 
 interface HeaderProps {
   revealMode?: boolean;
@@ -11,8 +19,8 @@ interface HeaderProps {
 
 export function Header({ revealMode = false }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(!revealMode);
-  const [mounted, setMounted] = useState(false);
+  const [pointerNearTop, setPointerNearTop] = useState(false);
+  const isVisible = !revealMode || pointerNearTop;
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
@@ -26,18 +34,12 @@ export function Header({ revealMode = false }: HeaderProps) {
     { key: "contact", label: t("nav.contact"), anchor: "#contact" },
   ];
 
+  // In reveal mode the header only shows while the pointer is near the top.
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!revealMode) {
-      setIsVisible(true);
-      return;
-    }
+    if (!revealMode) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      setIsVisible(e.clientY < 100);
+      setPointerNearTop(e.clientY < 100);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -119,7 +121,7 @@ export function Header({ revealMode = false }: HeaderProps) {
               aria-label={t("nav.toggleTheme")}
               data-testid="button-theme-toggle"
             >
-              {mounted && (theme === "dark" ? <Sun size={18} /> : <Moon size={18} />)}
+              <ThemeIcon />
             </button>
           </div>
 
@@ -130,7 +132,7 @@ export function Header({ revealMode = false }: HeaderProps) {
               className="p-2 text-foreground/60 hover:text-foreground transition-colors"
               aria-label={t("nav.toggleTheme")}
             >
-              {mounted && (theme === "dark" ? <Sun size={18} /> : <Moon size={18} />)}
+              <ThemeIcon />
             </button>
             <button
               className="p-2 -mr-2 text-foreground"
