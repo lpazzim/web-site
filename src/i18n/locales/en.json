@@ -21,7 +21,8 @@
       "line4": "Matter",
       "intro": "Senior Frontend Engineer based in São Paulo, Brazil, building scalable, high-performance web applications with React, Next.js and TypeScript, with a focus on Web Performance, SEO and Accessibility.",
       "yearsLabel": "2010 — {{year}}",
-      "yearsSubtitle": "Selected Works"
+      "yearsSubtitle": "Selected Works",
+      "scroll": "Scroll to explore"
     },
     "marquee": "Clean Code • Pixel Perfect • Performance First • User Focused •",
     "approach": {

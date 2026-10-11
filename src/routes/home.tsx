@@ -1,8 +1,12 @@
-import { motion, useScroll, useTransform, useInView } from "motion/react";
-import { useRef, type ReactNode } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
+import { useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
+import { HudFrame } from "@/components/tech/HudFrame";
 import { Intro } from "@/components/tech/Intro";
+import { ParallaxText, TextReveal } from "@/components/tech/Reveal";
+import { ScrollCue } from "@/components/tech/ScrollCue";
+import { SectionLabel } from "@/components/tech/SectionLabel";
 import { projects } from "@/content/projects";
 import { profile } from "@/content/profile";
 import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
@@ -16,41 +20,6 @@ import { useQuery } from "@tanstack/react-query";
 import { listPosts } from "@/lib/blog";
 import { format, parseISO } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
-
-const TextReveal = ({ children, className = "" }: { children: ReactNode; className?: string }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <div ref={ref} className={`overflow-hidden ${className}`}>
-      <motion.div
-        initial={{ y: "100%" }}
-        animate={isInView ? { y: 0 } : { y: "100%" }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-};
-
-const ParallaxText = ({ children, baseVelocity = 1 }: { children: ReactNode; baseVelocity?: number }) => {
-  return (
-    <div className="overflow-hidden whitespace-nowrap flex">
-      <motion.div
-        className="flex gap-8"
-        animate={{ x: baseVelocity > 0 ? [0, -1000] : [-1000, 0] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      >
-        {[...Array(4)].map((_, i) => (
-          <span key={i} className="text-[8vw] md:text-[6vw] uppercase tracking-tighter font-serif opacity-10">
-            {children}
-          </span>
-        ))}
-      </motion.div>
-    </div>
-  );
-};
 
 const HERO_LINES = [
   { key: "line1", className: "" },
@@ -106,9 +75,9 @@ export default function Home() {
           style={{ opacity: heroOpacity, scale: heroScale, pointerEvents: heroPointerEvents }}
           className="min-h-screen flex flex-col justify-between pt-24 pb-12 container-wide sticky top-0 z-10"
         >
-          <div className="flex-1 flex flex-col justify-center">
+          <div className="flex-1 flex flex-col justify-start pt-6 md:pt-10">
             {/* One heading for the page; each line slides up on its own. */}
-            <h1 className="text-[12vw] md:text-[10vw] lg:text-[8vw] leading-[0.85] tracking-tighter uppercase font-serif">
+            <h1 className="text-[14vw] md:text-[11vw] lg:text-[9vw] leading-[0.85] font-semibold tracking-tighter uppercase glow-text">
               {HERO_LINES.map(({ key, className }, index) => (
                 <span key={key} className={`block overflow-hidden ${index === 2 ? "mt-4" : ""}`}>
                   <motion.span
@@ -128,13 +97,16 @@ export default function Home() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 1 }}
-            className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pt-12 border-t border-border"
+            className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pt-12 -mx-6 px-6 md:-mx-12 md:px-12 lg:-mx-20 lg:px-20 bg-linear-to-t from-background via-background/80 to-transparent"
           >
             <p className="text-lg md:text-xl max-w-md text-muted-foreground leading-relaxed">{t("home.hero.intro")}</p>
-            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground font-sans">
-              {t("home.hero.yearsLabel", { year: new Date().getFullYear() })}
-              <br />
-              {t("home.hero.yearsSubtitle")}
+            <div className="flex items-end gap-8">
+              <ScrollCue label={t("home.hero.scroll")} className="hidden md:flex" />
+              <HudFrame className="px-4 py-3 text-hud">
+                {t("home.hero.yearsLabel", { year: new Date().getFullYear() })}
+                <br />
+                {t("home.hero.yearsSubtitle")}
+              </HudFrame>
             </div>
           </motion.div>
         </motion.section>
@@ -148,25 +120,27 @@ export default function Home() {
         </section>
 
         {/* Video/Statement Section */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-foreground text-background">
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-grid border-y border-border">
           <motion.div
             initial={{ opacity: 0, y: 100 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1 }}
-            className="container-wide text-center py-32"
+            className="container-wide py-32 flex flex-col items-center"
           >
-            <div className="text-xs tracking-[0.3em] uppercase mb-12 opacity-60 font-sans">
+            <SectionLabel index={1} className="mb-12">
               {t("home.approach.label")}
-            </div>
-            <h2 className="text-4xl md:text-6xl lg:text-7xl uppercase tracking-tighter leading-[0.95] mb-12">
-              {t("home.approach.title1")}
-              <br />
-              {t("home.approach.title2")}
-              <br />
-              {t("home.approach.title3")}
-            </h2>
-            <p className="text-xl md:text-2xl opacity-60 max-w-2xl mx-auto italic font-serif">
+            </SectionLabel>
+            <HudFrame className="px-6 py-10 md:px-16 md:py-16 text-center">
+              <h2 className="text-4xl md:text-6xl lg:text-7xl font-semibold uppercase tracking-tighter leading-[0.95]">
+                {t("home.approach.title1")}
+                <br />
+                <span className="text-primary glow-text">{t("home.approach.title2")}</span>
+                <br />
+                {t("home.approach.title3")}
+              </h2>
+            </HudFrame>
+            <p className="mt-12 text-lg md:text-xl text-muted-foreground max-w-2xl text-center">
               {t("home.approach.quote")}
             </p>
           </motion.div>
@@ -177,9 +151,9 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
             <div>
               <TextReveal>
-                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">
+                <SectionLabel index={2} className="mb-8">
                   {t("home.philosophy.label")}
-                </div>
+                </SectionLabel>
               </TextReveal>
               <TextReveal>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase tracking-tighter leading-[0.95]">
@@ -242,9 +216,9 @@ export default function Home() {
           <div className="container-wide mb-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
             <div>
               <TextReveal>
-                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">
+                <SectionLabel index={3} className="mb-4">
                   {t("home.projects.label")}
-                </div>
+                </SectionLabel>
               </TextReveal>
               <TextReveal>
                 <h2 className="text-5xl md:text-7xl uppercase tracking-tighter">{t("home.projects.title")}</h2>
@@ -324,9 +298,9 @@ export default function Home() {
               transition={{ duration: 1 }}
               className="text-center"
             >
-              <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-12 font-sans">
+              <SectionLabel index={4} className="mb-12 justify-center">
                 {t("home.vision.label")}
-              </div>
+              </SectionLabel>
               <h2 className="text-[10vw] md:text-[8vw] lg:text-[6vw] uppercase tracking-tighter leading-[0.85]">
                 {t("home.vision.line1")}
               </h2>
@@ -345,9 +319,9 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 lg:gap-32">
             <div>
               <TextReveal>
-                <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">
+                <SectionLabel index={5} className="mb-8">
                   {t("home.about.label")}
-                </div>
+                </SectionLabel>
               </TextReveal>
               <TextReveal>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase tracking-tighter leading-[0.95] mb-8">
@@ -405,9 +379,9 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 lg:gap-20">
               <div>
                 <TextReveal>
-                  <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">
+                  <SectionLabel index={6} className="mb-4">
                     {t("home.latestArticles.label")}
-                  </div>
+                  </SectionLabel>
                 </TextReveal>
                 <TextReveal>
                   <h2 className="text-3xl md:text-4xl uppercase tracking-tighter leading-[0.95]">

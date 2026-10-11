@@ -59,7 +59,7 @@ holds, add a new entry that supersedes it instead of silently reverting it.
 ## 9. Tech visual direction (redesign inspired by composites.archi)
 
 - **Decision**: near-black default theme with an electric cyan accent, Space Grotesk for text and JetBrains Mono for HUD
-  micro-labels, plus decorative utilities (`bg-grid`, `scanlines`, `noise`, `text-hud`, `text-glow`) driven by tokens.
+  micro-labels, plus decorative utilities (`bg-grid`, `scanlines`, `noise`, `text-hud`, `glow-text`) driven by tokens.
   The redesign ships in small steps, one PR each; WebGL arrives later, client-only and lazy-loaded.
 - **Why**: the site is a frontend showcase, so the look should read as technology and modernity. Tokens and CSS-only
   utilities keep the pre-rendered HTML identical to the first browser render. `font-serif` stays as the class name for

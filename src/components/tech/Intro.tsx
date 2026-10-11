@@ -100,7 +100,7 @@ export function Intro() {
             {LINES.map((line, index) => (
               <span key={line} className="block overflow-hidden">
                 <motion.span
-                  className={`block ${index === 1 ? "text-primary text-glow" : ""}`}
+                  className={`block ${index === 1 ? "text-primary glow-text" : ""}`}
                   initial={{ y: "105%" }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.9, delay: 0.15 + index * 0.12, ease: [0.16, 1, 0.3, 1] }}
