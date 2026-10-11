@@ -1,11 +1,16 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, type ReactNode } from "react";
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
 import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
 import { projects } from "@/content/projects";
+import { getI18n, languageFromPath } from "@/i18n";
+import { LocaleLink } from "@/i18n/LocaleLink";
 import { useLocale } from "@/i18n/useLocale";
+import { pageMeta } from "@/lib/seo";
+import NotFound from "./not-found";
+import type { Route } from "./+types/project";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 
 const reveal = {
@@ -30,11 +35,26 @@ const Section = ({ label, children }: { label: string; children: ReactNode }) =>
   </motion.section>
 );
 
-const Project = () => {
+const findProject = (id: string | undefined) => projects.find((p) => p.id === id);
+
+export function meta({ params, location }: Route.MetaArgs) {
+  const locale = languageFromPath(location.pathname);
+  const project = findProject(params.id);
+  if (!project) return [{ title: getI18n(locale).t("seo.notFound.title") }];
+  return pageMeta({
+    title: `${project.title} · ${project.category[locale]}`,
+    description: project.summary[locale],
+    path: `/work/${project.id}`,
+    locale,
+    type: "article",
+  });
+}
+
+export default function Project() {
   const { id } = useParams();
   const { t } = useTranslation();
   const locale = useLocale();
-  const project = projects.find((p) => p.id === id);
+  const project = findProject(id);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -43,9 +63,7 @@ const Project = () => {
   });
   const heroY = useTransform(scrollYProgress, [0, 0.5], [0, 200]);
 
-  if (!project) {
-    return <Navigate to="/work" replace />;
-  }
+  if (!project) return <NotFound />;
 
   const nextProject = projects[(projects.indexOf(project) + 1) % projects.length];
   const { links } = project;
@@ -202,7 +220,7 @@ const Project = () => {
         {/* Next Project Navigation */}
         {nextProject !== project && (
           <section className="py-40 md:py-60 border-t bg-muted/30">
-            <Link to={`/work/${nextProject.id}`} className="group block text-center container-wide">
+            <LocaleLink to={`/work/${nextProject.id}`} className="group block text-center container-wide">
               <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
                 <div className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-12">
                   {t("project.nextProject")}
@@ -215,18 +233,18 @@ const Project = () => {
                   <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-3" />
                 </div>
               </motion.div>
-            </Link>
+            </LocaleLink>
           </section>
         )}
 
         <section className="container-wide py-12 border-t flex justify-between items-center">
-          <Link
+          <LocaleLink
             to="/work"
             className="inline-flex items-center gap-3 text-sm uppercase tracking-widest hover:text-primary transition-colors group"
           >
             <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-2" />
             {t("project.backToArchive")}
-          </Link>
+          </LocaleLink>
           <div className="text-[10px] uppercase tracking-widest opacity-30">
             {t("project.copyright", { year: new Date().getFullYear() })}
           </div>
@@ -234,6 +252,4 @@ const Project = () => {
       </div>
     </Layout>
   );
-};
-
-export default Project;
+}

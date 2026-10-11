@@ -6,7 +6,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["dist", "node_modules/.tmp", "playwright-report", "test-results"]),
+  globalIgnores(["build", ".react-router", "coverage", "node_modules/.tmp", "playwright-report", "test-results"]),
   {
     files: ["**/*.{ts,tsx}"],
     extends: [js.configs.recommended, tseslint.configs.recommended],
@@ -22,8 +22,20 @@ export default defineConfig([
     languageOptions: { globals: globals.browser },
   },
   {
+    // Route modules export React Router's conventional functions next to the component.
+    files: ["src/root.tsx", "src/routes/**/*.tsx"],
+    rules: {
+      "react-refresh/only-export-components": [
+        "error",
+        {
+          allowExportNames: ["meta", "links", "loader", "clientLoader", "ErrorBoundary", "HydrateFallback", "Layout"],
+        },
+      ],
+    },
+  },
+  {
     // Serverless functions and build tooling run on Node.
-    files: ["api/**/*.ts", "vite-plugins/**/*.ts", "e2e/**/*.ts", "*.config.ts"],
+    files: ["api/**/*.ts", "vite-plugins/**/*.ts", "e2e/**/*.ts", "scripts/**/*.ts", "*.config.ts"],
     languageOptions: { globals: globals.node },
   },
 ]);

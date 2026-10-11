@@ -36,3 +36,7 @@ profile.pdf
 coverage
 playwright-report
 test-results
+
+# React Router build output and generated types
+build
+.react-router

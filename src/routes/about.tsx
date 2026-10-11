@@ -8,6 +8,9 @@ import { experience } from "@/content/experience";
 import { profile } from "@/content/profile";
 import { DraftBadge } from "@/components/ProjectCover";
 import { useLocale } from "@/i18n/useLocale";
+import { getI18n, languageFromPath } from "@/i18n";
+import { pageMeta, personJsonLd } from "@/lib/seo";
+import type { Route } from "./+types/about";
 
 const fadeIn = (delay = 0) => ({
   initial: { opacity: 0, y: 30 },
@@ -24,7 +27,20 @@ const socialLinks = [
   { href: "https://github.com/lpazzim", label: "GitHub" },
 ];
 
-const About = () => {
+export function meta({ location }: Route.MetaArgs) {
+  const locale = languageFromPath(location.pathname);
+  const { t } = getI18n(locale);
+  return pageMeta({
+    title: t("seo.about.title"),
+    description: t("seo.about.description"),
+    path: "/about",
+    locale,
+    type: "profile",
+    extra: [personJsonLd(t("seo.jobTitle"))],
+  });
+}
+
+export default function About() {
   const { t } = useTranslation();
   const locale = useLocale();
   const dateLocale = locale === "pt-BR" ? ptBR : enUS;
@@ -187,6 +203,4 @@ const About = () => {
       </section>
     </Layout>
   );
-};
-
-export default About;
+}

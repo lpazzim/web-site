@@ -151,5 +151,31 @@
   "notFound": {
     "subtitle": "Oops! Page not found",
     "return": "Return to Home"
+  },
+  "seo": {
+    "jobTitle": "Senior Frontend Engineer",
+    "home": {
+      "description": "Senior Frontend Engineer in São Paulo building scalable, high-performance web apps with React, Next.js and TypeScript. Web Performance, SEO and Accessibility."
+    },
+    "work": {
+      "title": "Case studies",
+      "description": "Selected frontend work: invoice SaaS at scale, Core Web Vitals and technical SEO, no-code platforms and healthcare products."
+    },
+    "about": {
+      "title": "About",
+      "description": "Career timeline, skills and certifications of Lucas Pazzim, Senior Frontend Engineer specialized in React, Next.js and TypeScript."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Get in touch with Lucas Pazzim by email, LinkedIn or GitHub."
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Articles on frontend development, React, web performance and building great user experiences."
+    },
+    "notFound": {
+      "title": "Page not found",
+      "description": "The page you are looking for does not exist."
+    }
   }
 }

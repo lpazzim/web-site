@@ -7,3 +7,5 @@ coverage
 playwright-report
 test-results
 profile.pdf
+build
+.react-router

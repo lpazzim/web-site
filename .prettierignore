@@ -4,3 +4,5 @@ public
 coverage
 playwright-report
 test-results
+build
+.react-router

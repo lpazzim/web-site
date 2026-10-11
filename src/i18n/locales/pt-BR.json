@@ -151,5 +151,31 @@
   "notFound": {
     "subtitle": "Ops! Página não encontrada",
     "return": "Voltar para o Início"
+  },
+  "seo": {
+    "jobTitle": "Engenheiro Frontend Sênior",
+    "home": {
+      "description": "Engenheiro Frontend Sênior em São Paulo construindo aplicações web escaláveis e de alta performance com React, Next.js e TypeScript. Web Performance, SEO e Acessibilidade."
+    },
+    "work": {
+      "title": "Estudos de caso",
+      "description": "Trabalhos selecionados: SaaS de notas fiscais em escala, Core Web Vitals e SEO técnico, plataformas no-code e produtos de saúde."
+    },
+    "about": {
+      "title": "Sobre",
+      "description": "Trajetória, habilidades e certificações de Lucas Pazzim, Engenheiro Frontend Sênior especializado em React, Next.js e TypeScript."
+    },
+    "contact": {
+      "title": "Contato",
+      "description": "Fale com Lucas Pazzim por e-mail, LinkedIn ou GitHub."
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Artigos sobre desenvolvimento frontend, React, performance web e construção de ótimas experiências de usuário."
+    },
+    "notFound": {
+      "title": "Página não encontrada",
+      "description": "A página que você procura não existe."
+    }
   }
 }

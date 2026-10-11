@@ -6,11 +6,14 @@ import { projects } from "@/content/projects";
 import { profile } from "@/content/profile";
 import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
 import { useLocale } from "@/i18n/useLocale";
-import { Link } from "react-router-dom";
+import { getI18n, languageFromPath } from "@/i18n";
+import { pageMeta, personJsonLd } from "@/lib/seo";
+import type { Route } from "./+types/home";
+import { LocaleLink } from "@/i18n/LocaleLink";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { listPosts } from "@/lib/blog";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
 
 const TextReveal = ({ children, className = "" }: { children: ReactNode; className?: string }) => {
@@ -48,7 +51,26 @@ const ParallaxText = ({ children, baseVelocity = 1 }: { children: ReactNode; bas
   );
 };
 
-const Index = () => {
+const HERO_LINES = [
+  { key: "line1", className: "" },
+  { key: "line2", className: "text-primary" },
+  { key: "line3", className: "text-muted-foreground" },
+  { key: "line4", className: "text-muted-foreground" },
+] as const;
+
+export function meta({ location }: Route.MetaArgs) {
+  const locale = languageFromPath(location.pathname);
+  const { t } = getI18n(locale);
+  return pageMeta({
+    description: t("seo.home.description"),
+    path: "/",
+    locale,
+    type: "profile",
+    extra: [personJsonLd(t("seo.jobTitle"))],
+  });
+}
+
+export default function Home() {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
@@ -83,46 +105,21 @@ const Index = () => {
           className="min-h-screen flex flex-col justify-between pt-24 pb-12 container-wide sticky top-0 z-10"
         >
           <div className="flex-1 flex flex-col justify-center">
-            <div className="overflow-hidden">
-              <motion.h1
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[12vw] md:text-[10vw] lg:text-[8vw] leading-[0.85] tracking-tighter uppercase font-serif"
-              >
-                {t("home.hero.line1")}
-              </motion.h1>
-            </div>
-            <div className="overflow-hidden">
-              <motion.h1
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 1, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[12vw] md:text-[10vw] lg:text-[8vw] leading-[0.85] tracking-tighter uppercase font-serif text-primary"
-              >
-                {t("home.hero.line2")}
-              </motion.h1>
-            </div>
-            <div className="overflow-hidden mt-4">
-              <motion.h1
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[12vw] md:text-[10vw] lg:text-[8vw] leading-[0.85] tracking-tighter uppercase font-serif text-muted-foreground"
-              >
-                {t("home.hero.line3")}
-              </motion.h1>
-            </div>
-            <div className="overflow-hidden">
-              <motion.h1
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="text-[12vw] md:text-[10vw] lg:text-[8vw] leading-[0.85] tracking-tighter uppercase font-serif text-muted-foreground"
-              >
-                {t("home.hero.line4")}
-              </motion.h1>
-            </div>
+            {/* One heading for the page; each line slides up on its own. */}
+            <h1 className="text-[12vw] md:text-[10vw] lg:text-[8vw] leading-[0.85] tracking-tighter uppercase font-serif">
+              {HERO_LINES.map(({ key, className }, index) => (
+                <span key={key} className={`block overflow-hidden ${index === 2 ? "mt-4" : ""}`}>
+                  <motion.span
+                    className={`block ${className}`}
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 1, delay: 0.2 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {t(`home.hero.${key}`)}
+                  </motion.span>
+                </span>
+              ))}
+            </h1>
           </div>
 
           <motion.div
@@ -205,14 +202,14 @@ const Index = () => {
                 </p>
               </TextReveal>
               <TextReveal>
-                <Link
+                <LocaleLink
                   to="/about"
                   className="inline-flex items-center gap-3 group text-lg border-b border-foreground pb-2 text-foreground transition-all hover:gap-5 relative z-20"
                   data-testid="link-about-story"
                 >
                   {t("home.philosophy.cta")}
                   <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                </Link>
+                </LocaleLink>
               </TextReveal>
             </div>
           </div>
@@ -251,14 +248,14 @@ const Index = () => {
                 <h2 className="text-5xl md:text-7xl uppercase tracking-tighter">{t("home.projects.title")}</h2>
               </TextReveal>
             </div>
-            <Link
+            <LocaleLink
               to="/work"
               className="text-sm uppercase tracking-[0.2em] hover:text-primary transition-colors font-sans flex items-center gap-2 group"
               data-testid="link-view-all-projects"
             >
               {t("home.projects.viewAll")}
               <ArrowUpRight className="w-4 h-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-            </Link>
+            </LocaleLink>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2">
@@ -271,7 +268,7 @@ const Index = () => {
                 transition={{ duration: 0.8, delay: index * 0.1 }}
                 className="group relative aspect-4/3 overflow-hidden border-b border-r border-border"
               >
-                <Link
+                <LocaleLink
                   to={`/work/${project.id}`}
                   className="block h-full w-full"
                   data-testid={`card-project-${project.id}`}
@@ -309,7 +306,7 @@ const Index = () => {
                   <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <ArrowUpRight className="w-8 h-8 text-white" />
                   </div>
-                </Link>
+                </LocaleLink>
               </motion.div>
             ))}
           </div>
@@ -425,11 +422,11 @@ const Index = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                   >
-                    <Link to={`/blog/${post.slug}`} className="group block">
+                    <LocaleLink to={`/blog/${post.slug}`} className="group block">
                       <div className="py-6 border-b border-border hover:bg-muted/20 transition-colors -mx-4 px-4">
                         <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
                           <div className="text-sm text-muted-foreground font-sans min-w-[100px]">
-                            {post.date && format(new Date(post.date), "MMM dd, yyyy", { locale: dateLocale })}
+                            {post.date && format(parseISO(post.date), "MMM dd, yyyy", { locale: dateLocale })}
                           </div>
                           <div className="flex-1">
                             <h3 className="text-xl md:text-2xl group-hover:text-primary transition-colors mb-2">
@@ -442,16 +439,16 @@ const Index = () => {
                           <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2 hidden md:block" />
                         </div>
                       </div>
-                    </Link>
+                    </LocaleLink>
                   </motion.article>
                 ))}
                 <TextReveal>
-                  <Link to="/blog" className="inline-flex items-center gap-3 text-lg group mt-8 relative z-20">
+                  <LocaleLink to="/blog" className="inline-flex items-center gap-3 text-lg group mt-8 relative z-20">
                     <span className="border-b border-foreground pb-1 transition-colors group-hover:border-primary group-hover:text-primary">
                       {t("home.latestArticles.viewAll")}
                     </span>
                     <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                  </Link>
+                  </LocaleLink>
                 </TextReveal>
               </div>
             </div>
@@ -519,6 +516,4 @@ const Index = () => {
       </div>
     </Layout>
   );
-};
-
-export default Index;
+}

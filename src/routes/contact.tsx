@@ -2,6 +2,9 @@ import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
 import { Mail } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons/brand";
+import { getI18n, languageFromPath } from "@/i18n";
+import { pageMeta } from "@/lib/seo";
+import type { Route } from "./+types/contact";
 
 const contactLinks = [
   { href: "mailto:lpazzim@gmail.com", label: "lpazzim@gmail.com", icon: Mail, external: false },
@@ -9,7 +12,18 @@ const contactLinks = [
   { href: "https://github.com/lpazzim", label: "github.com/lpazzim", icon: GitHubIcon, external: true },
 ];
 
-const Contact = () => {
+export function meta({ location }: Route.MetaArgs) {
+  const locale = languageFromPath(location.pathname);
+  const { t } = getI18n(locale);
+  return pageMeta({
+    title: t("seo.contact.title"),
+    description: t("seo.contact.description"),
+    path: "/contact",
+    locale,
+  });
+}
+
+export default function Contact() {
   const { t } = useTranslation();
 
   return (
@@ -66,6 +80,4 @@ const Contact = () => {
       </section>
     </Layout>
   );
-};
-
-export default Contact;
+}
