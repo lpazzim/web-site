@@ -16,8 +16,8 @@ import type { Route } from "./+types/blog-post";
 // Build time: pre-renders every post that exists when the site is deployed.
 export async function loader({ params }: Route.LoaderArgs) {
   // Imported inside the loader so it is dropped from every client chunk.
-  const { getPostBySlug } = await import("@/lib/notion.server");
-  const result = await getPostBySlug(params.slug);
+  const { getPostForBuild } = await import("@/lib/notion.server");
+  const result = await getPostForBuild(params.slug);
   if (!result) throw data(null, { status: 404 });
   return result;
 }
