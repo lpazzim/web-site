@@ -105,3 +105,16 @@ test("the mobile menu covers the page below the header", async ({ page, isMobile
   // Regression: a transform on the header used to collapse this fixed panel to zero height.
   expect((await menu.boundingBox())?.height).toBeGreaterThan(300);
 });
+
+test("keyboard users can skip the navigation and land on the main content", async ({ page, isMobile }) => {
+  test.skip(isMobile, "Keyboard navigation is a desktop flow");
+  await page.goto("/about");
+
+  await page.keyboard.press("Tab");
+  const skipLink = page.getByRole("link", { name: /skip to content/i });
+  await expect(skipLink).toBeFocused();
+  await expect(skipLink).toBeVisible();
+
+  await page.keyboard.press("Enter");
+  await expect(page.locator("main#main")).toBeFocused();
+});

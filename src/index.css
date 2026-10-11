@@ -12,7 +12,7 @@
   --primary-foreground: hsl(0 0% 100%);
   --secondary: hsl(40 10% 92%);
   --muted: hsl(0 0% 97%);
-  --muted-foreground: hsl(0 0% 45%);
+  --muted-foreground: hsl(0 0% 42%);
   --accent: hsl(40 18% 72%);
   --accent-foreground: hsl(0 0% 8%);
   --popover: hsl(0 0% 100%);
@@ -80,6 +80,16 @@
   --animate-fade-in-up: fade-in-up 0.8s ease-out both;
   --animate-marquee: marquee 40s linear infinite;
   --animate-scan: scan 1.8s linear infinite;
+  --animate-line-up: line-up 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+  @keyframes line-up {
+    from {
+      transform: translateY(105%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
 
   @keyframes scan {
     from {
@@ -131,6 +141,12 @@
   h5,
   h6 {
     @apply font-serif font-normal;
+  }
+
+  /* One visible focus ring for every keyboard-focusable element. */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 3px;
   }
 
   ::selection {

@@ -7,7 +7,8 @@
     "toggleTheme": "Alternar tema",
     "toggleMenu": "Alternar menu",
     "toggleLanguage": "Alternar idioma",
-    "scroll": "Rolagem"
+    "scroll": "Rolagem",
+    "skip": "Pular para o conteúdo"
   },
   "intro": {
     "label": "Inicializando portfólio",

@@ -1,4 +1,5 @@
 import { Layout } from "@/components/Layout";
+import { Enter } from "@/components/tech/Enter";
 import { motion } from "motion/react";
 import { data } from "react-router";
 import { format, parseISO } from "date-fns";
@@ -69,7 +70,7 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
     <Layout>
       <article className="container-wide py-16 md:py-24">
         <div className="max-w-3xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <Enter>
             <LocaleLink
               to="/blog"
               className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8"
@@ -94,7 +95,7 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
                 <img src={post.image} alt={post.title} className="w-full h-auto grayscale" />
               </div>
             )}
-          </motion.div>
+          </Enter>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}

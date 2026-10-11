@@ -81,13 +81,7 @@ export default function Project() {
 
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-10 px-4">
             {project.draft && <DraftBadge />}
-            <motion.h1
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-display text-center"
-            >
-              {project.title}
-            </motion.h1>
+            <h1 className="animate-fade-in-up text-display text-center">{project.title}</h1>
           </div>
 
           <div className="absolute bottom-8 left-0 right-0 z-10 container-wide">

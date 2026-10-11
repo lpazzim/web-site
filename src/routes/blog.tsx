@@ -1,4 +1,5 @@
 import { Layout } from "@/components/Layout";
+import { Enter } from "@/components/tech/Enter";
 import { SectionLabel } from "@/components/tech/SectionLabel";
 import { motion } from "motion/react";
 import { useQuery } from "@tanstack/react-query";
@@ -48,11 +49,11 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
     <Layout>
       <section className="container-wide py-16 md:py-24">
         <div className="max-w-4xl">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+          <Enter>
             <SectionLabel className="mb-6">{t("blog.label")}</SectionLabel>
             <h1 className="text-5xl md:text-7xl font-semibold uppercase tracking-tighter mb-8">{t("blog.title")}</h1>
             <p className="text-xl text-muted-foreground mb-16">{t("blog.intro")}</p>
-          </motion.div>
+          </Enter>
 
           {isLoading && <div className="text-muted-foreground">{t("blog.loading")}</div>}
 

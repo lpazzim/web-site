@@ -7,7 +7,8 @@
     "toggleTheme": "Toggle theme",
     "toggleMenu": "Toggle menu",
     "toggleLanguage": "Toggle language",
-    "scroll": "Scroll"
+    "scroll": "Scroll",
+    "skip": "Skip to content"
   },
   "intro": {
     "label": "Initializing portfolio",
