@@ -14,8 +14,8 @@
       "line2": "Interfaces",
       "line3": "That",
       "line4": "Matter",
-      "intro": "Senior Frontend Engineer based in São Paulo, Brazil. Specialized in React, TypeScript, and JavaScript. Currently working, crafting solutions that transform digital experiences.",
-      "yearsLabel": "2018 — 2025",
+      "intro": "Senior Frontend Engineer based in São Paulo, Brazil, building scalable, high-performance web applications with React, Next.js and TypeScript, with a focus on Web Performance, SEO and Accessibility.",
+      "yearsLabel": "2010 — {{year}}",
       "yearsSubtitle": "Selected Works"
     },
     "marquee": "Clean Code • Pixel Perfect • Performance First • User Focused •",
@@ -58,11 +58,7 @@
       "line3": "Every Line"
     },
     "about": {
-      "label": "About Me",
-      "name": "Lucas Pazzim",
-      "tagline": "Senior Frontend Engineer based in <0>São Paulo, Brazil</0>, specialized in React, TypeScript, and JavaScript.",
-      "para1": "I'm passionate about technology, innovation, and detail-oriented development. My focus is on creating exceptional user experiences through clean code, thoughtful architecture, and attention to the smallest details.",
-      "para2": "Currently working, crafting solutions that transform digital experiences. I develop and maintain complex components that enable users to build applications intuitively, collaborating with DevOps teams using Docker, Vite, and modern tooling."
+      "label": "About Me"
     },
     "latestArticles": {
       "label": "Blog",
@@ -75,7 +71,7 @@
       "button": "Get in Touch"
     },
     "footer": {
-      "copyright": "Lucas Pazzim © 2018—2025"
+      "copyright": "Lucas Pazzim © {{year}}"
     }
   },
   "work": {
@@ -101,18 +97,19 @@
   "about": {
     "label": "About",
     "name": "Lucas Pazzim",
-    "tagline": "Senior Frontend Engineer based in <0>São Paulo, Brazil</0>, specialized in React, TypeScript, and JavaScript.",
-    "para1": "I'm passionate about technology, innovation, and detail-oriented development. My focus is on creating exceptional user experiences through clean code, thoughtful architecture, and attention to the smallest details.",
-    "para2": "Currently working, crafting solutions that transform digital experiences. I develop and maintain complex components that enable users to build applications intuitively, collaborating with DevOps teams using Docker for containerization, Vite for fast development, and pnpm for package management.",
-    "para3": "My work approach is detail-oriented and open-minded, with a strong focus on creating efficient and maintainable code, always seeking to enhance user experience through technical excellence.",
+    "tagline": "Senior Frontend Engineer based in <0>São Paulo, Brazil</0>, building scalable, high-performance web applications with React, Next.js and TypeScript.",
+    "para1": "I specialize in enterprise-grade interfaces aligned with frontend architecture, usability and business goals. My core expertise includes Web Performance, Technical SEO, Design Systems, Internationalization (i18n) and Accessibility (WCAG).",
+    "para2": "I have strong experience optimizing Core Web Vitals, reducing bundle size, implementing code splitting and lazy loading, and designing scalable frontend architectures. I have led initiatives that significantly improved performance and organic indexing through metadata best practices, canonical strategies and optimized rendering approaches (SSR, SSG, ISR).",
+    "para3": "I also bring solid experience in advanced component design, REST/GraphQL integrations, CI/CD pipelines, automated testing (Jest, Vitest, Playwright) and monorepos, working closely with product, design and backend teams to deliver robust, scalable solutions.",
     "locationLabel": "Location",
     "locationValue": "São Paulo, SP\nBrazil",
     "educationLabel": "Education",
-    "educationValue": "Universidade Cruzeiro do Sul",
     "contactLabel": "Contact",
     "experienceLabel": "Experience",
     "techStackLabel": "Tech Stack",
-    "currentRole": "Present"
+    "currentRole": "Present",
+    "languagesLabel": "Languages",
+    "certificationsLabel": "Certifications"
   },
   "contact": {
     "titleLine1": "Let's work",
@@ -139,17 +136,17 @@
   "footer": {
     "locationLabel": "Location",
     "locationValue": "São Paulo, SP\nBrazil",
-    "galleryLabel": "Gallery",
     "projectsLink": "Projects",
     "aboutLink": "About",
     "contactLink": "Contact",
     "contactLabel": "Contact",
     "legalLabel": "Legal",
     "rights": "© {{year}} All Rights Reserved",
-    "tagline": "Design & Illustration",
+    "tagline": "Senior Frontend Engineer",
     "workLink": "Work",
     "copyright": "© {{year}} Lucas Pazzim",
-    "city": "São Paulo, Brazil"
+    "city": "São Paulo, Brazil",
+    "navLabel": "Navigation"
   },
   "notFound": {
     "subtitle": "Oops! Page not found",

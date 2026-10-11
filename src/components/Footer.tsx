@@ -23,9 +23,9 @@ export function Footer({ variant = "default" }: FooterProps) {
               </div>
             </div>
 
-            {/* Gallery */}
+            {/* Navigation */}
             <div className="space-y-3">
-              <p className="text-label">{t("footer.galleryLabel")}</p>
+              <p className="text-label">{t("footer.navLabel")}</p>
               <div className="text-sm space-y-1">
                 <Link to="/work" className="block text-foreground hover:text-accent transition-colors">{t("footer.projectsLink")}</Link>
                 <Link to="/about" className="block text-foreground hover:text-accent transition-colors">{t("footer.aboutLink")}</Link>

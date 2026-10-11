@@ -1,7 +1,8 @@
 import type { CaseStudy } from "./types";
+import { professionalCases } from "./cases";
 
-const allProjects: CaseStudy[] = [
-  {
+// This site itself, listed after the professional work.
+const portfolioCase: CaseStudy = {
     id: "lpazzim-com",
     title: "lpazzim.com",
     company: "Personal project",
@@ -79,34 +80,9 @@ const allProjects: CaseStudy[] = [
     },
     links: { live: "https://lpazzim.com", repo: "https://github.com/lpazzim/web-site" },
     accent: "211 100% 55%",
-    featured: true,
-  },
+    featured: false,
+};
 
-  // --- Placeholders below: replace with real case studies, then delete. ---
-  draftCase("react-dashboard", "React Dashboard", "2024", "262 83% 62%", ["React", "TypeScript", "Tailwind CSS"]),
-  draftCase("design-system", "Design System", "2024", "24 95% 55%", ["React", "Storybook", "TypeScript"]),
-  draftCase("ecommerce-platform", "E-Commerce Platform", "2023", "152 60% 42%", ["Next.js", "TypeScript", "Stripe"]),
-];
-
-function draftCase(id: string, title: string, period: string, accent: string, stack: string[]): CaseStudy {
-  const todo = { en: "TODO: write this section.", "pt-BR": "TODO: escrever esta seção." };
-  return {
-    id,
-    title,
-    company: "Company",
-    period,
-    role: { en: "Frontend Engineer", "pt-BR": "Engenheiro Frontend" },
-    category: { en: "Web Application", "pt-BR": "Aplicação Web" },
-    summary: todo,
-    stack,
-    context: todo,
-    contributions: { en: [todo.en], "pt-BR": [todo["pt-BR"]] },
-    decisions: { en: [{ title: "TODO", body: todo.en }], "pt-BR": [{ title: "TODO", body: todo["pt-BR"] }] },
-    results: { en: [{ value: "—", label: "TODO" }], "pt-BR": [{ value: "—", label: "TODO" }] },
-    accent,
-    featured: true,
-    draft: true,
-  };
-}
+const allProjects: CaseStudy[] = [...professionalCases, portfolioCase];
 
 export const projects = allProjects.filter((p) => import.meta.env.DEV || !p.draft);

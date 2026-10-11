@@ -14,8 +14,8 @@
       "line2": "Interfaces",
       "line3": "Que",
       "line4": "Importam",
-      "intro": "Engenheiro Frontend Sênior baseado em São Paulo, Brasil. Especializado em React, TypeScript e JavaScript. Atualmente desenvolvendo soluções que transformam experiências digitais.",
-      "yearsLabel": "2018 — 2025",
+      "intro": "Engenheiro Frontend Sênior em São Paulo, Brasil, construindo aplicações web escaláveis e de alta performance com React, Next.js e TypeScript, com foco em Web Performance, SEO e Acessibilidade.",
+      "yearsLabel": "2010 — {{year}}",
       "yearsSubtitle": "Trabalhos Selecionados"
     },
     "marquee": "Código Limpo • Pixel Perfeito • Performance Primeiro • Foco no Usuário •",
@@ -58,11 +58,7 @@
       "line3": "Cada Linha"
     },
     "about": {
-      "label": "Sobre Mim",
-      "name": "Lucas Pazzim",
-      "tagline": "Engenheiro Frontend Sênior baseado em <0>São Paulo, Brasil</0>, especializado em React, TypeScript e JavaScript.",
-      "para1": "Sou apaixonado por tecnologia, inovação e desenvolvimento orientado a detalhes. Meu foco é criar experiências de usuário excepcionais através de código limpo, arquitetura cuidadosa e atenção aos menores detalhes.",
-      "para2": "Atualmente trabalho desenvolvendo soluções que transformam experiências digitais. Desenvolvo e mantenho componentes complexos que permitem aos usuários construir aplicações de forma intuitiva, colaborando com equipes de DevOps usando Docker, Vite e ferramentas modernas."
+      "label": "Sobre Mim"
     },
     "latestArticles": {
       "label": "Blog",
@@ -75,7 +71,7 @@
       "button": "Entre em Contato"
     },
     "footer": {
-      "copyright": "Lucas Pazzim © 2018—2025"
+      "copyright": "Lucas Pazzim © {{year}}"
     }
   },
   "work": {
@@ -101,18 +97,19 @@
   "about": {
     "label": "Sobre",
     "name": "Lucas Pazzim",
-    "tagline": "Engenheiro Frontend Sênior baseado em <0>São Paulo, Brasil</0>, especializado em React, TypeScript e JavaScript.",
-    "para1": "Sou apaixonado por tecnologia, inovação e desenvolvimento orientado a detalhes. Meu foco é criar experiências de usuário excepcionais através de código limpo, arquitetura cuidadosa e atenção aos menores detalhes.",
-    "para2": "Atualmente trabalho desenvolvendo soluções que transformam experiências digitais. Desenvolvo e mantenho componentes complexos que permitem aos usuários construir aplicações de forma intuitiva, colaborando com equipes de DevOps usando Docker para containerização, Vite para desenvolvimento rápido e pnpm para gerenciamento de pacotes.",
-    "para3": "Minha abordagem de trabalho é orientada a detalhes e de mente aberta, com forte foco em criar código eficiente e fácil de manter, sempre buscando aprimorar a experiência do usuário através de excelência técnica.",
+    "tagline": "Engenheiro Frontend Sênior em <0>São Paulo, Brasil</0>, construindo aplicações web escaláveis e de alta performance com React, Next.js e TypeScript.",
+    "para1": "Sou especializado em interfaces de nível corporativo alinhadas à arquitetura frontend, à usabilidade e aos objetivos de negócio. Minha especialidade inclui Web Performance, SEO técnico, Design Systems, internacionalização (i18n) e acessibilidade (WCAG).",
+    "para2": "Tenho forte experiência otimizando Core Web Vitals, reduzindo o tamanho de bundles, implementando code splitting e lazy loading e projetando arquiteturas frontend escaláveis. Liderei iniciativas que melhoraram significativamente a performance e a indexação orgânica com boas práticas de metadados, estratégias de canonical e abordagens de renderização otimizadas (SSR, SSG, ISR).",
+    "para3": "Também tenho sólida experiência em design avançado de componentes, integrações REST/GraphQL, pipelines de CI/CD, testes automatizados (Jest, Vitest, Playwright) e monorepos, trabalhando lado a lado com times de produto, design e backend para entregar soluções robustas e escaláveis.",
     "locationLabel": "Localização",
     "locationValue": "São Paulo, SP\nBrasil",
     "educationLabel": "Formação",
-    "educationValue": "Universidade Cruzeiro do Sul",
     "contactLabel": "Contato",
     "experienceLabel": "Experiência",
     "techStackLabel": "Stack de Tecnologias",
-    "currentRole": "Atual"
+    "currentRole": "Atual",
+    "languagesLabel": "Idiomas",
+    "certificationsLabel": "Certificações"
   },
   "contact": {
     "titleLine1": "Vamos trabalhar",
@@ -139,17 +136,17 @@
   "footer": {
     "locationLabel": "Localização",
     "locationValue": "São Paulo, SP\nBrasil",
-    "galleryLabel": "Galeria",
     "projectsLink": "Projetos",
     "aboutLink": "Sobre",
     "contactLink": "Contato",
     "contactLabel": "Contato",
     "legalLabel": "Legal",
     "rights": "© {{year}} Todos os Direitos Reservados",
-    "tagline": "Design & Ilustração",
+    "tagline": "Engenheiro Frontend Sênior",
     "workLink": "Trabalhos",
     "copyright": "© {{year}} Lucas Pazzim",
-    "city": "São Paulo, Brasil"
+    "city": "São Paulo, Brasil",
+    "navLabel": "Navegação"
   },
   "notFound": {
     "subtitle": "Ops! Página não encontrada",

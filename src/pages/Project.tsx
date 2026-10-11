@@ -15,7 +15,13 @@ const reveal = {
   transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
 } as const;
 
-const Section = ({ label, children }: { label: string; children: ReactNode }) => (
+// Literal class names so Tailwind can detect them.
+const RESULT_COLUMNS: Record<number, string> = {
+  1: "sm:grid-cols-1",
+  2: "sm:grid-cols-2",
+};
+
+const Section =({ label, children }: { label: string; children: ReactNode }) => (
   <motion.section {...reveal} className="container-wide py-20 md:py-28 border-t">
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20">
       <h2 className="lg:col-span-4 text-label">{label}</h2>
@@ -43,6 +49,7 @@ const Project = () => {
 
   const nextProject = projects[(projects.indexOf(project) + 1) % projects.length];
   const { links } = project;
+  const results = project.results[locale];
 
   return (
     <Layout noPadding headerRevealMode showEchelonFooter>
@@ -136,28 +143,36 @@ const Project = () => {
           </ul>
         </Section>
 
-        <Section label={t("project.decisions")}>
-          <ol className="space-y-14">
-            {project.decisions[locale].map((decision, index) => (
-              <li key={decision.title} className="grid grid-cols-[3rem_1fr] gap-4">
-                <span className="font-sans text-sm text-muted-foreground tabular-nums pt-2">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <h3 className="text-2xl md:text-3xl mb-4">{decision.title}</h3>
-                  <p className="text-lg text-muted-foreground leading-relaxed">{decision.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </Section>
+        {project.decisions && (
+          <Section label={t("project.decisions")}>
+            <ol className="space-y-14">
+              {project.decisions[locale].map((decision, index) => (
+                <li key={decision.title} className="grid grid-cols-[3rem_1fr] gap-4">
+                  <span className="font-sans text-sm text-muted-foreground tabular-nums pt-2">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div>
+                    <h3 className="text-2xl md:text-3xl mb-4">{decision.title}</h3>
+                    <p className="text-lg text-muted-foreground leading-relaxed">{decision.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </Section>
+        )}
 
         <Section label={t("project.results")}>
-          <dl className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border border">
-            {project.results[locale].map((metric) => (
+          <dl className={`grid grid-cols-1 gap-px bg-border border ${RESULT_COLUMNS[results.length] ?? "sm:grid-cols-3"}`}>
+            {results.map((metric) => (
               <div key={metric.label} className="bg-background p-8 flex flex-col gap-3">
                 <dt className="order-2 font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground">{metric.label}</dt>
-                <dd className="order-1 text-6xl md:text-7xl tracking-tighter text-primary tabular-nums">{metric.value}</dd>
+                <dd
+                  className={`order-1 tracking-tighter text-primary tabular-nums ${
+                    metric.value.length > 4 ? "text-5xl md:text-6xl" : "text-6xl md:text-7xl"
+                  }`}
+                >
+                  {metric.value}
+                </dd>
               </div>
             ))}
           </dl>

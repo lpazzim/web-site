@@ -33,8 +33,8 @@ export interface CaseStudy {
   /** What you personally did. */
   contributions: Localized<string[]>;
   /** The technical decisions worth explaining (and their trade-offs). */
-  decisions: Localized<Decision[]>;
-  /** Measurable outcomes. Keep them honest and verifiable. */
+  decisions?: Localized<Decision[]>;
+  /** Outcomes. Keep them honest and verifiable; values may be qualitative. */
   results: Localized<Metric[]>;
   /** What you would do differently / what you took away. */
   learnings?: Localized;
@@ -53,13 +53,27 @@ export interface CaseStudy {
 export interface Experience {
   company: string;
   role: Localized;
-  /** "YYYY-MM" */
+  /** "YYYY-MM", or "YYYY" when only the year is known. */
   start: string;
-  /** "YYYY-MM"; omit for the current position. */
+  /** Same format as start; omit for the current position. */
   end?: string;
   location?: string;
   summary: Localized;
   highlights: Localized<string[]>;
   stack: string[];
   draft?: boolean;
+}
+
+export interface Education {
+  institution: string;
+  course: Localized;
+  period: string;
+}
+
+export interface Profile {
+  headline: Localized;
+  skills: string[];
+  languages: { name: Localized; level: Localized }[];
+  education: Education[];
+  certifications: string[];
 }

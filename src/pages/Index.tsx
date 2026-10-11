@@ -3,6 +3,7 @@ import { useRef, type ReactNode } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
 import { projects } from "@/content/projects";
+import { profile } from "@/content/profile";
 import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
 import { useLocale } from "@/i18n/useLocale";
 import { Link } from "react-router-dom";
@@ -132,7 +133,7 @@ const Index = () => {
               {t("home.hero.intro")}
             </p>
             <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground font-sans">
-              {t("home.hero.yearsLabel")}<br />{t("home.hero.yearsSubtitle")}
+              {t("home.hero.yearsLabel", { year: new Date().getFullYear() })}<br />{t("home.hero.yearsSubtitle")}
             </div>
           </motion.div>
         </motion.section>
@@ -329,7 +330,7 @@ const Index = () => {
               </TextReveal>
               <TextReveal>
                 <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase tracking-tighter leading-[0.95] mb-8">
-                  {t("home.about.name")}
+                  {t("about.name")}
                 </h2>
               </TextReveal>
               <TextReveal>
@@ -343,27 +344,24 @@ const Index = () => {
               </TextReveal>
               <TextReveal>
                 <p className="text-2xl md:text-3xl leading-relaxed">
-                  <Trans i18nKey="home.about.tagline">
-                    Senior Frontend Engineer based in <span className="text-primary">São Paulo, Brazil</span>, 
-                    specialized in React, TypeScript, and JavaScript.
-                  </Trans>
+                  <Trans i18nKey="about.tagline" components={[<span className="text-primary" />]} />
                 </p>
               </TextReveal>
             </div>
             <div className="flex flex-col justify-center">
               <TextReveal>
                 <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                  {t("home.about.para1")}
+                  {t("about.para1")}
                 </p>
               </TextReveal>
               <TextReveal>
                 <p className="text-xl text-muted-foreground leading-relaxed mb-8">
-                  {t("home.about.para2")}
+                  {t("about.para2")}
                 </p>
               </TextReveal>
               <TextReveal>
                 <div className="flex flex-wrap gap-3 mt-4">
-                  {["React", "TypeScript", "JavaScript", "Vite", "Docker", "Styled Components"].map((skill) => (
+                  {profile.skills.slice(0, 8).map((skill) => (
                     <span
                       key={skill}
                       className="text-sm border border-border px-4 py-2 hover:border-primary hover:text-primary transition-colors"
@@ -479,7 +477,7 @@ const Index = () => {
         <footer className="py-12 container-wide border-t border-border relative z-20">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             <div className="text-sm text-muted-foreground font-sans">
-              {t("home.footer.copyright")}
+              {t("home.footer.copyright", { year: new Date().getFullYear() })}
             </div>
             <div className="flex gap-8 text-sm font-sans relative z-20">
               <a href="https://www.linkedin.com/in/lpazzim" target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-foreground transition-colors cursor-pointer" data-testid="link-linkedin">
