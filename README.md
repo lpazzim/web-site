@@ -88,5 +88,20 @@ builds, with an empty blog.
 ## Deployment
 
 Deployed on **Vercel** as static files plus Vercel Functions for `/api` (see `vercel.json`). Notion credentials must be
-available at build time so blog posts are pre-rendered. CI runs formatting, lint, type-checking, unit and end-to-end tests
-on every push and pull request.
+available at build time so blog posts are pre-rendered. CI runs a dependency audit, formatting, lint, type-checking, unit
+and end-to-end tests on every push and pull request; Dependabot opens grouped update PRs weekly.
+
+## Working with AI agents
+
+The repository is set up for coding agents (Claude Code, Codex, Cursor, Copilot...):
+
+| File                    | Purpose                                                                   |
+| ----------------------- | ------------------------------------------------------------------------- |
+| `AGENTS.md`             | Stack, commands, project map, rules (always / never) and conventions      |
+| `CLAUDE.md`             | Imports `AGENTS.md` and adds Claude Code specifics                        |
+| `.claude/rules/*.md`    | Area rules (routes, content, UI, API/security, tests) loaded by file path |
+| `.claude/skills/`       | Workflows: `/verify`, `/add-case-study`, `/add-page`, `/upgrade-deps`     |
+| `.claude/settings.json` | Permissions and a hook that blocks edits to secrets and generated files   |
+| `docs/decisions.md`     | Architecture decisions and the reasons behind them                        |
+
+Personal overrides go in `CLAUDE.local.md` or `.claude/settings.local.json` (both gitignored).
