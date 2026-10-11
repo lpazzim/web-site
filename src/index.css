@@ -200,6 +200,6 @@
   }
 }
 
-@utility text-glow {
+@utility glow-text {
   text-shadow: 0 0 24px var(--glow);
 }

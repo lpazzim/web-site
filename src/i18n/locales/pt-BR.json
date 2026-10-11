@@ -21,7 +21,8 @@
       "line4": "Importam",
       "intro": "Engenheiro Frontend Sênior em São Paulo, Brasil, construindo aplicações web escaláveis e de alta performance com React, Next.js e TypeScript, com foco em Web Performance, SEO e Acessibilidade.",
       "yearsLabel": "2010 — {{year}}",
-      "yearsSubtitle": "Trabalhos Selecionados"
+      "yearsSubtitle": "Trabalhos Selecionados",
+      "scroll": "Role para explorar"
     },
     "marquee": "Código Limpo • Pixel Perfeito • Performance Primeiro • Foco no Usuário •",
     "approach": {
