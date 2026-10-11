@@ -97,7 +97,7 @@ export default function Home() {
 
   return (
     <Layout hideFooter noPadding>
-      <div ref={containerRef} className="bg-background">
+      <div ref={containerRef}>
         {/* Hero Section - Full Screen */}
         <motion.section
           ref={heroRef}

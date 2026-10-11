@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { TechBackground } from "./tech/TechBackground";
 
 interface LayoutProps {
   children: ReactNode;
@@ -19,6 +20,7 @@ export function Layout({
 }: LayoutProps) {
   return (
     <div className="min-h-screen flex flex-col">
+      <TechBackground />
       <Header revealMode={headerRevealMode} />
       <main className={`flex-1 ${noPadding ? "" : "pt-20 md:pt-24"}`}>{children}</main>
       {!hideFooter && <Footer variant={showEchelonFooter ? "echelon" : "default"} />}

@@ -64,3 +64,14 @@ holds, add a new entry that supersedes it instead of silently reverting it.
 - **Why**: the site is a frontend showcase, so the look should read as technology and modernity. Tokens and CSS-only
   utilities keep the pre-rendered HTML identical to the first browser render. `font-serif` stays as the class name for
   headings and body to avoid touching every component; it now maps to the geometric sans.
+
+## 10. WebGL background with three.js, client-only and lazy
+
+- **Decision**: `three` + `@react-three/fiber` draw one fixed canvas of animated contour lines (`TechBackground`).
+  The scene is a lazy chunk mounted only after hydration, when WebGL 2 exists and `prefers-reduced-motion` is off
+  (`useWebGLEnabled`, a `useSyncExternalStore` whose server snapshot is `false`). The CSS grid underneath is the
+  pre-rendered fallback.
+- **Why**: it is the signature visual of the reference and shows frontend craft, but it must not cost the
+  pre-rendered pages anything: the HTML never contains the canvas, so hydration cannot mismatch, and the ~900 KB
+  chunk is not referenced by the HTML. The geometry is static; motion happens in the vertex shader (no per-frame
+  allocations) and the pixel ratio is capped at 1.5.
