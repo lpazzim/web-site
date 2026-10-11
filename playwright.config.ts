@@ -13,6 +13,10 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${PORT}`,
     trace: "on-first-retry",
+    // The opening animation and the WebGL background are off with reduced
+    // motion, which keeps the behavior specs deterministic. e2e/motion.spec.ts
+    // opts back in.
+    reducedMotion: "reduce",
   },
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },

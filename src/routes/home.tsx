@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform, useInView } from "motion/react";
 import { useRef, type ReactNode } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
+import { Intro } from "@/components/tech/Intro";
 import { projects } from "@/content/projects";
 import { profile } from "@/content/profile";
 import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
@@ -97,7 +98,8 @@ export default function Home() {
 
   return (
     <Layout hideFooter noPadding>
-      <div ref={containerRef} className="bg-background">
+      <Intro />
+      <div ref={containerRef}>
         {/* Hero Section - Full Screen */}
         <motion.section
           ref={heroRef}
