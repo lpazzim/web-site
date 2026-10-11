@@ -1,5 +1,5 @@
 import { Layout } from "@/components/Layout";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { useQuery } from "@tanstack/react-query";
 import { listPosts } from "@/lib/blog";
 import { Link } from "react-router-dom";

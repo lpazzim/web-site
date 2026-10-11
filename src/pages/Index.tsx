@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "motion/react";
 import { useRef, type ReactNode } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";

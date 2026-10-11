@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { MotionConfig } from "framer-motion";
+import { MotionConfig } from "motion/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/theme/ThemeProvider";
@@ -19,7 +19,7 @@ const queryClient = new QueryClient();
 const App = () => (
   <ThemeProvider>
     <QueryClientProvider client={queryClient}>
-      {/* Honors the OS "reduce motion" setting for every Framer Motion animation. */}
+      {/* Honors the OS "reduce motion" setting for every Motion animation. */}
       <MotionConfig reducedMotion="user">
         <BrowserRouter>
           <Suspense fallback={<div className="min-h-screen bg-background" />}>

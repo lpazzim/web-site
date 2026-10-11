@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, type ReactNode } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";

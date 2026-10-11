@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
-import { Mail, Linkedin, Github } from "lucide-react";
+import { Mail } from "lucide-react";
+import { GitHubIcon, LinkedInIcon } from "@/components/icons/brand";
 
 const contactLinks = [
   { href: "mailto:lpazzim@gmail.com", label: "lpazzim@gmail.com", icon: Mail, external: false },
-  { href: "https://www.linkedin.com/in/lpazzim", label: "linkedin.com/in/lpazzim", icon: Linkedin, external: true },
-  { href: "https://github.com/lpazzim", label: "github.com/lpazzim", icon: Github, external: true },
+  { href: "https://www.linkedin.com/in/lpazzim", label: "linkedin.com/in/lpazzim", icon: LinkedInIcon, external: true },
+  { href: "https://github.com/lpazzim", label: "github.com/lpazzim", icon: GitHubIcon, external: true },
 ];
 
 const Contact = () => {

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Layout } from "@/components/Layout";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Trans, useTranslation } from "react-i18next";
 import { format, parse } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
