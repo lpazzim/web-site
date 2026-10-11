@@ -1,73 +1,58 @@
-# Welcome to your Lovable project
+# lpazzim.com
 
-## Project info
+Personal portfolio and living CV of **Lucas Pazzim**, Senior Frontend Engineer based in São Paulo, Brazil.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+🌐 **[lpazzim.com](https://lpazzim.com)** · [LinkedIn](https://www.linkedin.com/in/lpazzim) · [GitHub](https://github.com/lpazzim)
 
-## How can I edit this code?
+## Stack
 
-There are several ways of editing your application.
+- **React 18** + **TypeScript**, bundled with **Vite**
+- **Tailwind CSS** with Radix-based primitives from **shadcn/ui**
+- **Framer Motion** for scroll-driven and reveal animations
+- **TanStack Query** for data fetching and caching
+- **i18next** for English / Brazilian Portuguese content
+- **Notion API** as a headless CMS for the blog, served through **Vercel Serverless Functions**
 
-**Use Lovable**
+## Project structure
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+api/            Vercel Serverless Functions (Notion-backed blog API)
+server/         Local Express server mirroring the API for development
+public/         Static assets (favicons, Open Graph image, photos)
+src/
+  components/   Layout, header, footer, Notion block renderer
+  data/         Portfolio projects
+  i18n/         i18next setup and locale files (en, pt-BR)
+  lib/          Blog API client and utilities
+  pages/        Route components
 ```
 
-**Edit a file directly in GitHub**
+## Getting started
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Requires Node.js 20+ and [pnpm](https://pnpm.io).
 
-**Use GitHub Codespaces**
+```sh
+pnpm install
+cp .env.example .env   # then fill in the Notion credentials
+pnpm dev               # Vite on :5000 + API server on :3001
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Environment variables
 
-## What technologies are used for this project?
+| Variable             | Description                                   |
+| -------------------- | --------------------------------------------- |
+| `NOTION_API_TOKEN`   | Notion internal integration token             |
+| `NOTION_DATABASE_ID` | ID of the Notion data source holding the posts |
 
-This project is built with:
+### Scripts
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+| Command        | Description                     |
+| -------------- | ------------------------------- |
+| `pnpm dev`     | Start client and API in watch mode |
+| `pnpm build`   | Production build into `dist/`   |
+| `pnpm preview` | Preview the production build    |
+| `pnpm lint`    | Run ESLint                      |
 
-## How can I deploy this project?
+## Deployment
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Deployed on **Vercel**. Routes under `/api` run as Serverless Functions; every other path is rewritten to the SPA (see `vercel.json`).

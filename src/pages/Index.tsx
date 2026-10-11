@@ -190,14 +190,14 @@ const Index = () => {
                 </p>
               </TextReveal>
               <TextReveal>
-                <a 
-                  href="#about" 
+                <Link
+                  to="/about"
                   className="inline-flex items-center gap-3 group text-lg border-b border-foreground pb-2 text-foreground transition-all hover:gap-5 relative z-20"
                   data-testid="link-about-story"
                 >
-                  {t("home.philosophy.cta")} 
+                  {t("home.philosophy.cta")}
                   <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-                </a>
+                </Link>
               </TextReveal>
             </div>
           </div>
@@ -256,7 +256,7 @@ const Index = () => {
                   transition={{ duration: 0.8, delay: index * 0.1 }}
                   className="group relative aspect-[4/3] overflow-hidden border-b border-r border-border"
                 >
-                  <Link to={`/project/${project.id}`} className="block h-full w-full" data-testid={`card-project-${project.id}`}>
+                  <Link to={`/work/${project.id}`} className="block h-full w-full" data-testid={`card-project-${project.id}`}>
                     <img
                       src={project.coverImage}
                       alt={project.title}

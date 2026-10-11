@@ -37,10 +37,12 @@ export function Footer({ variant = "default" }: FooterProps) {
             <div className="space-y-3">
               <p className="text-label">{t("footer.contactLabel")}</p>
               <div className="text-sm text-foreground space-y-1">
-                <a href="mailto:hello@lucaspazzim.com" className="block hover:text-accent transition-colors">
-                  hello@lucaspazzim.com
+                <a href="mailto:lpazzim@gmail.com" className="block hover:text-accent transition-colors">
+                  lpazzim@gmail.com
                 </a>
-                <p>+55 11 9999-9999</p>
+                <a href="https://www.linkedin.com/in/lpazzim" target="_blank" rel="noopener noreferrer" className="block hover:text-accent transition-colors">
+                  LinkedIn
+                </a>
               </div>
             </div>
 

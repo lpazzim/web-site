@@ -16,6 +16,7 @@ const Project = () => {
     target: containerRef,
     offset: ["start start", "end end"]
   });
+  const heroY = useTransform(scrollYProgress, [0, 0.5], [0, 200]);
 
   if (!project) {
     return <Navigate to="/work" replace />;
@@ -35,7 +36,7 @@ const Project = () => {
         <section className="relative h-screen overflow-hidden">
           <motion.img
             style={{
-              y: useTransform(scrollYProgress, [0, 0.5], [0, 200]),
+              y: heroY,
               scale: 1.1
             }}
             src={project.coverImage}
@@ -117,7 +118,7 @@ const Project = () => {
 
         {/* Next Project Navigation */}
         <section className="py-60 border-t mt-20 bg-muted/30">
-          <Link to={`/project/${nextProject.id}`} className="group block text-center container-wide">
+          <Link to={`/work/${nextProject.id}`} className="group block text-center container-wide">
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}

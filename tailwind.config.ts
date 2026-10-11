@@ -20,7 +20,7 @@ export default {
     extend: {
       fontFamily: {
         display: ['Syne', 'system-ui', 'sans-serif'],
-        serif: ['Playfair Display', 'Georgia', 'serif'],
+        serif: ['"Times New Roman"', 'Georgia', 'serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
