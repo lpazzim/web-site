@@ -1,24 +1,18 @@
-import { defineConfig } from "vite";
+import { fileURLToPath, URL } from "node:url";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react";
-import path from "path";
+import { vercelApi } from "./vite-plugins/vercel-api";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "0.0.0.0",
-    port: 5000,
-    allowedHosts: true,
-    proxy: {
-      "/api": {
-        target: "http://localhost:3001",
-        changeOrigin: true,
-      },
+export default defineConfig(({ mode }) => {
+  // Expose server-only secrets (NOTION_*) to the API handlers in dev. They are
+  // never prefixed with VITE_, so they stay out of the client bundle.
+  Object.assign(process.env, loadEnv(mode, process.cwd(), "NOTION_"));
+
+  return {
+    server: { port: 5000 },
+    plugins: [react(), vercelApi()],
+    resolve: {
+      alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
     },
-  },
-  plugins: [react()].filter(Boolean),
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
-}));
+  };
+});

@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-import { listPosts, BlogPost } from "@/lib/blog";
+import { listPosts } from "@/lib/blog";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
@@ -41,7 +41,7 @@ const Blog = () => {
           {posts && posts.length === 0 && <div className="text-muted-foreground">{t("blog.empty")}</div>}
 
           <div className="space-y-12">
-            {posts?.map((post: BlogPost, index: number) => (
+            {posts?.map((post, index) => (
               <motion.article
                 key={post.id}
                 initial={{ opacity: 0, y: 30 }}

@@ -1,43 +1,34 @@
-export interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  description: string;
-  date: string;
-  published: boolean;
-  image?: string;
-  canonical?: string;
-  author?: string;
-}
+import type { BlogPost, PostWithBlocks } from "../../shared/blog";
 
-export interface PostWithBlocks {
-  post: BlogPost;
-  blocks: any[];
-}
+export type { BlogPost, NotionBlock, PostWithBlocks } from "../../shared/blog";
 
 const API_BASE = "/api";
 
-export async function listPosts(limit?: number): Promise<BlogPost[]> {
-  const url = limit ? `${API_BASE}/posts?limit=${limit}` : `${API_BASE}/posts`;
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch posts");
+export class HttpError extends Error {
+  constructor(
+    readonly status: number,
+    path: string,
+  ) {
+    super(`Request to ${path} failed with status ${status}`);
+    this.name = "HttpError";
   }
+}
 
-  return response.json();
+async function getJson<T>(path: string): Promise<T> {
+  const response = await fetch(`${API_BASE}${path}`);
+  if (!response.ok) throw new HttpError(response.status, path);
+  return response.json() as Promise<T>;
+}
+
+export function listPosts(limit?: number): Promise<BlogPost[]> {
+  return getJson(limit ? `/posts?limit=${limit}` : "/posts");
 }
 
 export async function getPostBySlug(slug: string): Promise<PostWithBlocks | null> {
-  const response = await fetch(`${API_BASE}/posts/${slug}`);
-
-  if (response.status === 404) {
-    return null;
+  try {
+    return await getJson<PostWithBlocks>(`/posts/${encodeURIComponent(slug)}`);
+  } catch (error) {
+    if (error instanceof HttpError && error.status === 404) return null;
+    throw error;
   }
-
-  if (!response.ok) {
-    throw new Error("Failed to fetch post");
-  }
-
-  return response.json();
 }

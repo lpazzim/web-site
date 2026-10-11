@@ -9,7 +9,7 @@ import { useLocale } from "@/i18n/useLocale";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { listPosts, BlogPost } from "@/lib/blog";
+import { listPosts } from "@/lib/blog";
 import { format } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
 
@@ -51,7 +51,7 @@ const ParallaxText = ({ children, baseVelocity = 1 }: { children: ReactNode; bas
 const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const locale = useLocale();
   const dateLocale = locale === "pt-BR" ? ptBR : enUS;
   const featuredProjects = projects.filter((p) => p.featured).slice(0, 4);
@@ -415,7 +415,7 @@ const Index = () => {
                 </TextReveal>
               </div>
               <div className="lg:col-span-3 space-y-8">
-                {latestPosts.map((post: BlogPost, index: number) => (
+                {latestPosts.map((post, index) => (
                   <motion.article
                     key={post.id}
                     initial={{ opacity: 0, y: 30 }}

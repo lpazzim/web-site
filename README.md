@@ -16,8 +16,9 @@ Personal portfolio and living CV of **Lucas Pazzim**, Senior Frontend Engineer b
 ## Project structure
 
 ```
-api/            Vercel Serverless Functions (Notion-backed blog API)
-server/         Local Express server mirroring the API for development
+api/            Vercel Functions (Notion-backed blog API); api/_lib holds shared code
+shared/         Types shared by the API and the client
+vite-plugins/   Dev-only plugin that serves api/ from the Vite dev server
 public/         Static assets (favicons, Open Graph image, photos)
 src/
   components/   Layout, header, footer, Notion block renderer
@@ -34,7 +35,7 @@ Requires Node.js 20+ and [pnpm](https://pnpm.io).
 ```sh
 pnpm install
 cp .env.example .env   # then fill in the Notion credentials
-pnpm dev               # Vite on :5000 + API server on :3001
+pnpm dev               # Vite on :5000, also serving /api/* locally
 ```
 
 ### Environment variables
@@ -46,12 +47,12 @@ pnpm dev               # Vite on :5000 + API server on :3001
 
 ### Scripts
 
-| Command        | Description                        |
-| -------------- | ---------------------------------- |
-| `pnpm dev`     | Start client and API in watch mode |
-| `pnpm build`   | Production build into `dist/`      |
-| `pnpm preview` | Preview the production build       |
-| `pnpm lint`    | Run ESLint                         |
+| Command        | Description                         |
+| -------------- | ----------------------------------- |
+| `pnpm dev`     | Start the dev server (client + API) |
+| `pnpm build`   | Production build into `dist/`       |
+| `pnpm preview` | Preview the production build        |
+| `pnpm lint`    | Run ESLint                          |
 
 ## Deployment
 
