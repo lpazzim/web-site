@@ -2,6 +2,7 @@ import { fileURLToPath, URL } from "node:url";
 import { defineConfig, loadEnv } from "vite";
 import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import babel from "@rolldown/plugin-babel";
+import tailwindcss from "@tailwindcss/vite";
 import { vercelApi } from "./vite-plugins/vercel-api.ts";
 
 export default defineConfig(({ mode }) => {
@@ -11,7 +12,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     server: { port: 5000 },
-    plugins: [react(), babel({ presets: [reactCompilerPreset()] }), vercelApi()],
+    plugins: [react(), babel({ presets: [reactCompilerPreset()] }), tailwindcss(), vercelApi()],
     resolve: {
       alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
     },

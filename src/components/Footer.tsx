@@ -67,7 +67,7 @@ export function Footer({ variant = "default" }: FooterProps) {
 
         {/* Large Scrolling Text */}
         <div className="border-t border-separator overflow-hidden py-6 md:py-8">
-          <div className="flex whitespace-nowrap animate-marquee">
+          <div className="flex w-max whitespace-nowrap animate-marquee">
             {Array.from({ length: 8 }).map((_, i) => (
               <span
                 key={i}

@@ -267,7 +267,7 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.8, delay: index * 0.1 }}
-                className="group relative aspect-[4/3] overflow-hidden border-b border-r border-border"
+                className="group relative aspect-4/3 overflow-hidden border-b border-r border-border"
               >
                 <Link
                   to={`/work/${project.id}`}
@@ -280,7 +280,7 @@ const Index = () => {
                     className="transition-transform duration-700 group-hover:scale-105"
                   />
                   {/* Strong gradient overlay for text readability */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
 
                   <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 text-white">
                     <div className="flex justify-between items-end">

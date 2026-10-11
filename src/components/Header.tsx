@@ -85,7 +85,7 @@ export function Header({ revealMode = false }: HeaderProps) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-100 transition-all duration-500 ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
       } ${isMenuOpen ? "bg-background" : "bg-background/80 backdrop-blur-md"}`}
     >
@@ -147,7 +147,7 @@ export function Header({ revealMode = false }: HeaderProps) {
       </div>
 
       <div
-        className={`md:hidden fixed inset-x-0 top-20 bottom-0 z-[99] transition-all duration-300 ${
+        className={`md:hidden fixed inset-x-0 top-20 bottom-0 z-99 transition-all duration-300 ${
           isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >

@@ -119,7 +119,7 @@ const About = () => {
                   <li key={exp.company + exp.start} className="relative pl-8 md:pl-12">
                     <span
                       aria-hidden="true"
-                      className={`absolute -left-[5px] top-2 h-[9px] w-[9px] rounded-full ${
+                      className={`absolute left-[-5px] top-2 h-[9px] w-[9px] rounded-full ${
                         exp.end ? "bg-border" : "bg-primary ring-4 ring-primary/20"
                       }`}
                     />

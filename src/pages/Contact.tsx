@@ -52,7 +52,7 @@ const Contact = () => {
 
           {/* Image */}
           <div className="hidden lg:block">
-            <div className="aspect-[4/5] bg-secondary overflow-hidden">
+            <div className="aspect-4/5 bg-secondary overflow-hidden">
               <img
                 src="/images/lucas-pazzim-about.jpeg"
                 alt="Lucas Pazzim"

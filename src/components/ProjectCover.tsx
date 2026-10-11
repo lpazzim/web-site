@@ -16,13 +16,13 @@ export function ProjectCover({ project, bare = false, className }: ProjectCoverP
     return <img src={project.cover} alt={project.title} className={cn("h-full w-full object-cover", className)} />;
   }
 
-  const accent = project.accent ?? "var(--primary)";
+  const accent = project.accent ? `hsl(${project.accent})` : "var(--primary)";
   const style = {
     "--cover-accent": accent,
     backgroundColor: "hsl(0 0% 6%)",
     backgroundImage: [
-      "radial-gradient(120% 90% at 85% 10%, hsl(var(--cover-accent) / 0.55), transparent 60%)",
-      "radial-gradient(80% 70% at 0% 100%, hsl(var(--cover-accent) / 0.25), transparent 70%)",
+      "radial-gradient(120% 90% at 85% 10%, color-mix(in oklab, var(--cover-accent) 55%, transparent), transparent 60%)",
+      "radial-gradient(80% 70% at 0% 100%, color-mix(in oklab, var(--cover-accent) 25%, transparent), transparent 70%)",
       "linear-gradient(hsl(0 0% 100% / 0.04) 1px, transparent 1px)",
       "linear-gradient(90deg, hsl(0 0% 100% / 0.04) 1px, transparent 1px)",
     ].join(","),
