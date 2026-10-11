@@ -1,0 +1,9 @@
+# Not part of the deployment. Test files under api/ would otherwise be
+# deployed as Vercel Functions.
+**/*.test.ts
+**/*.test.tsx
+e2e
+coverage
+playwright-report
+test-results
+profile.pdf
