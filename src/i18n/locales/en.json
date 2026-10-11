@@ -155,6 +155,7 @@
     "navLabel": "Navigation"
   },
   "notFound": {
+    "code": "Error · Route not found",
     "subtitle": "Oops! Page not found",
     "return": "Return to Home"
   },

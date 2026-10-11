@@ -19,7 +19,7 @@ const fadeIn = (delay = 0) => ({
 });
 
 const Eyebrow = ({ as: Tag = "h2", children }: { as?: "h2" | "h3"; children: ReactNode }) => (
-  <Tag className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">{children}</Tag>
+  <Tag className="text-hud mb-4">{children}</Tag>
 );
 
 const socialLinks = [

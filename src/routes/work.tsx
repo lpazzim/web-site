@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
+import { PageHeader } from "@/components/tech/PageHeader";
 import { ProjectListItem } from "@/components/ProjectListItem";
 import { projects } from "@/content/projects";
 import { getI18n, languageFromPath } from "@/i18n";
@@ -17,13 +18,11 @@ export default function Work() {
 
   return (
     <Layout showEchelonFooter>
-      <section className="container-wide pt-16 md:pt-24 pb-16 md:pb-20">
-        <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-bold tracking-tight">{t("work.title")}</h1>
-      </section>
+      <PageHeader label={t("home.projects.label")} title={t("work.title")} />
 
       <section className="pb-24">
-        {projects.map((project) => (
-          <ProjectListItem key={project.id} project={project} />
+        {projects.map((project, index) => (
+          <ProjectListItem key={project.id} project={project} index={index + 1} />
         ))}
       </section>
     </Layout>
