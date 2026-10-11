@@ -2,7 +2,9 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef, type ReactNode } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
-import { projects } from "@/data/projects";
+import { projects } from "@/content/projects";
+import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
+import { useLocale } from "@/i18n/useLocale";
 import { Link } from "react-router-dom";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -49,7 +51,9 @@ const Index = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const { t, i18n } = useTranslation();
-  const dateLocale = i18n.resolvedLanguage === "pt-BR" ? ptBR : enUS;
+  const locale = useLocale();
+  const dateLocale = locale === "pt-BR" ? ptBR : enUS;
+  const featuredProjects = projects.filter((p) => p.featured).slice(0, 4);
   const keywords = t("home.keywords", { returnObjects: true }) as string[];
 
   const { scrollYProgress } = useScroll({
@@ -245,9 +249,7 @@ const Index = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2">
-            {projects.slice(0, 4).map((project, index) => {
-              const projectCategory = t(`projects.${project.id}.category`, { defaultValue: project.category });
-              return (
+            {featuredProjects.map((project, index) => (
                 <motion.div
                   key={project.id}
                   initial={{ opacity: 0, y: 50 }}
@@ -257,10 +259,10 @@ const Index = () => {
                   className="group relative aspect-[4/3] overflow-hidden border-b border-r border-border"
                 >
                   <Link to={`/work/${project.id}`} className="block h-full w-full" data-testid={`card-project-${project.id}`}>
-                    <img
-                      src={project.coverImage}
-                      alt={project.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    <ProjectCover
+                      project={project}
+                      bare
+                      className="transition-transform duration-700 group-hover:scale-105"
                     />
                     {/* Strong gradient overlay for text readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
@@ -275,11 +277,12 @@ const Index = () => {
                             viewport={{ once: true }}
                             transition={{ delay: 0.2 }}
                           >
-                            {projectCategory}
+                            {project.category[locale]}
                           </motion.div>
                           <h3 className="text-3xl md:text-4xl lg:text-5xl tracking-tight leading-none">{project.title}</h3>
+                          {project.draft && <DraftBadge className="mt-3" />}
                         </div>
-                        <div className="text-sm font-sans opacity-50">{project.year}</div>
+                        <div className="text-sm font-sans opacity-50">{project.period}</div>
                       </div>
                     </div>
 
@@ -289,8 +292,7 @@ const Index = () => {
                     </div>
                   </Link>
                 </motion.div>
-              );
-            })}
+            ))}
           </div>
         </section>
 

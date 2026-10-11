@@ -35,9 +35,16 @@
       "cta": "More about me"
     },
     "keywords": [
-      "Curiosity", "Inquisitive", "Empathetic", "Creatively",
-      "Rational", "Long-lasting", "Optimal", "Articulate",
-      "Consistency", "Intuitive"
+      "Curiosity",
+      "Inquisitive",
+      "Empathetic",
+      "Creatively",
+      "Rational",
+      "Long-lasting",
+      "Optimal",
+      "Articulate",
+      "Consistency",
+      "Intuitive"
     ],
     "projects": {
       "label": "Selected Work",
@@ -75,12 +82,21 @@
     "title": "Projects"
   },
   "project": {
-    "client": "Client",
-    "focus": "Focus",
+    "role": "Role",
+    "company": "Company",
+    "period": "Period",
+    "links": "Links",
+    "liveSite": "Live site",
+    "sourceCode": "Source code",
+    "context": "Context",
+    "contributions": "What I did",
+    "decisions": "Key decisions",
+    "results": "Results",
+    "learnings": "Takeaway",
     "nextProject": "Next Project",
     "viewCaseStudy": "View Case Study",
     "backToArchive": "Back to Archive",
-    "copyright": "© 2020-2025 Lucas Pazzim"
+    "copyright": "© {{year}} Lucas Pazzim"
   },
   "about": {
     "label": "About",
@@ -95,21 +111,8 @@
     "educationValue": "Universidade Cruzeiro do Sul",
     "contactLabel": "Contact",
     "experienceLabel": "Experience",
-    "experience": [
-      {
-        "role": "Senior Software Engineer",
-        "company": "Current Position",
-        "period": "Present",
-        "description": "Development and maintenance of complex components that enable users to build applications intuitively. Implementation of performance optimizations and innovative features in collaboration with cross-functional teams."
-      },
-      {
-        "role": "Frontend Developer",
-        "company": "Previous Experience",
-        "period": "2018 - 2022",
-        "description": "Building responsive websites using HTML, CSS3, JavaScript, jQuery, and Bootstrap. Collaboration with backend engineers to optimize API calls and maintenance of legacy applications."
-      }
-    ],
-    "techStackLabel": "Tech Stack"
+    "techStackLabel": "Tech Stack",
+    "currentRole": "Present"
   },
   "contact": {
     "titleLine1": "Let's work",
@@ -151,47 +154,5 @@
   "notFound": {
     "subtitle": "Oops! Page not found",
     "return": "Return to Home"
-  },
-  "projects": {
-    "react-dashboard": {
-      "category": "Web Application",
-      "client": "Personal Project",
-      "description": "A modern analytics dashboard built with React, TypeScript, and Tailwind CSS. Features real-time data visualization, responsive design, and dark mode support."
-    },
-    "design-system": {
-      "category": "Component Library",
-      "client": "Open Source",
-      "description": "A comprehensive design system and component library built with React and Storybook. Includes 50+ accessible, customizable components following atomic design principles."
-    },
-    "ecommerce-platform": {
-      "category": "Web Application",
-      "client": "Startup",
-      "description": "A performant e-commerce platform with server-side rendering, optimized checkout flow, and seamless payment integration using Stripe."
-    },
-    "developer-tools": {
-      "category": "Tooling",
-      "client": "Personal Project",
-      "description": "A collection of developer productivity tools including CLI utilities, VS Code extensions, and automation scripts to streamline development workflows."
-    },
-    "api-gateway": {
-      "category": "Backend",
-      "client": "Enterprise",
-      "description": "A scalable API gateway handling authentication, rate limiting, and request routing for microservices architecture serving millions of requests."
-    },
-    "data-visualization": {
-      "category": "Interactive",
-      "client": "Tech Conference",
-      "description": "Interactive data visualization projects exploring complex datasets through animated charts, graphs, and creative visual storytelling."
-    },
-    "performance-audit": {
-      "category": "Article",
-      "client": "Tech Blog",
-      "description": "In-depth technical article on web performance optimization techniques, covering Core Web Vitals, code splitting, and lazy loading strategies."
-    },
-    "debugging-guide": {
-      "category": "Article",
-      "client": "Dev Community",
-      "description": "Comprehensive guide to debugging JavaScript applications, covering browser DevTools, React DevTools, and advanced debugging techniques."
-    }
   }
 }

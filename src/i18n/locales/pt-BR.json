@@ -35,9 +35,16 @@
       "cta": "Mais sobre mim"
     },
     "keywords": [
-      "Curiosidade", "Inquisitivo", "Empático", "Criativo",
-      "Racional", "Duradouro", "Ótimo", "Articulado",
-      "Consistência", "Intuitivo"
+      "Curiosidade",
+      "Inquisitivo",
+      "Empático",
+      "Criativo",
+      "Racional",
+      "Duradouro",
+      "Ótimo",
+      "Articulado",
+      "Consistência",
+      "Intuitivo"
     ],
     "projects": {
       "label": "Trabalhos Selecionados",
@@ -75,12 +82,21 @@
     "title": "Projetos"
   },
   "project": {
-    "client": "Cliente",
-    "focus": "Foco",
+    "role": "Papel",
+    "company": "Empresa",
+    "period": "Período",
+    "links": "Links",
+    "liveSite": "Ver site",
+    "sourceCode": "Código-fonte",
+    "context": "Contexto",
+    "contributions": "O que eu fiz",
+    "decisions": "Decisões-chave",
+    "results": "Resultados",
+    "learnings": "Aprendizado",
     "nextProject": "Próximo Projeto",
     "viewCaseStudy": "Ver Estudo de Caso",
     "backToArchive": "Voltar ao Arquivo",
-    "copyright": "© 2020-2025 Lucas Pazzim"
+    "copyright": "© {{year}} Lucas Pazzim"
   },
   "about": {
     "label": "Sobre",
@@ -95,21 +111,8 @@
     "educationValue": "Universidade Cruzeiro do Sul",
     "contactLabel": "Contato",
     "experienceLabel": "Experiência",
-    "experience": [
-      {
-        "role": "Engenheiro de Software Sênior",
-        "company": "Posição Atual",
-        "period": "Atual",
-        "description": "Desenvolvimento e manutenção de componentes complexos que permitem aos usuários construir aplicações de forma intuitiva. Implementação de otimizações de performance e funcionalidades inovadoras em colaboração com equipes multidisciplinares."
-      },
-      {
-        "role": "Desenvolvedor Frontend",
-        "company": "Experiência Anterior",
-        "period": "2018 - 2022",
-        "description": "Construção de sites responsivos usando HTML, CSS3, JavaScript, jQuery e Bootstrap. Colaboração com engenheiros de backend para otimizar chamadas de API e manutenção de aplicações legadas."
-      }
-    ],
-    "techStackLabel": "Stack de Tecnologias"
+    "techStackLabel": "Stack de Tecnologias",
+    "currentRole": "Atual"
   },
   "contact": {
     "titleLine1": "Vamos trabalhar",
@@ -151,47 +154,5 @@
   "notFound": {
     "subtitle": "Ops! Página não encontrada",
     "return": "Voltar para o Início"
-  },
-  "projects": {
-    "react-dashboard": {
-      "category": "Aplicação Web",
-      "client": "Projeto Pessoal",
-      "description": "Um dashboard de analytics moderno construído com React, TypeScript e Tailwind CSS. Apresenta visualização de dados em tempo real, design responsivo e suporte ao modo escuro."
-    },
-    "design-system": {
-      "category": "Biblioteca de Componentes",
-      "client": "Código Aberto",
-      "description": "Um design system abrangente e biblioteca de componentes construída com React e Storybook. Inclui mais de 50 componentes acessíveis e personalizáveis seguindo princípios de atomic design."
-    },
-    "ecommerce-platform": {
-      "category": "Aplicação Web",
-      "client": "Startup",
-      "description": "Uma plataforma de e-commerce performática com renderização no servidor, fluxo de checkout otimizado e integração de pagamento via Stripe."
-    },
-    "developer-tools": {
-      "category": "Ferramentas",
-      "client": "Projeto Pessoal",
-      "description": "Uma coleção de ferramentas de produtividade para desenvolvedores incluindo utilitários CLI, extensões para VS Code e scripts de automação para agilizar fluxos de desenvolvimento."
-    },
-    "api-gateway": {
-      "category": "Backend",
-      "client": "Empresarial",
-      "description": "Um API gateway escalável que gerencia autenticação, rate limiting e roteamento de requisições para arquitetura de microsserviços atendendo milhões de requisições."
-    },
-    "data-visualization": {
-      "category": "Interativo",
-      "client": "Conferência de Tecnologia",
-      "description": "Projetos interativos de visualização de dados que exploram datasets complexos através de gráficos animados e narrativas visuais criativas."
-    },
-    "performance-audit": {
-      "category": "Artigo",
-      "client": "Blog de Tecnologia",
-      "description": "Artigo técnico aprofundado sobre técnicas de otimização de performance web, abordando Core Web Vitals, code splitting e estratégias de lazy loading."
-    },
-    "debugging-guide": {
-      "category": "Artigo",
-      "client": "Comunidade Dev",
-      "description": "Guia completo de debugging para aplicações JavaScript, abordando DevTools do navegador, React DevTools e técnicas avançadas de debugging."
-    }
   }
 }

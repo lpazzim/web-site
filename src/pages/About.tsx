@@ -1,6 +1,11 @@
 import { Layout } from "@/components/Layout";
 import { motion } from "framer-motion";
 import { Trans, useTranslation } from "react-i18next";
+import { format, parse } from "date-fns";
+import { enUS, ptBR } from "date-fns/locale";
+import { experience } from "@/content/experience";
+import { DraftBadge } from "@/components/ProjectCover";
+import { useLocale } from "@/i18n/useLocale";
 
 const skills = [
   "React",
@@ -15,17 +20,12 @@ const skills = [
   "Vitest"
 ];
 
-interface ExperienceItem {
-  role: string;
-  company: string;
-  period: string;
-  description: string;
-}
-
 const About = () => {
   const { t } = useTranslation();
-  // returnObjects pulls the array straight from the active locale
-  const experience = t("about.experience", { returnObjects: true }) as ExperienceItem[];
+  const locale = useLocale();
+  const dateLocale = locale === "pt-BR" ? ptBR : enUS;
+  const formatMonth = (yearMonth: string) =>
+    format(parse(yearMonth, "yyyy-MM", new Date()), "MMM yyyy", { locale: dateLocale });
 
   return (
     <Layout showEchelonFooter>
@@ -111,26 +111,53 @@ const About = () => {
             </motion.div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-24 pt-16 border-t border-border"
-          >
-            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8 font-sans">{t("about.experienceLabel")}</div>
-            <div className="space-y-12">
-              {experience.map((exp, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="text-sm text-muted-foreground font-sans">{exp.period}</div>
-                  <div className="md:col-span-3">
-                    <h3 className="text-2xl mb-1">{exp.role}</h3>
+          {experience.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="mt-24 pt-16 border-t border-border"
+            >
+              <h2 className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-12 font-sans">{t("about.experienceLabel")}</h2>
+              <ol className="relative border-l border-border ml-1 space-y-16">
+                {experience.map((exp) => (
+                  <li key={exp.company + exp.start} className="relative pl-8 md:pl-12">
+                    <span
+                      aria-hidden="true"
+                      className={`absolute -left-[5px] top-2 h-[9px] w-[9px] rounded-full ${exp.end ? "bg-border" : "bg-primary ring-4 ring-primary/20"}`}
+                    />
+                    <p className="text-sm text-muted-foreground font-sans mb-2">
+                      <time dateTime={exp.start}>{formatMonth(exp.start)}</time>
+                      {" — "}
+                      {exp.end ? <time dateTime={exp.end}>{formatMonth(exp.end)}</time> : t("about.currentRole")}
+                      {exp.location && <span className="ml-3 opacity-60">{exp.location}</span>}
+                    </p>
+                    <h3 className="text-2xl md:text-3xl mb-1">
+                      {exp.role[locale]}
+                      {exp.draft && <DraftBadge className="ml-3 align-middle" />}
+                    </h3>
                     <p className="text-primary mb-4">{exp.company}</p>
-                    <p className="text-muted-foreground">{exp.description}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </motion.div>
+                    <p className="text-muted-foreground mb-4">{exp.summary[locale]}</p>
+                    <ul className="space-y-2 mb-6">
+                      {exp.highlights[locale].map((item) => (
+                        <li key={item} className="flex gap-3 text-muted-foreground">
+                          <span aria-hidden="true" className="mt-3 h-px w-4 shrink-0 bg-primary" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <ul className="flex flex-wrap gap-2">
+                      {exp.stack.map((tech) => (
+                        <li key={tech} className="text-[10px] uppercase tracking-widest border border-border px-2 py-1 font-sans text-muted-foreground">
+                          {tech}
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ol>
+            </motion.div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
