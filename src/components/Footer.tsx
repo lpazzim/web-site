@@ -18,18 +18,22 @@ export function Footer({ variant = "default" }: FooterProps) {
             {/* Location */}
             <div className="space-y-3">
               <p className="text-label">{t("footer.locationLabel")}</p>
-              <div className="text-sm text-foreground space-y-1 whitespace-pre-line">
-                {t("footer.locationValue")}
-              </div>
+              <div className="text-sm text-foreground space-y-1 whitespace-pre-line">{t("footer.locationValue")}</div>
             </div>
 
             {/* Navigation */}
             <div className="space-y-3">
               <p className="text-label">{t("footer.navLabel")}</p>
               <div className="text-sm space-y-1">
-                <Link to="/work" className="block text-foreground hover:text-accent transition-colors">{t("footer.projectsLink")}</Link>
-                <Link to="/about" className="block text-foreground hover:text-accent transition-colors">{t("footer.aboutLink")}</Link>
-                <Link to="/contact" className="block text-foreground hover:text-accent transition-colors">{t("footer.contactLink")}</Link>
+                <Link to="/work" className="block text-foreground hover:text-accent transition-colors">
+                  {t("footer.projectsLink")}
+                </Link>
+                <Link to="/about" className="block text-foreground hover:text-accent transition-colors">
+                  {t("footer.aboutLink")}
+                </Link>
+                <Link to="/contact" className="block text-foreground hover:text-accent transition-colors">
+                  {t("footer.contactLink")}
+                </Link>
               </div>
             </div>
 
@@ -40,7 +44,12 @@ export function Footer({ variant = "default" }: FooterProps) {
                 <a href="mailto:lpazzim@gmail.com" className="block hover:text-accent transition-colors">
                   lpazzim@gmail.com
                 </a>
-                <a href="https://www.linkedin.com/in/lpazzim" target="_blank" rel="noopener noreferrer" className="block hover:text-accent transition-colors">
+                <a
+                  href="https://www.linkedin.com/in/lpazzim"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block hover:text-accent transition-colors"
+                >
                   LinkedIn
                 </a>
               </div>
@@ -81,16 +90,20 @@ export function Footer({ variant = "default" }: FooterProps) {
           {/* Left */}
           <div className="space-y-4">
             <p className="font-display text-xl font-semibold">Lucas Pazzim</p>
-            <p className="text-muted-foreground text-sm">
-              {t("footer.tagline")}
-            </p>
+            <p className="text-muted-foreground text-sm">{t("footer.tagline")}</p>
           </div>
 
           {/* Center */}
           <div className="flex gap-8 text-sm text-muted-foreground">
-            <Link to="/work" className="hover-highlight">{t("footer.workLink")}</Link>
-            <Link to="/about" className="hover-highlight">{t("footer.aboutLink")}</Link>
-            <Link to="/contact" className="hover-highlight">{t("footer.contactLink")}</Link>
+            <Link to="/work" className="hover-highlight">
+              {t("footer.workLink")}
+            </Link>
+            <Link to="/about" className="hover-highlight">
+              {t("footer.aboutLink")}
+            </Link>
+            <Link to="/contact" className="hover-highlight">
+              {t("footer.contactLink")}
+            </Link>
           </div>
 
           {/* Right */}

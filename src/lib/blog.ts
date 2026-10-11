@@ -15,29 +15,29 @@ export interface PostWithBlocks {
   blocks: any[];
 }
 
-const API_BASE = '/api';
+const API_BASE = "/api";
 
 export async function listPosts(limit?: number): Promise<BlogPost[]> {
   const url = limit ? `${API_BASE}/posts?limit=${limit}` : `${API_BASE}/posts`;
   const response = await fetch(url);
-  
+
   if (!response.ok) {
-    throw new Error('Failed to fetch posts');
+    throw new Error("Failed to fetch posts");
   }
-  
+
   return response.json();
 }
 
 export async function getPostBySlug(slug: string): Promise<PostWithBlocks | null> {
   const response = await fetch(`${API_BASE}/posts/${slug}`);
-  
+
   if (response.status === 404) {
     return null;
   }
-  
+
   if (!response.ok) {
-    throw new Error('Failed to fetch post');
+    throw new Error("Failed to fetch post");
   }
-  
+
   return response.json();
 }

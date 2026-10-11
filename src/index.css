@@ -35,11 +35,16 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Times New Roman', Georgia, serif;
+    font-family: "Times New Roman", Georgia, serif;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Times New Roman', Georgia, serif;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Times New Roman", Georgia, serif;
     font-weight: 400;
   }
 
@@ -51,7 +56,7 @@
 @layer components {
   .text-display {
     @apply text-6xl md:text-8xl lg:text-[10rem] leading-[0.85] tracking-tighter uppercase;
-    font-family: 'Times New Roman', Georgia, serif;
+    font-family: "Times New Roman", Georgia, serif;
   }
 
   .text-headline {
@@ -65,7 +70,10 @@
 
   .text-label {
     @apply text-xs md:text-sm uppercase tracking-[0.2em] text-muted-foreground;
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      sans-serif;
   }
 
   .hover-highlight {
@@ -94,7 +102,7 @@
   }
 
   .link-editorial::after {
-    content: '';
+    content: "";
     @apply absolute bottom-0 left-0 w-full h-px bg-current;
     transform: scaleX(0);
     transform-origin: right;
@@ -121,8 +129,12 @@
   }
 
   @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes fade-in-up {

@@ -19,7 +19,9 @@ const Contact = () => {
           <div className="space-y-12">
             <div>
               <h1 className="text-display lg:text-[clamp(3rem,6vw,7rem)] mb-6 animate-fade-in-up">
-                {t("contact.titleLine1")}<br />{t("contact.titleLine2")}
+                {t("contact.titleLine1")}
+                <br />
+                {t("contact.titleLine2")}
               </h1>
               <p className="text-xl text-muted-foreground animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
                 {t("contact.intro")}

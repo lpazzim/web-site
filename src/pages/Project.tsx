@@ -21,7 +21,7 @@ const RESULT_COLUMNS: Record<number, string> = {
   2: "sm:grid-cols-2",
 };
 
-const Section =({ label, children }: { label: string; children: ReactNode }) => (
+const Section = ({ label, children }: { label: string; children: ReactNode }) => (
   <motion.section {...reveal} className="container-wide py-20 md:py-28 border-t">
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20">
       <h2 className="lg:col-span-4 text-label">{label}</h2>
@@ -39,7 +39,7 @@ const Project = () => {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end end"],
   });
   const heroY = useTransform(scrollYProgress, [0, 0.5], [0, 200]);
 
@@ -79,7 +79,10 @@ const Project = () => {
               </div>
               <ul className="flex flex-wrap gap-2">
                 {project.stack.map((tech) => (
-                  <li key={tech} className="text-[10px] uppercase tracking-widest border border-foreground/30 px-3 py-1">
+                  <li
+                    key={tech}
+                    className="text-[10px] uppercase tracking-widest border border-foreground/30 px-3 py-1"
+                  >
                     {tech}
                   </li>
                 ))}
@@ -109,12 +112,22 @@ const Project = () => {
                   <dt className="text-label mb-3">{t("project.links")}</dt>
                   <dd className="space-y-2 font-sans text-sm uppercase tracking-widest">
                     {links.live && (
-                      <a href={links.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
+                      <a
+                        href={links.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 hover:text-primary transition-colors"
+                      >
                         {t("project.liveSite")} <ArrowUpRight size={14} />
                       </a>
                     )}
                     {links.repo && (
-                      <a href={links.repo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-primary transition-colors">
+                      <a
+                        href={links.repo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 hover:text-primary transition-colors"
+                      >
                         {t("project.sourceCode")} <ArrowUpRight size={14} />
                       </a>
                     )}
@@ -122,9 +135,7 @@ const Project = () => {
                 </div>
               )}
             </dl>
-            <p className="lg:col-span-8 text-3xl md:text-5xl leading-[1.1] tracking-tight">
-              {project.summary[locale]}
-            </p>
+            <p className="lg:col-span-8 text-3xl md:text-5xl leading-[1.1] tracking-tight">{project.summary[locale]}</p>
           </div>
         </section>
 
@@ -162,10 +173,14 @@ const Project = () => {
         )}
 
         <Section label={t("project.results")}>
-          <dl className={`grid grid-cols-1 gap-px bg-border border ${RESULT_COLUMNS[results.length] ?? "sm:grid-cols-3"}`}>
+          <dl
+            className={`grid grid-cols-1 gap-px bg-border border ${RESULT_COLUMNS[results.length] ?? "sm:grid-cols-3"}`}
+          >
             {results.map((metric) => (
               <div key={metric.label} className="bg-background p-8 flex flex-col gap-3">
-                <dt className="order-2 font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground">{metric.label}</dt>
+                <dt className="order-2 font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                  {metric.label}
+                </dt>
                 <dd
                   className={`order-1 tracking-tighter text-primary tabular-nums ${
                     metric.value.length > 4 ? "text-5xl md:text-6xl" : "text-6xl md:text-7xl"
@@ -180,9 +195,7 @@ const Project = () => {
 
         {project.learnings && (
           <Section label={t("project.learnings")}>
-            <blockquote className="text-2xl md:text-4xl leading-snug italic">
-              “{project.learnings[locale]}”
-            </blockquote>
+            <blockquote className="text-2xl md:text-4xl leading-snug italic">“{project.learnings[locale]}”</blockquote>
           </Section>
         )}
 
@@ -190,17 +203,16 @@ const Project = () => {
         {nextProject !== project && (
           <section className="py-40 md:py-60 border-t bg-muted/30">
             <Link to={`/work/${nextProject.id}`} className="group block text-center container-wide">
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-              >
-                <div className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-12">{t("project.nextProject")}</div>
+              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+                <div className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-12">
+                  {t("project.nextProject")}
+                </div>
                 <h2 className="text-display group-hover:text-primary transition-all duration-500 transform group-hover:scale-[1.02]">
                   {nextProject.title}
                 </h2>
                 <div className="mt-16 inline-flex items-center gap-4 text-xl border-b border-foreground pb-2">
-                  {t("project.viewCaseStudy")} <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-3" />
+                  {t("project.viewCaseStudy")}{" "}
+                  <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-3" />
                 </div>
               </motion.div>
             </Link>
@@ -208,7 +220,10 @@ const Project = () => {
         )}
 
         <section className="container-wide py-12 border-t flex justify-between items-center">
-          <Link to="/work" className="inline-flex items-center gap-3 text-sm uppercase tracking-widest hover:text-primary transition-colors group">
+          <Link
+            to="/work"
+            className="inline-flex items-center gap-3 text-sm uppercase tracking-widest hover:text-primary transition-colors group"
+          >
             <ArrowLeft size={18} className="transition-transform group-hover:-translate-x-2" />
             {t("project.backToArchive")}
           </Link>

@@ -10,9 +10,7 @@ export function resolveLanguage(raw?: string): SupportedLanguage {
   const exact = SUPPORTED_LANGUAGES.find((lng) => lng.toLowerCase() === lower);
   if (exact) return exact;
   const primary = lower.split("-")[0];
-  const byPrimary = SUPPORTED_LANGUAGES.find(
-    (lng) => lng.toLowerCase().split("-")[0] === primary,
-  );
+  const byPrimary = SUPPORTED_LANGUAGES.find((lng) => lng.toLowerCase().split("-")[0] === primary);
   return byPrimary ?? "en";
 }
 

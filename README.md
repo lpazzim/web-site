@@ -39,19 +39,19 @@ pnpm dev               # Vite on :5000 + API server on :3001
 
 ### Environment variables
 
-| Variable             | Description                                   |
-| -------------------- | --------------------------------------------- |
-| `NOTION_API_TOKEN`   | Notion internal integration token             |
+| Variable             | Description                                    |
+| -------------------- | ---------------------------------------------- |
+| `NOTION_API_TOKEN`   | Notion internal integration token              |
 | `NOTION_DATABASE_ID` | ID of the Notion data source holding the posts |
 
 ### Scripts
 
-| Command        | Description                     |
-| -------------- | ------------------------------- |
+| Command        | Description                        |
+| -------------- | ---------------------------------- |
 | `pnpm dev`     | Start client and API in watch mode |
-| `pnpm build`   | Production build into `dist/`   |
-| `pnpm preview` | Preview the production build    |
-| `pnpm lint`    | Run ESLint                      |
+| `pnpm build`   | Production build into `dist/`      |
+| `pnpm preview` | Preview the production build       |
+| `pnpm lint`    | Run ESLint                         |
 
 ## Deployment
 

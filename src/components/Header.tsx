@@ -50,12 +50,12 @@ export function Header({ revealMode = false }: HeaderProps) {
 
   const handleNavClick = (anchor: string, isRoute?: boolean) => {
     setIsMenuOpen(false);
-    
+
     if (isRoute) {
       navigate(anchor);
       return;
     }
-    
+
     if (location.pathname !== "/") {
       navigate("/");
       setTimeout(() => {
@@ -82,16 +82,14 @@ export function Header({ revealMode = false }: HeaderProps) {
   };
 
   return (
-    <header 
+    <header
       className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 ${
-        isVisible 
-          ? 'opacity-100 translate-y-0' 
-          : 'opacity-0 -translate-y-full pointer-events-none'
-      } ${isMenuOpen ? 'bg-background' : 'bg-background/80 backdrop-blur-md'}`}
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
+      } ${isMenuOpen ? "bg-background" : "bg-background/80 backdrop-blur-md"}`}
     >
       <div className="container-wide relative">
         <div className="flex items-center justify-between h-20 md:h-24">
-          <button 
+          <button
             onClick={handleLogoClick}
             className="font-display text-lg font-semibold tracking-tight text-foreground hover:opacity-70 transition-opacity"
             data-testid="link-home"
@@ -146,9 +144,9 @@ export function Header({ revealMode = false }: HeaderProps) {
         </div>
       </div>
 
-      <div 
+      <div
         className={`md:hidden fixed inset-x-0 top-20 bottom-0 z-[99] transition-all duration-300 ${
-          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
         <div className="absolute inset-0 bg-background" />
@@ -158,9 +156,9 @@ export function Header({ revealMode = false }: HeaderProps) {
               key={item.key}
               onClick={() => handleNavClick(item.anchor, item.isRoute)}
               className={`text-4xl font-display text-foreground text-left transition-all duration-500 ${
-                isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
-              style={{ transitionDelay: isMenuOpen ? `${index * 0.1}s` : '0s' }}
+              style={{ transitionDelay: isMenuOpen ? `${index * 0.1}s` : "0s" }}
             >
               {item.label}
             </button>

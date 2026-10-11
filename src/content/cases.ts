@@ -12,12 +12,14 @@ export const professionalCases: CaseStudy[] = [
     category: { en: "Invoice generation SaaS", "pt-BR": "SaaS de emissão de notas fiscais" },
     summary: {
       en: "Scaling the frontend of a high-throughput invoice generation SaaS, including a core technology migration with near-zero downtime.",
-      "pt-BR": "Escala do frontend de um SaaS de emissão de notas fiscais de alto volume, incluindo uma migração de tecnologia core com downtime praticamente zero.",
+      "pt-BR":
+        "Escala do frontend de um SaaS de emissão de notas fiscais de alto volume, incluindo uma migração de tecnologia core com downtime praticamente zero.",
     },
     stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Zustand", "Zod", "AWS Amplify"],
     context: {
       en: "Invoice generation is critical, high-throughput work: the platform has to stay available while it evolves, and the interface has to hold up under many users working at the same time.",
-      "pt-BR": "Emissão de notas é um trabalho crítico e de alto volume: a plataforma precisa continuar disponível enquanto evolui, e a interface precisa aguentar muitos usuários trabalhando ao mesmo tempo.",
+      "pt-BR":
+        "Emissão de notas é um trabalho crítico e de alto volume: a plataforma precisa continuar disponível enquanto evolui, e a interface precisa aguentar muitos usuários trabalhando ao mesmo tempo.",
     },
     contributions: {
       en: [
@@ -59,12 +61,14 @@ export const professionalCases: CaseStudy[] = [
     category: { en: "Performance, SEO & i18n", "pt-BR": "Performance, SEO & i18n" },
     summary: {
       en: "Frontend architecture for enterprise web applications, with a focus on Core Web Vitals, technical SEO and multi-language routing.",
-      "pt-BR": "Arquitetura frontend para aplicações web corporativas, com foco em Core Web Vitals, SEO técnico e roteamento multi-idioma.",
+      "pt-BR":
+        "Arquitetura frontend para aplicações web corporativas, com foco em Core Web Vitals, SEO técnico e roteamento multi-idioma.",
     },
     stack: ["React", "Next.js", "TypeScript", "REST", "Jest", "Vitest", "Playwright"],
     context: {
       en: "Enterprise web applications that need to be fast, discoverable in search and available in multiple languages, built and shipped together with product, design and backend teams.",
-      "pt-BR": "Aplicações web corporativas que precisam ser rápidas, encontráveis em buscadores e disponíveis em vários idiomas, construídas e entregues junto com times de produto, design e backend.",
+      "pt-BR":
+        "Aplicações web corporativas que precisam ser rápidas, encontráveis em buscadores e disponíveis em vários idiomas, construídas e entregues junto com times de produto, design e backend.",
     },
     contributions: {
       en: [
@@ -136,12 +140,14 @@ export const professionalCases: CaseStudy[] = [
     category: { en: "Automotive marketplace · Financial team", "pt-BR": "Marketplace automotivo · Time financeiro" },
     summary: {
       en: "Building and maintaining features for the tech financial team, where ranking high in Google searches was a product requirement.",
-      "pt-BR": "Construção e manutenção de funcionalidades no time de tecnologia financeira, onde ranquear bem no Google era requisito de produto.",
+      "pt-BR":
+        "Construção e manutenção de funcionalidades no time de tecnologia financeira, onde ranquear bem no Google era requisito de produto.",
     },
     stack: ["React", "Next.js", "Redux", "TypeScript", "SCSS", "ESLint", "Google Analytics"],
     context: {
       en: "As part of the tech financial team, the work combined new features and maintenance with a constant focus on performance, usability and presentation. SEO was critical: the product needed to rank highly in Google searches.",
-      "pt-BR": "No time de tecnologia financeira, o trabalho combinava novas funcionalidades e manutenção com foco constante em performance, usabilidade e apresentação. SEO era crítico: o produto precisava ranquear bem nas buscas do Google.",
+      "pt-BR":
+        "No time de tecnologia financeira, o trabalho combinava novas funcionalidades e manutenção com foco constante em performance, usabilidade e apresentação. SEO era crítico: o produto precisava ranquear bem nas buscas do Google.",
     },
     contributions: {
       en: [
@@ -182,7 +188,8 @@ export const professionalCases: CaseStudy[] = [
     stack: ["React", "Redux", "TypeScript", "JavaScript", "SCSS", "GitHub"],
     context: {
       en: "A new product built from the ground up for doctors to use during their daily consultations, where the frontend had to be efficient, reusable and dependable.",
-      "pt-BR": "Um novo produto construído do zero para médicos usarem em suas consultas diárias, em que o frontend precisava ser eficiente, reutilizável e confiável.",
+      "pt-BR":
+        "Um novo produto construído do zero para médicos usarem em suas consultas diárias, em que o frontend precisava ser eficiente, reutilizável e confiável.",
     },
     contributions: {
       en: [
@@ -210,12 +217,14 @@ export const professionalCases: CaseStudy[] = [
     category: { en: "No-code platform", "pt-BR": "Plataforma no-code" },
     summary: {
       en: "Complex components that let users build their own applications effortlessly on a no-code platform.",
-      "pt-BR": "Componentes complexos que permitem aos usuários construir suas próprias aplicações sem esforço em uma plataforma no-code.",
+      "pt-BR":
+        "Componentes complexos que permitem aos usuários construir suas próprias aplicações sem esforço em uma plataforma no-code.",
     },
     stack: ["React", "TypeScript", "styled-components", "Docker", "Vite", "pnpm", "Prettier"],
     context: {
       en: "In a no-code platform, the components are the product: users assemble applications from them, so they need to be powerful, reliable and easy to use.",
-      "pt-BR": "Em uma plataforma no-code, os componentes são o produto: os usuários montam aplicações com eles, então precisam ser poderosos, confiáveis e fáceis de usar.",
+      "pt-BR":
+        "Em uma plataforma no-code, os componentes são o produto: os usuários montam aplicações com eles, então precisam ser poderosos, confiáveis e fáceis de usar.",
     },
     contributions: {
       en: [

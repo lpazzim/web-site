@@ -12,8 +12,12 @@ const Blog = () => {
   const { t, i18n } = useTranslation();
   const dateLocale = i18n.resolvedLanguage === "pt-BR" ? ptBR : enUS;
 
-  const { data: posts, isLoading, error } = useQuery({
-    queryKey: ['posts'],
+  const {
+    data: posts,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["posts"],
     queryFn: () => listPosts(),
     staleTime: 1000 * 60 * 5,
   });
@@ -22,29 +26,19 @@ const Blog = () => {
     <Layout>
       <section className="container-wide py-16 md:py-24">
         <div className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">{t("blog.label")}</div>
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <div className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4 font-sans">
+              {t("blog.label")}
+            </div>
             <h1 className="text-5xl md:text-7xl uppercase tracking-tighter mb-8">{t("blog.title")}</h1>
-            <p className="text-xl text-muted-foreground mb-16">
-              {t("blog.intro")}
-            </p>
+            <p className="text-xl text-muted-foreground mb-16">{t("blog.intro")}</p>
           </motion.div>
 
-          {isLoading && (
-            <div className="text-muted-foreground">{t("blog.loading")}</div>
-          )}
+          {isLoading && <div className="text-muted-foreground">{t("blog.loading")}</div>}
 
-          {error && (
-            <div className="text-red-500">{t("blog.error")}</div>
-          )}
+          {error && <div className="text-red-500">{t("blog.error")}</div>}
 
-          {posts && posts.length === 0 && (
-            <div className="text-muted-foreground">{t("blog.empty")}</div>
-          )}
+          {posts && posts.length === 0 && <div className="text-muted-foreground">{t("blog.empty")}</div>}
 
           <div className="space-y-12">
             {posts?.map((post: BlogPost, index: number) => (
@@ -58,20 +52,17 @@ const Blog = () => {
                 <Link to={`/blog/${post.slug}`} className="block">
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-6 py-8 border-t border-border hover:bg-muted/20 transition-colors -mx-4 px-4">
                     <div className="text-sm text-muted-foreground font-sans">
-                      {post.date && format(new Date(post.date), 'MMM dd, yyyy', { locale: dateLocale })}
+                      {post.date && format(new Date(post.date), "MMM dd, yyyy", { locale: dateLocale })}
                       {post.author && <div className="mt-1">{post.author}</div>}
                     </div>
                     <div className="md:col-span-3">
                       <h2 className="text-2xl md:text-3xl mb-3 group-hover:text-primary transition-colors">
                         {post.title}
                       </h2>
-                      {post.description && (
-                        <p className="text-muted-foreground text-lg mb-4">
-                          {post.description}
-                        </p>
-                      )}
+                      {post.description && <p className="text-muted-foreground text-lg mb-4">{post.description}</p>}
                       <span className="inline-flex items-center gap-2 text-sm text-primary">
-                        {t("blog.readArticle")} <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        {t("blog.readArticle")}{" "}
+                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                       </span>
                     </div>
                   </div>

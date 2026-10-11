@@ -9,11 +9,11 @@ export default defineConfig(({ mode }) => ({
     port: 5000,
     allowedHosts: true,
     proxy: {
-      '/api': {
-        target: 'http://localhost:3001',
+      "/api": {
+        target: "http://localhost:3001",
         changeOrigin: true,
-      }
-    }
+      },
+    },
   },
   plugins: [react()].filter(Boolean),
   resolve: {

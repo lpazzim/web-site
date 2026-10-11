@@ -2,7 +2,7 @@ import { Client } from "@notionhq/client";
 
 function sanitizeEnv(val: string | undefined): string | undefined {
   if (!val) return undefined;
-  return val.trim().replace(/^["']|["']$/g, '');
+  return val.trim().replace(/^["']|["']$/g, "");
 }
 
 export function getNotionClient(): Client {

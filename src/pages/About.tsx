@@ -31,9 +31,7 @@ const About = () => {
 
   // Experience dates are "YYYY-MM", or "YYYY" when LinkedIn only lists the year.
   const formatDate = (value: string) =>
-    value.length === 4
-      ? value
-      : format(parse(value, "yyyy-MM", new Date()), "MMM yyyy", { locale: dateLocale });
+    value.length === 4 ? value : format(parse(value, "yyyy-MM", new Date()), "MMM yyyy", { locale: dateLocale });
 
   return (
     <Layout showEchelonFooter>

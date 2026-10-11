@@ -34,7 +34,10 @@ export const profile: Profile = {
   ],
   languages: [
     { name: { en: "Portuguese", "pt-BR": "Português" }, level: { en: "Native", "pt-BR": "Nativo" } },
-    { name: { en: "English", "pt-BR": "Inglês" }, level: { en: "Full professional", "pt-BR": "Profissional completo" } },
+    {
+      name: { en: "English", "pt-BR": "Inglês" },
+      level: { en: "Full professional", "pt-BR": "Profissional completo" },
+    },
   ],
   education: [
     {

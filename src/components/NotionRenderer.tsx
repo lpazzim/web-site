@@ -26,12 +26,7 @@ function spanFor(rt: RichText[number]) {
     }
   }
   let el: React.ReactNode = rt.plain_text;
-  if (rt.annotations?.code)
-    el = (
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">
-        {el}
-      </code>
-    );
+  if (rt.annotations?.code) el = <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">{el}</code>;
   if (rt.annotations?.bold) el = <strong>{el}</strong>;
   if (rt.annotations?.italic) el = <em>{el}</em>;
   if (rt.annotations?.underline) el = <u>{el}</u>;
@@ -63,7 +58,7 @@ function Rich({ rich_text }: { rich_text: RichText }) {
 export function NotionRenderer({ blocks }: { blocks: any[] }) {
   const renderBlocks = (nodes: any[]): React.ReactNode[] => {
     if (!nodes || !Array.isArray(nodes)) return [];
-    
+
     const out: React.ReactNode[] = [];
     let i = 0;
 
@@ -79,22 +74,17 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
           i++;
         }
         out.push(
-          <ol
-            key={`ol-${items[0].id}`}
-            className="list-decimal pl-6 my-4 space-y-2"
-          >
+          <ol key={`ol-${items[0].id}`} className="list-decimal pl-6 my-4 space-y-2">
             {items.map((item) => {
               const bi = item.numbered_list_item || item[item.type];
               return (
                 <li key={item.id} className="leading-relaxed text-muted-foreground">
                   <Rich rich_text={bi.rich_text} />
-                  {item.children?.length ? (
-                    <div className="mt-2 ml-4">{renderBlocks(item.children)}</div>
-                  ) : null}
+                  {item.children?.length ? <div className="mt-2 ml-4">{renderBlocks(item.children)}</div> : null}
                 </li>
               );
             })}
-          </ol>
+          </ol>,
         );
         continue;
       }
@@ -106,22 +96,17 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
           i++;
         }
         out.push(
-          <ul
-            key={`ul-${items[0].id}`}
-            className="list-disc pl-6 my-4 space-y-2"
-          >
+          <ul key={`ul-${items[0].id}`} className="list-disc pl-6 my-4 space-y-2">
             {items.map((item) => {
               const bi = item.bulleted_list_item || item[item.type];
               return (
                 <li key={item.id} className="leading-relaxed text-muted-foreground">
                   <Rich rich_text={bi.rich_text} />
-                  {item.children?.length ? (
-                    <div className="mt-2 ml-4">{renderBlocks(item.children)}</div>
-                  ) : null}
+                  {item.children?.length ? <div className="mt-2 ml-4">{renderBlocks(item.children)}</div> : null}
                 </li>
               );
             })}
-          </ul>
+          </ul>,
         );
         continue;
       }
@@ -131,48 +116,34 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
       switch (t) {
         case "heading_1":
           out.push(
-            <h1
-              key={block.id}
-              className="text-3xl md:text-4xl font-serif leading-tight mt-12 mb-4"
-            >
+            <h1 key={block.id} className="text-3xl md:text-4xl font-serif leading-tight mt-12 mb-4">
               <Rich rich_text={b.rich_text} />
-            </h1>
+            </h1>,
           );
           break;
 
         case "heading_2":
           out.push(
-            <h2
-              key={block.id}
-              className="text-2xl md:text-3xl font-serif leading-snug mt-10 mb-3"
-            >
+            <h2 key={block.id} className="text-2xl md:text-3xl font-serif leading-snug mt-10 mb-3">
               <Rich rich_text={b.rich_text} />
-            </h2>
+            </h2>,
           );
           break;
 
         case "heading_3":
           out.push(
-            <h3
-              key={block.id}
-              className="text-xl md:text-2xl font-serif leading-snug mt-8 mb-2"
-            >
+            <h3 key={block.id} className="text-xl md:text-2xl font-serif leading-snug mt-8 mb-2">
               <Rich rich_text={b.rich_text} />
-            </h3>
+            </h3>,
           );
           break;
 
         case "paragraph":
           out.push(
-            <p
-              key={block.id}
-              className="leading-relaxed my-4 text-muted-foreground text-lg"
-            >
+            <p key={block.id} className="leading-relaxed my-4 text-muted-foreground text-lg">
               <Rich rich_text={b.rich_text} />
-              {block.children?.length ? (
-                <div className="mt-2 ml-4">{renderBlocks(block.children)}</div>
-              ) : null}
-            </p>
+              {block.children?.length ? <div className="mt-2 ml-4">{renderBlocks(block.children)}</div> : null}
+            </p>,
           );
           break;
 
@@ -183,32 +154,22 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
               className="border-l-4 border-primary pl-6 italic my-6 text-muted-foreground text-lg"
             >
               <Rich rich_text={b.rich_text} />
-            </blockquote>
+            </blockquote>,
           );
           break;
 
         case "divider":
-          out.push(
-            <hr key={block.id} className="my-8 border-border" />
-          );
+          out.push(<hr key={block.id} className="my-8 border-border" />);
           break;
 
         case "to_do":
           out.push(
-            <div
-              key={block.id}
-              className="flex items-start gap-3 my-3"
-            >
-              <input
-                type="checkbox"
-                disabled
-                defaultChecked={b.checked}
-                className="mt-1 h-4 w-4 accent-primary"
-              />
+            <div key={block.id} className="flex items-start gap-3 my-3">
+              <input type="checkbox" disabled defaultChecked={b.checked} className="mt-1 h-4 w-4 accent-primary" />
               <div className="text-muted-foreground">
                 <Rich rich_text={b.rich_text} />
               </div>
-            </div>
+            </div>,
           );
           break;
 
@@ -218,10 +179,8 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
               <summary className="cursor-pointer font-medium hover:text-primary transition-colors">
                 <Rich rich_text={b.rich_text} />
               </summary>
-              {block.children?.length ? (
-                <div className="ml-4 mt-2">{renderBlocks(block.children)}</div>
-              ) : null}
-            </details>
+              {block.children?.length ? <div className="ml-4 mt-2">{renderBlocks(block.children)}</div> : null}
+            </details>,
           );
           break;
 
@@ -231,13 +190,11 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
               key={block.id}
               className="my-6 p-4 rounded-none border border-border bg-muted/30 flex items-start gap-3"
             >
-              {b.icon?.emoji && (
-                <span className="text-xl shrink-0">{b.icon.emoji}</span>
-              )}
+              {b.icon?.emoji && <span className="text-xl shrink-0">{b.icon.emoji}</span>}
               <div className="flex-1 min-w-0 text-muted-foreground">
                 <Rich rich_text={b.rich_text} />
               </div>
-            </div>
+            </div>,
           );
           break;
 
@@ -247,45 +204,29 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
               key={block.id}
               className="overflow-x-auto rounded-none p-4 text-sm bg-muted border border-border my-6 font-mono"
             >
-              <code className="block">
-                {b.rich_text?.map((r: any) => r.plain_text).join("")}
-              </code>
-            </pre>
+              <code className="block">{b.rich_text?.map((r: any) => r.plain_text).join("")}</code>
+            </pre>,
           );
           break;
 
         case "image": {
-          const src =
-            b.type === "external" ? b.external?.url : b.file?.url;
+          const src = b.type === "external" ? b.external?.url : b.file?.url;
           const caption = b.caption?.[0]?.plain_text ?? "";
           out.push(
             <figure key={block.id} className="my-8">
-              <img
-                src={src}
-                alt={caption}
-                className="w-full h-auto"
-              />
-              {caption && (
-                <figcaption className="mt-3 text-sm text-center text-muted-foreground">
-                  {caption}
-                </figcaption>
-              )}
-            </figure>
+              <img src={src} alt={caption} className="w-full h-auto" />
+              {caption && <figcaption className="mt-3 text-sm text-center text-muted-foreground">{caption}</figcaption>}
+            </figure>,
           );
           break;
         }
 
         case "video": {
-          const src =
-            b.type === "external" ? b.external?.url : b.file?.url;
+          const src = b.type === "external" ? b.external?.url : b.file?.url;
           out.push(
             <div key={block.id} className="my-8 aspect-video">
-              <video
-                src={src}
-                controls
-                className="w-full h-full"
-              />
-            </div>
+              <video src={src} controls className="w-full h-full" />
+            </div>,
           );
           break;
         }
@@ -293,12 +234,8 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
         case "embed": {
           out.push(
             <div key={block.id} className="my-8">
-              <iframe
-                src={b.url}
-                className="w-full aspect-video border-0"
-                allowFullScreen
-              />
-            </div>
+              <iframe src={b.url} className="w-full aspect-video border-0" allowFullScreen />
+            </div>,
           );
           break;
         }
@@ -319,17 +256,11 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
                 >
                   <div className="min-w-0 flex-1">
                     <div className="text-foreground truncate">{hostname}</div>
-                    <div className="text-sm text-muted-foreground break-all">
-                      {u.href}
-                    </div>
+                    <div className="text-sm text-muted-foreground break-all">{u.href}</div>
                   </div>
                 </a>
-                {caption && (
-                  <figcaption className="mt-1 text-xs text-muted-foreground">
-                    {caption}
-                  </figcaption>
-                )}
-              </figure>
+                {caption && <figcaption className="mt-1 text-xs text-muted-foreground">{caption}</figcaption>}
+              </figure>,
             );
           } catch {
             out.push(
@@ -341,7 +272,7 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
                 className="block break-all border border-border p-4 my-4 hover:bg-muted/50"
               >
                 {url}
-              </a>
+              </a>,
             );
           }
           break;
@@ -357,10 +288,7 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
                       {row.table_row?.cells?.map((cell: any, cellIndex: number) => {
                         const CellTag = rowIndex === 0 ? "th" : "td";
                         return (
-                          <CellTag
-                            key={cellIndex}
-                            className="border border-border px-4 py-2 text-left"
-                          >
+                          <CellTag key={cellIndex} className="border border-border px-4 py-2 text-left">
                             <Rich rich_text={cell} />
                           </CellTag>
                         );
@@ -369,7 +297,7 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
                   ))}
                 </tbody>
               </table>
-            </div>
+            </div>,
           );
           break;
         }
@@ -386,9 +314,5 @@ export function NotionRenderer({ blocks }: { blocks: any[] }) {
     return null;
   }
 
-  return (
-    <article className="notion-content max-w-none">
-      {renderBlocks(blocks)}
-    </article>
-  );
+  return <article className="notion-content max-w-none">{renderBlocks(blocks)}</article>;
 }

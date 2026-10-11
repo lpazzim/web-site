@@ -15,7 +15,8 @@ const developer: Localized = { en: "Developer", "pt-BR": "Desenvolvedor" };
 const reactConsulting: Pick<Experience, "summary" | "highlights" | "stack"> = {
   summary: {
     en: "Built a React application, from capturing business requirements to design, development and testing.",
-    "pt-BR": "Construí uma aplicação em React, do levantamento de requisitos de negócio ao design, desenvolvimento e testes.",
+    "pt-BR":
+      "Construí uma aplicação em React, do levantamento de requisitos de negócio ao design, desenvolvimento e testes.",
   },
   highlights: {
     en: [
@@ -113,7 +114,8 @@ const allExperience: Experience[] = [
     end: "2023-08",
     summary: {
       en: "Created and maintained complex components that let users build applications effortlessly in a no-code platform.",
-      "pt-BR": "Criei e mantive componentes complexos que permitem aos usuários construir aplicações sem esforço em uma plataforma no-code.",
+      "pt-BR":
+        "Criei e mantive componentes complexos que permitem aos usuários construir aplicações sem esforço em uma plataforma no-code.",
     },
     highlights: {
       en: [
@@ -155,7 +157,8 @@ const allExperience: Experience[] = [
     location: "São Paulo, BR",
     summary: {
       en: "Member of the tech financial team, maintaining and shipping features with a constant focus on performance, usability and presentation.",
-      "pt-BR": "Integrante do time de tecnologia financeira, mantendo e entregando funcionalidades com foco constante em performance, usabilidade e apresentação.",
+      "pt-BR":
+        "Integrante do time de tecnologia financeira, mantendo e entregando funcionalidades com foco constante em performance, usabilidade e apresentação.",
     },
     highlights: {
       en: [

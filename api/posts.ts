@@ -1,18 +1,21 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { Client } from '@notionhq/client';
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { Client } from "@notionhq/client";
 
 function sanitizeEnv(val: string | undefined): string | undefined {
   if (!val) return undefined;
-  return val.trim().replace(/^["']|["']$/g, '');
+  return val.trim().replace(/^["']|["']$/g, "");
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,OPTIONS");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+  );
 
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     res.status(200).end();
     return;
   }
@@ -47,13 +50,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const page = (queryRes.results as any[])[0];
       if (!page) {
-        res.status(404).json({ error: 'Post not found' });
+        res.status(404).json({ error: "Post not found" });
         return;
       }
 
       const post = mapPageToPost(page);
       const blocks = await getBlocksWithChildren(notion, page.id);
-      res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
+      res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate");
       res.status(200).json({ post, blocks });
       return;
     }
@@ -67,12 +70,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     const posts = (queryRes.results as any[]).map(mapPageToPost);
-    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate');
+    res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate");
     res.status(200).json(posts);
   } catch (error: any) {
-    console.error('Error querying Notion:', error);
+    console.error("Error querying Notion:", error);
     res.status(500).json({
-      error: error.message || 'Internal Server Error',
+      error: error.message || "Internal Server Error",
       name: error.name,
       code: error.code,
     });
