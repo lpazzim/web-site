@@ -2,7 +2,8 @@ import { defineConfig, devices } from "@playwright/test";
 
 const PORT = 4173;
 
-// End-to-end tests run against the production build served by `vite preview`.
+// End-to-end tests run against the pre-rendered production build, served as
+// static files with the SPA fallback (like Vercel).
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
@@ -18,7 +19,7 @@ export default defineConfig({
     { name: "mobile", use: { ...devices["Pixel 7"] } },
   ],
   webServer: {
-    command: `pnpm build && pnpm preview --port ${PORT} --strictPort`,
+    command: "pnpm build && pnpm preview",
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
