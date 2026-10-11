@@ -56,7 +56,7 @@ const portfolioCase: CaseStudy = {
       },
       {
         title: "Generated covers over stock photos",
-        body: "Each case gets a typographic cover tinted by its own accent color, so the archive stays visually consistent without decorative imagery.",
+        body: "Each case gets a generative line-art cover seeded by its id and tinted by its own accent color, so the archive stays visually consistent without stock imagery.",
       },
     ],
     "pt-BR": [
@@ -70,7 +70,7 @@ const portfolioCase: CaseStudy = {
       },
       {
         title: "Capas geradas em vez de fotos de banco",
-        body: "Cada case ganha uma capa tipográfica tingida pela própria cor de destaque, mantendo o arquivo visualmente consistente sem imagens decorativas.",
+        body: "Cada case ganha uma capa generativa de linhas, gerada a partir do seu id e tingida pela própria cor de destaque, mantendo o arquivo visualmente consistente sem imagens de banco.",
       },
     ],
   },

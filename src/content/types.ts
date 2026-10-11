@@ -40,7 +40,7 @@ export interface CaseStudy {
   learnings?: Localized;
 
   links?: { live?: string; repo?: string };
-  /** Optional screenshot; a typographic cover is generated when absent. */
+  /** Optional screenshot; a generative cover is drawn when absent. */
   cover?: string;
   /** HSL triplet ("211 100% 50%") tinting the generated cover. */
   accent?: string;

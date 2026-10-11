@@ -8,6 +8,7 @@
     "build": "react-router build && node scripts/postbuild.ts",
     "lint": "eslint .",
     "preview": "sirv build/client --port 4173 --single __spa-fallback.html",
+    "og": "node scripts/og-image.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "react-router typegen && tsc -b",

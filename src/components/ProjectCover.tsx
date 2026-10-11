@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import type { CaseStudy } from "@/content/types";
+import { CoverArt } from "@/components/tech/CoverArt";
 import { cn } from "@/lib/utils";
 
 interface ProjectCoverProps {
@@ -10,7 +11,7 @@ interface ProjectCoverProps {
 }
 
 // Uses the project's screenshot when there is one; otherwise draws a
-// typographic cover tinted by the project's accent color.
+// generative cover (see lib/cover-art.ts) tinted by the project's accent color.
 export function ProjectCover({ project, bare = false, className }: ProjectCoverProps) {
   if (project.cover) {
     return <img src={project.cover} alt={project.title} className={cn("h-full w-full object-cover", className)} />;
@@ -34,8 +35,14 @@ export function ProjectCover({ project, bare = false, className }: ProjectCoverP
       role="img"
       aria-label={project.title}
       style={style}
-      className={cn("relative h-full w-full overflow-hidden text-white", className)}
+      className={cn("group scanlines relative h-full w-full overflow-hidden text-white", className)}
     >
+      <CoverArt seed={project.id} />
+      {/* Scan line sweeping the cover while the card is hovered. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-px bg-(--cover-accent) opacity-0 shadow-[0_0_14px_var(--cover-accent)] group-hover:animate-scan group-hover:opacity-100"
+      />
       {!bare && (
         <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-10">
           <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-white/60">{project.period}</span>

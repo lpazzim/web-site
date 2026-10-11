@@ -75,3 +75,12 @@ holds, add a new entry that supersedes it instead of silently reverting it.
   pre-rendered pages anything: the HTML never contains the canvas, so hydration cannot mismatch, and the ~900 KB
   chunk is not referenced by the HTML. The geometry is static; motion happens in the vertex shader (no per-frame
   allocations) and the pixel ratio is capped at 1.5.
+
+## 11. Generative covers and a scripted social image
+
+- **Decision**: cases without a screenshot get line art generated from their id (`src/lib/cover-art.ts`: mesh, waves,
+  circuits or node graph, seeded PRNG), drawn as SVG by `CoverArt`. `pnpm og` renders `public/og-image.png` from the same
+  generator with Playwright; the PNG is committed.
+- **Why**: consistent, license-free imagery that reads as technology. Pure seeded functions keep pre-rendered HTML and
+  hydration identical (no `Math.random()`), numbers are rounded to one decimal, and the generator is shared with the
+  script so the social card and the site cannot drift apart.
