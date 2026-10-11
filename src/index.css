@@ -79,6 +79,16 @@
 
   --animate-fade-in-up: fade-in-up 0.8s ease-out both;
   --animate-marquee: marquee 40s linear infinite;
+  --animate-scan: scan 1.8s linear infinite;
+
+  @keyframes scan {
+    from {
+      top: 0;
+    }
+    to {
+      top: 100%;
+    }
+  }
 
   @keyframes fade-in-up {
     from {
