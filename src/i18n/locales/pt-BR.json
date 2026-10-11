@@ -6,7 +6,12 @@
     "contact": "Contato",
     "toggleTheme": "Alternar tema",
     "toggleMenu": "Alternar menu",
-    "toggleLanguage": "Alternar idioma"
+    "toggleLanguage": "Alternar idioma",
+    "scroll": "Rolagem"
+  },
+  "intro": {
+    "label": "Inicializando portfólio",
+    "skip": "Pular"
   },
   "home": {
     "hero": {

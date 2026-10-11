@@ -6,7 +6,12 @@
     "contact": "Contact",
     "toggleTheme": "Toggle theme",
     "toggleMenu": "Toggle menu",
-    "toggleLanguage": "Toggle language"
+    "toggleLanguage": "Toggle language",
+    "scroll": "Scroll"
+  },
+  "intro": {
+    "label": "Initializing portfolio",
+    "skip": "Skip"
   },
   "home": {
     "hero": {

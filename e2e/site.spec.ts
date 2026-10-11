@@ -94,3 +94,14 @@ test("pages hydrate without console errors", async ({ page }) => {
   // /api is not served by the static preview server; those failures are expected.
   expect(errors.filter((text) => !text.includes("/api/") && !text.includes("404"))).toEqual([]);
 });
+
+test("the mobile menu covers the page below the header", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "The menu only exists on small screens");
+  await page.goto("/");
+  await page.getByTestId("button-menu-toggle").click();
+
+  const menu = page.locator("#mobile-menu");
+  await expect(menu.getByRole("link", { name: /projects/i })).toBeVisible();
+  // Regression: a transform on the header used to collapse this fixed panel to zero height.
+  expect((await menu.boundingBox())?.height).toBeGreaterThan(300);
+});

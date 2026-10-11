@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import { Menu, X, Sun, Moon } from "lucide-react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/theme/theme-context";
 import { LocaleLink } from "@/i18n/LocaleLink";
@@ -35,6 +36,9 @@ export function Header({ revealMode = false }: HeaderProps) {
   const { theme, setTheme } = useTheme();
   const { t } = useTranslation();
   const localize = useLocalizedPath();
+  // Motion values update the DOM directly, so scrolling never re-renders the header.
+  const { scrollYProgress } = useScroll();
+  const scrollPercent = useTransform(scrollYProgress, (value) => String(Math.round(value * 100)).padStart(3, "0"));
 
   // In reveal mode the header only shows while the pointer is near the top.
   useEffect(() => {
@@ -78,38 +82,52 @@ export function Header({ revealMode = false }: HeaderProps) {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-100 transition-all duration-500 ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
-      } ${isMenuOpen ? "bg-background" : "bg-background/80 backdrop-blur-md"}`}
+        // No transform while visible: it would make this header the containing block of the fixed mobile menu.
+        isVisible ? "opacity-100" : "opacity-0 -translate-y-full pointer-events-none"
+      } border-b border-border ${isMenuOpen ? "bg-background" : "bg-background/70 backdrop-blur-md"}`}
     >
       <div className="container-wide relative">
-        <div className="flex items-center justify-between h-20 md:h-24">
+        <div className="flex items-center justify-between h-16 md:h-20">
           <LocaleLink
             to="/"
             onClick={closeMenu}
-            className="font-display text-lg font-semibold tracking-tight text-foreground hover:opacity-70 transition-opacity"
+            className="group flex flex-col leading-tight text-foreground"
             data-testid="link-home"
           >
-            Lucas Pazzim
+            <span className="font-display text-base font-semibold tracking-tight transition-colors group-hover:text-primary">
+              Lucas Pazzim
+            </span>
+            <span className="text-hud hidden xl:block">{t("seo.jobTitle")}</span>
           </LocaleLink>
 
           <nav aria-label="Main" className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2">
-            {NAV_ITEMS.map((item) => (
+            {NAV_ITEMS.map((item, index) => (
               <NavLink
                 key={item.key}
                 to={localize(item.path)}
                 className={({ isActive }) =>
-                  `text-xs font-sans tracking-widest uppercase transition-all duration-300 hover:tracking-[0.2em] hover:text-foreground ${
-                    isActive ? "text-foreground" : "text-foreground/70"
+                  `group text-hud flex items-center gap-2 transition-colors duration-300 hover:text-foreground ${
+                    isActive ? "text-foreground!" : ""
                   }`
                 }
                 data-testid={`nav-${item.key}`}
               >
-                {t(`nav.${item.key}`)}
+                {({ isActive }) => (
+                  <>
+                    <span aria-hidden="true" className={isActive ? "text-primary" : "opacity-50"}>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    {t(`nav.${item.key}`)}
+                  </>
+                )}
               </NavLink>
             ))}
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
+            <span aria-hidden="true" className="text-hud hidden xl:inline-flex gap-1.5 tabular-nums">
+              {t("nav.scroll")} <motion.span>{scrollPercent}</motion.span>%
+            </span>
             <LanguageSwitcher />
             <span aria-hidden="true" className="h-4 w-px bg-foreground/20" />
             {themeButton}
@@ -133,10 +151,16 @@ export function Header({ revealMode = false }: HeaderProps) {
         </div>
       </div>
 
+      <motion.div
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 h-px origin-left bg-primary"
+        style={{ scaleX: scrollYProgress }}
+      />
+
       <div
         id={MOBILE_MENU_ID}
         inert={!isMenuOpen}
-        className={`md:hidden fixed inset-x-0 top-20 bottom-0 z-99 transition-all duration-300 ${
+        className={`md:hidden fixed inset-x-0 top-16 bottom-0 z-99 transition-all duration-300 ${
           isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
@@ -150,11 +174,14 @@ export function Header({ revealMode = false }: HeaderProps) {
               key={item.key}
               to={item.path}
               onClick={closeMenu}
-              className={`text-4xl font-display text-foreground text-left transition-all duration-500 ${
+              className={`flex items-baseline gap-4 text-5xl font-display uppercase tracking-tighter text-foreground text-left transition-all duration-500 hover:text-primary ${
                 isMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
               style={{ transitionDelay: isMenuOpen ? `${index * 0.1}s` : "0s" }}
             >
+              <span aria-hidden="true" className="text-hud">
+                {String(index + 1).padStart(2, "0")}
+              </span>
               {t(`nav.${item.key}`)}
             </LocaleLink>
           ))}
