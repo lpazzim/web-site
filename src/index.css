@@ -8,7 +8,7 @@
 :root {
   --background: hsl(0 0% 100%);
   --foreground: hsl(0 0% 8%);
-  --primary: hsl(211 100% 50%);
+  --primary: hsl(200 100% 36%);
   --primary-foreground: hsl(0 0% 100%);
   --secondary: hsl(40 10% 92%);
   --muted: hsl(0 0% 97%);
@@ -19,19 +19,29 @@
   --popover-foreground: hsl(0 0% 8%);
   --border: hsl(0 0% 92%);
   --separator: hsl(0 0% 85%);
+
+  /* Tech layer: decorative lines and glows (grid, HUD ticks, scanlines). */
+  --grid-line: hsl(0 0% 0% / 0.06);
+  --glow: hsl(200 100% 36% / 0.25);
+  --hud: hsl(0 0% 35%);
 }
 
 .dark {
-  --background: hsl(0 0% 4%);
+  --background: hsl(0 0% 6%);
   --foreground: hsl(0 0% 96%);
-  --primary: hsl(211 100% 60%);
+  --primary: hsl(190 100% 55%);
+  --primary-foreground: hsl(0 0% 6%);
   --secondary: hsl(0 0% 12%);
   --muted: hsl(0 0% 10%);
-  --muted-foreground: hsl(0 0% 55%);
+  --muted-foreground: hsl(0 0% 62%);
   --popover: hsl(0 0% 8%);
   --popover-foreground: hsl(0 0% 96%);
   --border: hsl(0 0% 15%);
-  --separator: hsl(0 0% 20%);
+  --separator: hsl(0 0% 22%);
+
+  --grid-line: hsl(0 0% 100% / 0.06);
+  --glow: hsl(190 100% 55% / 0.35);
+  --hud: hsl(0 0% 62%);
 }
 
 @theme inline {
@@ -48,12 +58,18 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-border: var(--border);
   --color-separator: var(--separator);
+  --color-grid-line: var(--grid-line);
+  --color-glow: var(--glow);
+  --color-hud: var(--hud);
 }
 
 @theme {
-  --font-display: "Syne", system-ui, sans-serif;
-  --font-serif: "Times New Roman", Georgia, serif;
-  --font-sans: "Inter", system-ui, sans-serif;
+  /* Components keep the `font-serif` class for headings and body copy; the
+     name is historical, the face is now the geometric sans. */
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-serif: "Space Grotesk", system-ui, sans-serif;
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* Square, editorial corners everywhere except explicit rounded-full. */
   --radius-xs: 0;
@@ -140,4 +156,50 @@
 
 @utility hover-highlight {
   @apply transition-colors duration-300 hover:text-primary;
+}
+
+/* HUD micro-labels: "01 / ABOUT", coordinates, status lines. */
+@utility text-hud {
+  @apply font-mono text-[0.6875rem] tracking-[0.18em] uppercase;
+  color: var(--hud);
+}
+
+/* Blueprint grid behind a section; pure CSS so it is identical in the
+   pre-rendered HTML and in the browser. */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Fine horizontal CRT-like lines over images and covers. */
+@utility scanlines {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(to bottom, transparent 0 2px, hsl(0 0% 0% / 0.18) 2px 3px);
+  }
+}
+
+/* Film-grain noise from an inline SVG filter (no image request). */
+@utility noise {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@utility text-glow {
+  text-shadow: 0 0 24px var(--glow);
 }
