@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
+import { Enter } from "@/components/tech/Enter";
 import { HudFrame } from "@/components/tech/HudFrame";
 import { Intro } from "@/components/tech/Intro";
 import { ParallaxText, TextReveal } from "@/components/tech/Reveal";
@@ -80,23 +81,20 @@ export default function Home() {
             <h1 className="text-[14vw] md:text-[11vw] lg:text-[9vw] leading-[0.85] font-semibold tracking-tighter uppercase glow-text">
               {HERO_LINES.map(({ key, className }, index) => (
                 <span key={key} className={`block overflow-hidden ${index === 2 ? "mt-4" : ""}`}>
-                  <motion.span
-                    className={`block ${className}`}
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    transition={{ duration: 1, delay: 0.2 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  {/* CSS animation, not motion: it runs on first paint instead of waiting for hydration (LCP). */}
+                  <span
+                    className={`block animate-line-up ${className}`}
+                    style={{ animationDelay: `${0.2 + index * 0.1}s` }}
                   >
                     {t(`home.hero.${key}`)}
-                  </motion.span>
+                  </span>
                 </span>
               ))}
             </h1>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1, duration: 1 }}
+          <Enter
+            delay={0.3}
             className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pt-12 -mx-6 px-6 md:-mx-12 md:px-12 lg:-mx-20 lg:px-20 bg-linear-to-t from-background via-background/80 to-transparent"
           >
             <p className="text-lg md:text-xl max-w-md text-muted-foreground leading-relaxed">{t("home.hero.intro")}</p>
@@ -108,7 +106,7 @@ export default function Home() {
                 {t("home.hero.yearsSubtitle")}
               </HudFrame>
             </div>
-          </motion.div>
+          </Enter>
         </motion.section>
 
         {/* Spacer for sticky hero */}

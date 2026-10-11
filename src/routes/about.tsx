@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Layout } from "@/components/Layout";
-import { motion } from "motion/react";
+import { Enter } from "@/components/tech/Enter";
 import { Trans, useTranslation } from "react-i18next";
 import { format, parse } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
@@ -11,12 +11,6 @@ import { useLocale } from "@/i18n/useLocale";
 import { getI18n, languageFromPath } from "@/i18n";
 import { pageMeta, personJsonLd } from "@/lib/seo";
 import type { Route } from "./+types/about";
-
-const fadeIn = (delay = 0) => ({
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.8, delay },
-});
 
 const Eyebrow = ({ as: Tag = "h2", children }: { as?: "h2" | "h3"; children: ReactNode }) => (
   <Tag className="text-hud mb-4">{children}</Tag>
@@ -53,7 +47,7 @@ export default function About() {
     <Layout showEchelonFooter>
       <section className="container-wide py-16 md:py-24">
         <div className="max-w-4xl">
-          <motion.div {...fadeIn()}>
+          <Enter>
             <Eyebrow as="h3">{t("about.label")}</Eyebrow>
             <h1 className="text-5xl md:text-7xl uppercase tracking-tighter mb-8">{t("about.name")}</h1>
             <img
@@ -61,10 +55,10 @@ export default function About() {
               alt="Lucas Pazzim"
               className="w-full max-w-md h-auto grayscale object-cover rounded-sm mb-16"
             />
-          </motion.div>
+          </Enter>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
-            <motion.div {...fadeIn(0.1)} className="lg:col-span-2 space-y-8">
+            <Enter as="div" delay={0.1} className="lg:col-span-2 space-y-8">
               <p className="text-2xl md:text-3xl leading-relaxed">
                 <Trans i18nKey="about.tagline" components={[<span className="text-primary" />]} />
               </p>
@@ -73,9 +67,9 @@ export default function About() {
                 <p>{t("about.para2")}</p>
                 <p>{t("about.para3")}</p>
               </div>
-            </motion.div>
+            </Enter>
 
-            <motion.aside {...fadeIn(0.2)} className="space-y-12">
+            <Enter as="aside" delay={0.2} className="space-y-12">
               <div>
                 <Eyebrow as="h3">{t("about.locationLabel")}</Eyebrow>
                 <p className="text-lg whitespace-pre-line">{t("about.locationValue")}</p>
@@ -124,11 +118,11 @@ export default function About() {
                   ))}
                 </ul>
               </div>
-            </motion.aside>
+            </Enter>
           </div>
 
           {experience.length > 0 && (
-            <motion.section {...fadeIn(0.3)} className="mt-24 pt-16 border-t border-border">
+            <Enter as="section" delay={0.3} className="mt-24 pt-16 border-t border-border">
               <Eyebrow>{t("about.experienceLabel")}</Eyebrow>
               <ol className="relative border-l border-border ml-1 mt-12 space-y-16">
                 {experience.map((exp) => (
@@ -172,10 +166,10 @@ export default function About() {
                   </li>
                 ))}
               </ol>
-            </motion.section>
+            </Enter>
           )}
 
-          <motion.section {...fadeIn(0.4)} className="mt-24 pt-16 border-t border-border">
+          <Enter as="section" delay={0.4} className="mt-24 pt-16 border-t border-border">
             <Eyebrow>{t("about.techStackLabel")}</Eyebrow>
             <ul className="flex flex-wrap gap-3 mt-8">
               {profile.skills.map((skill) => (
@@ -187,9 +181,9 @@ export default function About() {
                 </li>
               ))}
             </ul>
-          </motion.section>
+          </Enter>
 
-          <motion.section {...fadeIn(0.5)} className="mt-24 pt-16 border-t border-border">
+          <Enter as="section" delay={0.5} className="mt-24 pt-16 border-t border-border">
             <Eyebrow>{t("about.certificationsLabel")}</Eyebrow>
             <ul className="mt-8 divide-y divide-border border-y border-border">
               {profile.certifications.map((certification) => (
@@ -198,7 +192,7 @@ export default function About() {
                 </li>
               ))}
             </ul>
-          </motion.section>
+          </Enter>
         </div>
       </section>
     </Layout>

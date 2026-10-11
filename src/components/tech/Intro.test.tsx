@@ -51,6 +51,14 @@ describe("Intro", () => {
     expect(sessionStorage.getItem("intro-seen")).toBe("1");
   });
 
+  it("keeps keyboard focus on the skip button while open", async () => {
+    mockMotionPreference(false);
+    renderIntro();
+
+    await userEvent.tab();
+    expect(screen.getByRole("button", { name: /skip/i })).toHaveFocus();
+  });
+
   it("does not play with reduced motion", () => {
     mockMotionPreference(true);
     renderIntro();

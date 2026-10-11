@@ -16,6 +16,7 @@ reasons are in `docs/decisions.md`; read it before proposing structural changes.
 | Animation | `motion` (`motion/react`), always honoring reduced motion                                |
 | Data      | TanStack Query (client), route `loader`s (build time), Notion API (blog CMS)             |
 | i18n      | i18next, English at `/`, Portuguese at `/pt`                                             |
+| 3D        | `three` + `@react-three/fiber`, client-only and lazy (`src/components/tech/`)            |
 | Icons     | `lucide-react`; brand marks in `src/components/icons/brand.tsx`                          |
 | Tests     | Vitest + Testing Library (unit), Playwright (e2e + SEO)                                  |
 | Hosting   | Vercel: static files from `build/client` + Vercel Functions in `api/`                    |
@@ -31,6 +32,7 @@ pnpm lint           # ESLint 10 flat config
 pnpm format         # Prettier (printWidth 120, LF)
 pnpm test           # Vitest: "app" project (jsdom) and "api" project (node)
 pnpm test:e2e       # Playwright against the pre-rendered build (desktop + mobile)
+pnpm og             # regenerates public/og-image.png from the generative art (needs Chromium + network)
 ```
 
 **Definition of done** for any change: `pnpm format:check && pnpm lint && pnpm typecheck && pnpm test` pass, and
@@ -48,6 +50,7 @@ src/content/       CV data (experience, case studies, profile): typed and biling
 src/i18n/          languages.ts (URL <-> language), LocaleLink, useLocale, locales/*.json (UI strings)
 src/lib/           seo.ts (pageMeta), site-paths.ts (pre-render + sitemap list), blog client, *.server.ts
 src/components/    Layout, Header, Footer, NotionRenderer, ProjectCover...
+src/components/tech/  Visual identity: TechBackground (WebGL), Intro, HudFrame, SectionLabel, PageHeader, Enter, CoverArt
 src/theme/         Light/dark provider (default dark, persisted in localStorage "theme")
 e2e/               site.spec.ts (behavior), seo.spec.ts (crawls the sitemap and checks raw HTML)
 ```
@@ -66,6 +69,10 @@ e2e/               site.spec.ts (behavior), seo.spec.ts (crawls the sitemap and 
 - Keep career content truthful: it must match linkedin.com/in/lpazzim. Never invent companies, dates or metrics.
 - Prefer semantic HTML and accessible names: one `<h1>` per page, real links for navigation, buttons for actions,
   `aria-*` on custom widgets, visible focus, keyboard support.
+- Mount WebGL/canvas code only on the client after hydration and behind `React.lazy` (see `TechBackground`); import
+  `three` only from `src/components/tech/BackgroundScene.tsx` so it stays in its own chunk.
+- Animate above-the-fold content with CSS (`Enter`, `animate-line-up`), not a motion `initial` state: SSR would hide it
+  until hydration and delay the LCP.
 - Respect `prefers-reduced-motion` (handled globally by `MotionConfig` and CSS; do not override it).
 - Add or update tests with every behavior change; a bug fix needs a test that fails without the fix.
 - Match the surrounding code: naming, comment density (explain _why_, not _what_), file layout.

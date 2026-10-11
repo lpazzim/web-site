@@ -65,6 +65,11 @@ export function Intro() {
     const controls = animate(progress, 100, { duration: DURATION_SECONDS, ease: "easeInOut", onComplete: finish });
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") finish();
+      // The dialog is modal: keep keyboard focus on its only control.
+      if (event.key === "Tab") {
+        event.preventDefault();
+        skipRef.current?.focus();
+      }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {

@@ -92,3 +92,13 @@ holds, add a new entry that supersedes it instead of silently reverting it.
   put. Reduced motion disables the animations, and browsers without the API navigate instantly.
 - **Why**: native, zero-dependency transitions that fit the scan/HUD language. The background canvas is deliberately not
   given its own name: named groups paint above the page snapshot and would draw the animated lines over the content.
+
+## 13. Accessibility and performance budget for the redesign
+
+- **Decision**: contrast of the design tokens is a unit test (`src/theme/contrast.test.ts`, 4.5:1 in both themes); a
+  global `:focus-visible` ring, a "skip to content" link and a focus trap on the intro dialog cover keyboard use;
+  above-the-fold entrances are CSS (`Enter`, `animate-line-up`); the WebGL chunk loads only when the browser is idle.
+- **Why**: a motion `initial` state is serialized into the pre-rendered HTML, so content stayed hidden until hydration.
+  Measured on the production build (Pixel 7 profile, CPU 4x slower, simulated 4G), the home page LCP went from 5.1 s to
+  2.1 s (0.35 s on desktop) with CLS 0. The remaining main-thread cost is three.js evaluating after idle; it is the
+  price of the signature background and is kept off the critical path rather than removed.
