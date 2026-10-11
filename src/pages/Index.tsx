@@ -64,6 +64,8 @@ const Index = () => {
 
   const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
+  // The hero stays sticky behind the page; once faded out it must not swallow clicks.
+  const heroPointerEvents = useTransform(heroOpacity, (opacity) => (opacity < 0.05 ? "none" : "auto"));
 
   const { data: latestPosts } = useQuery({
     queryKey: ["latestPosts"],
@@ -77,7 +79,7 @@ const Index = () => {
         {/* Hero Section - Full Screen */}
         <motion.section
           ref={heroRef}
-          style={{ opacity: heroOpacity, scale: heroScale }}
+          style={{ opacity: heroOpacity, scale: heroScale, pointerEvents: heroPointerEvents }}
           className="min-h-screen flex flex-col justify-between pt-24 pb-12 container-wide sticky top-0 z-10"
         >
           <div className="flex-1 flex flex-col justify-center">

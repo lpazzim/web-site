@@ -6,7 +6,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
-  globalIgnores(["dist", "node_modules/.tmp"]),
+  globalIgnores(["dist", "node_modules/.tmp", "playwright-report", "test-results"]),
   {
     files: ["**/*.{ts,tsx}"],
     extends: [js.configs.recommended, tseslint.configs.recommended],
@@ -23,7 +23,7 @@ export default defineConfig([
   },
   {
     // Serverless functions and build tooling run on Node.
-    files: ["api/**/*.ts", "vite-plugins/**/*.ts", "*.config.ts"],
+    files: ["api/**/*.ts", "vite-plugins/**/*.ts", "e2e/**/*.ts", "*.config.ts"],
     languageOptions: { globals: globals.node },
   },
 ]);
