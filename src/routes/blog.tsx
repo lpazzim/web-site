@@ -1,7 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { Enter } from "@/components/tech/Enter";
 import { SectionLabel } from "@/components/tech/SectionLabel";
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useQuery } from "@tanstack/react-query";
 import { listPosts } from "@/lib/blog";
 import { LocaleLink } from "@/i18n/LocaleLink";
@@ -63,7 +63,7 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
 
           <div className="space-y-12">
             {posts?.map((post, index) => (
-              <motion.article
+              <m.article
                 key={post.id}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -88,7 +88,7 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
                     </div>
                   </div>
                 </LocaleLink>
-              </motion.article>
+              </m.article>
             ))}
           </div>
         </div>

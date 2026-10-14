@@ -1,4 +1,4 @@
-import { animate, AnimatePresence, motion, useMotionValue, useTransform } from "motion/react";
+import { animate, AnimatePresence, m, useMotionValue, useTransform } from "motion/react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -81,7 +81,7 @@ export function Intro() {
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
+        <m.div
           role="dialog"
           aria-modal="true"
           aria-label={t("intro.label")}
@@ -104,27 +104,27 @@ export function Intro() {
           <p className="text-[16vw] leading-[0.82] font-semibold tracking-tighter uppercase md:text-[11vw]">
             {LINES.map((line, index) => (
               <span key={line} className="block overflow-hidden">
-                <motion.span
+                <m.span
                   className={`block ${index === 1 ? "text-primary glow-text" : ""}`}
                   initial={{ y: "105%" }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.9, delay: 0.15 + index * 0.12, ease: [0.16, 1, 0.3, 1] }}
                 >
                   {line}
-                </motion.span>
+                </m.span>
               </span>
             ))}
           </p>
 
           <div className="flex items-end justify-between gap-6">
             <div className="h-px flex-1 bg-separator">
-              <motion.div className="h-px origin-left bg-primary" style={{ scaleX: bar }} />
+              <m.div className="h-px origin-left bg-primary" style={{ scaleX: bar }} />
             </div>
             <span className="text-hud tabular-nums">
-              <motion.span>{counter}</motion.span> / 100
+              <m.span>{counter}</m.span> / 100
             </span>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );
