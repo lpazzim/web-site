@@ -14,6 +14,13 @@ export interface Decision {
   body: string;
 }
 
+export interface CaseVideo {
+  /** H.264 MP4 under public/, e.g. "/videos/acme.mp4". */
+  src: string;
+  /** First frame of the clip, shown before playback and with reduced motion. */
+  poster: string;
+}
+
 export interface CaseStudy {
   /** URL slug: /work/:id */
   id: string;
@@ -42,6 +49,8 @@ export interface CaseStudy {
   links?: { live?: string; repo?: string };
   /** Optional screenshot; a generative cover is drawn when absent. */
   cover?: string;
+  /** Looping background clip rendered by `pnpm video <id>`; takes precedence over `cover`. */
+  video?: CaseVideo;
   /** HSL triplet ("211 100% 50%") tinting the generated cover. */
   accent?: string;
   /** Shown on the home page. */

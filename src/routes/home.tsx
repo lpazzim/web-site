@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform } from "motion/react";
-import { useRef } from "react";
+import { m } from "motion/react";
+import { useEffect, useRef } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
 import { Enter } from "@/components/tech/Enter";
@@ -10,7 +10,7 @@ import { ScrollCue } from "@/components/tech/ScrollCue";
 import { SectionLabel } from "@/components/tech/SectionLabel";
 import { projects } from "@/content/projects";
 import { profile } from "@/content/profile";
-import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
+import { FeaturedCarousel } from "@/components/FeaturedCarousel";
 import { useLocale } from "@/i18n/useLocale";
 import { getI18n, languageFromPath } from "@/i18n";
 import { pageMeta, personJsonLd } from "@/lib/seo";
@@ -29,6 +29,9 @@ const HERO_LINES = [
   { key: "line4", className: "text-muted-foreground" },
 ] as const;
 
+// Scroll distance (px) over which the hero fades out.
+const HERO_FADE = 1000;
+
 export function meta({ location }: Route.MetaArgs) {
   const locale = languageFromPath(location.pathname);
   const { t } = getI18n(locale);
@@ -42,23 +45,40 @@ export function meta({ location }: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const heroRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLElement>(null);
   const { t } = useTranslation();
   const locale = useLocale();
   const dateLocale = locale === "pt-BR" ? ptBR : enUS;
   const featuredProjects = projects.filter((p) => p.featured).slice(0, 4);
   const keywords = t("home.keywords", { returnObjects: true }) as string[];
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.15], [1, 0.95]);
-  // The hero stays sticky behind the page; once faded out it must not swallow clicks.
-  const heroPointerEvents = useTransform(heroOpacity, (opacity) => (opacity < 0.05 ? "none" : "auto"));
+  // The hero fades and shrinks over a fixed scroll distance (so the tall pinned
+  // carousel does not slow it down). It stays sticky above the whole page, so
+  // once faded out it must not catch clicks. Driven by a plain scroll listener
+  // that also reads the position on mount: after a reload in the middle of the
+  // page, a Motion-driven version stayed opaque over the carousel until the
+  // visitor scrolled again (see lib/scroll-resync.ts).
+  useEffect(() => {
+    const hero = heroRef.current;
+    if (!hero) return;
+    let frame = 0;
+    const apply = () => {
+      frame = 0;
+      const k = Math.min(1, Math.max(0, window.scrollY / HERO_FADE));
+      hero.style.opacity = String(1 - k);
+      hero.style.transform = k > 0 ? `scale(${1 - 0.05 * k})` : "";
+      hero.style.pointerEvents = k > 0.95 ? "none" : "";
+    };
+    const onScroll = () => {
+      frame ||= requestAnimationFrame(apply);
+    };
+    apply();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
 
   const { data: latestPosts } = useQuery({
     queryKey: ["latestPosts"],
@@ -69,11 +89,10 @@ export default function Home() {
   return (
     <Layout hideFooter noPadding>
       <Intro />
-      <div ref={containerRef}>
+      <div>
         {/* Hero Section - Full Screen */}
-        <motion.section
+        <section
           ref={heroRef}
-          style={{ opacity: heroOpacity, scale: heroScale, pointerEvents: heroPointerEvents }}
           className="min-h-screen flex flex-col justify-between pt-24 pb-12 container-wide sticky top-0 z-10"
         >
           <div className="flex-1 flex flex-col justify-start pt-6 md:pt-10">
@@ -107,7 +126,7 @@ export default function Home() {
               </HudFrame>
             </div>
           </Enter>
-        </motion.section>
+        </section>
 
         {/* Spacer for sticky hero */}
         <div className="h-[50vh]" />
@@ -119,7 +138,7 @@ export default function Home() {
 
         {/* Video/Statement Section */}
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-grid border-y border-border">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 100 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -141,7 +160,7 @@ export default function Home() {
             <p className="mt-12 text-lg md:text-xl text-muted-foreground max-w-2xl text-center">
               {t("home.approach.quote")}
             </p>
-          </motion.div>
+          </m.div>
         </section>
 
         {/* Philosophy Section */}
@@ -194,7 +213,7 @@ export default function Home() {
           <div className="container-wide">
             <div className="flex flex-wrap justify-center gap-4 md:gap-8">
               {keywords.map((word, i) => (
-                <motion.span
+                <m.span
                   key={word}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -203,14 +222,14 @@ export default function Home() {
                   className="text-2xl md:text-4xl tracking-tight text-muted-foreground hover:text-foreground transition-colors cursor-default"
                 >
                   {word}
-                </motion.span>
+                </m.span>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Projects Grid */}
-        <section id="projects" className="py-32 scroll-mt-24">
+        {/* Featured projects: a 3D ring turned by the page scroll */}
+        <section id="projects" className="pt-32 scroll-mt-24">
           <div className="container-wide mb-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
             <div>
               <TextReveal>
@@ -232,64 +251,13 @@ export default function Home() {
             </LocaleLink>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            {featuredProjects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                className="group relative aspect-4/3 overflow-hidden border-b border-r border-border"
-              >
-                <LocaleLink
-                  to={`/work/${project.id}`}
-                  className="block h-full w-full"
-                  data-testid={`card-project-${project.id}`}
-                >
-                  <ProjectCover
-                    project={project}
-                    bare
-                    className="transition-transform duration-700 group-hover:scale-105"
-                  />
-                  {/* Strong gradient overlay for text readability */}
-                  <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/40 to-transparent" />
-
-                  <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 text-white">
-                    <div className="flex justify-between items-end">
-                      <div>
-                        <motion.div
-                          className="text-xs uppercase tracking-[0.3em] mb-4 opacity-70 font-sans"
-                          initial={{ opacity: 0, y: 10 }}
-                          whileInView={{ opacity: 0.7, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: 0.2 }}
-                        >
-                          {project.category[locale]}
-                        </motion.div>
-                        <h3 className="text-3xl md:text-4xl lg:text-5xl tracking-tight leading-none">
-                          {project.title}
-                        </h3>
-                        {project.draft && <DraftBadge className="mt-3" />}
-                      </div>
-                      <div className="text-sm font-sans opacity-50">{project.period}</div>
-                    </div>
-                  </div>
-
-                  {/* Hover arrow indicator */}
-                  <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <ArrowUpRight className="w-8 h-8 text-white" />
-                  </div>
-                </LocaleLink>
-              </motion.div>
-            ))}
-          </div>
+          <FeaturedCarousel projects={featuredProjects} />
         </section>
 
         {/* Big Statement Section */}
         <section className="py-32 md:py-48 overflow-hidden">
           <div className="container-wide">
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -308,7 +276,7 @@ export default function Home() {
               <h2 className="text-[10vw] md:text-[8vw] lg:text-[6vw] uppercase tracking-tighter leading-[0.85] text-muted-foreground">
                 {t("home.vision.line3")}
               </h2>
-            </motion.div>
+            </m.div>
           </div>
         </section>
 
@@ -331,6 +299,8 @@ export default function Home() {
                   <img
                     src="/images/lucas-pazzim-about.jpeg"
                     alt="Lucas Pazzim"
+                    loading="lazy"
+                    decoding="async"
                     className="w-full max-w-sm h-auto grayscale object-cover rounded-sm"
                   />
                 </div>
@@ -389,7 +359,7 @@ export default function Home() {
               </div>
               <div className="lg:col-span-3 space-y-8">
                 {latestPosts.map((post, index) => (
-                  <motion.article
+                  <m.article
                     key={post.id}
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -414,7 +384,7 @@ export default function Home() {
                         </div>
                       </div>
                     </LocaleLink>
-                  </motion.article>
+                  </m.article>
                 ))}
                 <TextReveal>
                   <LocaleLink to="/blog" className="inline-flex items-center gap-3 text-lg group mt-8 relative z-20">

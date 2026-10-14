@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { I18nextProvider } from "react-i18next";
-import { MotionConfig } from "motion/react";
+import { LazyMotion, MotionConfig } from "motion/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Links,
@@ -13,11 +13,20 @@ import {
   type LinksFunction,
 } from "react-router";
 import { getI18n } from "@/i18n";
+import { resyncScrollPosition } from "@/lib/scroll-resync";
 import { useLocale } from "@/i18n/useLocale";
 import { ThemeProvider } from "@/theme/ThemeProvider";
 import { THEME_STORAGE_KEY } from "@/theme/theme-context";
 import NotFound from "@/routes/not-found";
 import stylesheet from "./index.css?url";
+
+// Once the features are in, scroll-driven components start following the
+// scroll: make them read a position restored by a reload (see scroll-resync.ts).
+const loadMotionFeatures = () =>
+  import("@/lib/motion-features").then((module) => {
+    resyncScrollPosition();
+    return module.default;
+  });
 import type { Route } from "./+types/root";
 
 export const links: LinksFunction = () => [
@@ -25,12 +34,15 @@ export const links: LinksFunction = () => [
   { rel: "icon", href: "/favicon.ico", sizes: "any" },
   { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
   { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
-  },
+  // Self-hosted fonts (declared in index.css): no third-party stylesheet blocks
+  // the first paint. Preloading the Latin files lets text render in its final face.
+  ...["space-grotesk-latin", "jetbrains-mono-latin"].map((font) => ({
+    rel: "preload",
+    as: "font",
+    type: "font/woff2",
+    href: `/fonts/${font}.woff2`,
+    crossOrigin: "anonymous" as const,
+  })),
 ];
 
 // Applies the saved theme before first paint (dark by default) to avoid a flash.
@@ -70,7 +82,11 @@ export default function App() {
         <QueryClientProvider client={queryClient}>
           {/* Honors the OS "reduce motion" setting for every Motion animation. */}
           <MotionConfig reducedMotion="user">
-            <Outlet />
+            {/* The animation engine loads as a separate chunk after hydration; `strict`
+                makes a stray `motion.*` component (which bundles it) throw. */}
+            <LazyMotion features={loadMotionFeatures} strict>
+              <Outlet />
+            </LazyMotion>
           </MotionConfig>
         </QueryClientProvider>
       </ThemeProvider>

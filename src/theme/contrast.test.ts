@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
+import { projects } from "@/content/projects";
 
 // Vitest blanks CSS imports and jsdom has no file URLs, so read the stylesheet
 // from the repo root (where the tests always run).
@@ -60,4 +61,13 @@ describe.each([
       4.5,
     );
   });
+
+  // Company names sit on their accent colour (NamePlate). NamePlate is only used
+  // for headings of 30px and up, which WCAG counts as large text: 3:1.
+  it.each(projects.filter((p) => p.accent).map((p) => [p.id, `hsl(${p.accent})`]))(
+    "on-accent heading text on the %s accent is at least 3:1",
+    (_id, accent) => {
+      expect(contrast(tokens["on-accent"], accent)).toBeGreaterThanOrEqual(3);
+    },
+  );
 });

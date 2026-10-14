@@ -1,19 +1,25 @@
 import type { CSSProperties } from "react";
 import type { CaseStudy } from "@/content/types";
 import { CoverArt } from "@/components/tech/CoverArt";
+import { CoverVideo, type CoverVideoPlay } from "@/components/tech/CoverVideo";
 import { cn } from "@/lib/utils";
 
 interface ProjectCoverProps {
   project: CaseStudy;
   /** Hide the inner typography when the caller overlays its own title. */
   bare?: boolean;
+  /** When the background clip runs (see CoverVideo); cards use "hover". */
+  play?: CoverVideoPlay;
+  /** With play="active": whether this cover is the one in focus. */
+  active?: boolean;
   className?: string;
 }
 
-// Uses the project's screenshot when there is one; otherwise draws a
-// generative cover (see lib/cover-art.ts) tinted by the project's accent color.
-export function ProjectCover({ project, bare = false, className }: ProjectCoverProps) {
-  if (project.cover) {
+// Plays the project's background clip when there is one, then falls back to its
+// screenshot, then to a generative cover (see lib/cover-art.ts) tinted by the
+// project's accent color.
+export function ProjectCover({ project, bare = false, play, active, className }: ProjectCoverProps) {
+  if (project.cover && !project.video) {
     return <img src={project.cover} alt={project.title} className={cn("h-full w-full object-cover", className)} />;
   }
 
@@ -37,7 +43,11 @@ export function ProjectCover({ project, bare = false, className }: ProjectCoverP
       style={style}
       className={cn("group scanlines relative h-full w-full overflow-hidden text-white", className)}
     >
-      <CoverArt seed={project.id} />
+      {project.video ? (
+        <CoverVideo video={project.video} play={play} active={active} />
+      ) : (
+        <CoverArt seed={project.id} />
+      )}
       {/* Scan line sweeping the cover while the card is hovered. */}
       <span
         aria-hidden="true"

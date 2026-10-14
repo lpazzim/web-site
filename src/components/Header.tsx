@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import { Menu, X, Sun, Moon } from "lucide-react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { m, useScroll, useTransform } from "motion/react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/theme/theme-context";
 import { LocaleLink } from "@/i18n/LocaleLink";
@@ -127,7 +127,7 @@ export function Header({ revealMode = false }: HeaderProps) {
 
           <div className="hidden md:flex items-center gap-4">
             <span aria-hidden="true" className="text-hud hidden xl:inline-flex gap-1.5 tabular-nums">
-              {t("nav.scroll")} <motion.span>{scrollPercent}</motion.span>%
+              {t("nav.scroll")} <m.span>{scrollPercent}</m.span>%
             </span>
             <LanguageSwitcher />
             <span aria-hidden="true" className="h-4 w-px bg-foreground/20" />
@@ -152,7 +152,7 @@ export function Header({ revealMode = false }: HeaderProps) {
         </div>
       </div>
 
-      <motion.div
+      <m.div
         aria-hidden="true"
         className="absolute inset-x-0 bottom-0 h-px origin-left bg-primary"
         style={{ scaleX: scrollYProgress }}

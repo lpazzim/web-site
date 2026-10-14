@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { SUPPORTED_LANGUAGES } from "@/i18n";
 import { experience } from "./experience";
@@ -63,6 +65,16 @@ describe("projects", () => {
 
   it("use valid HSL accents", () => {
     for (const { accent } of projects) if (accent) expect(accent).toMatch(/^\d{1,3} \d{1,3}% \d{1,3}%$/);
+  });
+
+  it("point cover clips at files that exist in public/", () => {
+    for (const { id, video } of projects) {
+      if (!video) continue;
+      for (const file of [video.src, video.poster]) {
+        expect(file, id).toMatch(/^\/videos\//);
+        expect(existsSync(resolve(__dirname, "../../public", file.slice(1))), `${id}: ${file}`).toBe(true);
+      }
+    }
   });
 });
 

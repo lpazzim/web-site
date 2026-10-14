@@ -1,6 +1,6 @@
 import { Layout } from "@/components/Layout";
 import { Enter } from "@/components/tech/Enter";
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { data } from "react-router";
 import { format, parseISO } from "date-fns";
 import { enUS, ptBR } from "date-fns/locale";
@@ -97,15 +97,15 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
             )}
           </Enter>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <NotionRenderer blocks={blocks} />
-          </motion.div>
+          </m.div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -118,7 +118,7 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
               <ArrowLeft className="w-5 h-5" />
               {t("blogPost.backAll")}
             </LocaleLink>
-          </motion.div>
+          </m.div>
         </div>
       </article>
     </Layout>
