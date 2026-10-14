@@ -62,6 +62,31 @@ test("theme toggle switches to light mode and persists", async ({ page }) => {
 
   await page.reload();
   await expect(html).not.toHaveClass(/dark/);
+
+  // It survives client-side navigation, a language switch and a full load of another page.
+  await page.goto("/about");
+  await expect(html).not.toHaveClass(/dark/);
+  await page.getByTestId("button-lang-pt-br").filter({ visible: true }).click();
+  await expect(page).toHaveURL(/\/pt\/about$/);
+  await expect(html).not.toHaveClass(/dark/);
+  await page.goto("/pt/work/upx");
+  await expect(html).not.toHaveClass(/dark/);
+});
+
+test("reloading in the middle of the home page keeps the hero out of the way", async ({ page }) => {
+  await page.goto("/");
+  await expect(page.getByTestId("card-project-treeunfe")).toBeAttached();
+  // Scroll into the featured carousel, past the hero fade.
+  await page.mouse.wheel(0, 3900);
+  await expect.poll(() => page.evaluate<number>("window.scrollY")).toBeGreaterThan(3000);
+
+  await page.reload();
+  await expect.poll(() => page.evaluate<number>("window.scrollY")).toBeGreaterThan(3000);
+
+  // The sticky hero must be faded out and let clicks through to the carousel.
+  const hero = page.locator("section.sticky").first();
+  await expect(hero).toHaveCSS("opacity", "0");
+  await expect(hero).toHaveCSS("pointer-events", "none");
 });
 
 test("unknown routes render the 404 page", async ({ page }) => {
