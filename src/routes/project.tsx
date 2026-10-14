@@ -1,9 +1,10 @@
-import { motion, useScroll, useTransform } from "motion/react";
+import { m, useScroll, useTransform } from "motion/react";
 import { useRef, type ReactNode } from "react";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
 import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
+import { NamePlate } from "@/components/tech/NamePlate";
 import { projects } from "@/content/projects";
 import { getI18n, languageFromPath } from "@/i18n";
 import { LocaleLink } from "@/i18n/LocaleLink";
@@ -27,12 +28,12 @@ const RESULT_COLUMNS: Record<number, string> = {
 };
 
 const Section = ({ label, children }: { label: string; children: ReactNode }) => (
-  <motion.section {...reveal} className="container-wide py-20 md:py-28 border-t">
+  <m.section {...reveal} className="container-wide py-20 md:py-28 border-t">
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-20">
       <h2 className="lg:col-span-4 text-label">{label}</h2>
       <div className="lg:col-span-8">{children}</div>
     </div>
-  </motion.section>
+  </m.section>
 );
 
 const findProject = (id: string | undefined) => projects.find((p) => p.id === id);
@@ -74,14 +75,16 @@ export default function Project() {
       <div ref={containerRef} className="bg-background">
         {/* Hero */}
         <section className="relative h-screen overflow-hidden">
-          <motion.div style={{ y: heroY, scale: 1.1 }} className="absolute inset-0">
+          <m.div style={{ y: heroY, scale: 1.1 }} className="absolute inset-0">
             <ProjectCover project={project} bare />
-          </motion.div>
+          </m.div>
           <div className="absolute inset-0 bg-background/30" />
 
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-10 px-4">
             {project.draft && <DraftBadge />}
-            <h1 className="animate-fade-in-up text-display text-center">{project.title}</h1>
+            <h1 className="animate-fade-in-up text-display text-center leading-[1.05] max-md:text-[min(3.75rem,12vw)]">
+              <NamePlate accent={project.accent}>{project.title}</NamePlate>
+            </h1>
           </div>
 
           <div className="absolute bottom-8 left-0 right-0 z-10 container-wide">
@@ -215,7 +218,7 @@ export default function Project() {
         {nextProject !== project && (
           <section className="py-40 md:py-60 border-t bg-muted/30">
             <LocaleLink to={`/work/${nextProject.id}`} className="group block text-center container-wide">
-              <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+              <m.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
                 <div className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-12">
                   {t("project.nextProject")}
                 </div>
@@ -226,7 +229,7 @@ export default function Project() {
                   {t("project.viewCaseStudy")}{" "}
                   <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-3" />
                 </div>
-              </motion.div>
+              </m.div>
             </LocaleLink>
           </section>
         )}

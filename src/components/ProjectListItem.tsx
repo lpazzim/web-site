@@ -48,7 +48,7 @@ export function ProjectListItem({ project, index }: ProjectListItemProps) {
 
           {/* Cover preview, only visible while the row is hovered. */}
           <div className="pointer-events-none fixed right-8 top-1/2 z-40 aspect-3/4 w-64 -translate-y-1/2 translate-x-4 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 lg:right-32 lg:w-80">
-            <ProjectCover project={project} />
+            <ProjectCover project={project} play="hover" />
           </div>
         </div>
       </div>
