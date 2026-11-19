@@ -3,6 +3,8 @@ import { useRef, type ReactNode } from "react";
 import { useParams } from "react-router";
 import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
+import { CaseGallery } from "@/components/CaseGallery";
+import { CaseLinks } from "@/components/CaseLinks";
 import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
 import { NamePlate } from "@/components/tech/NamePlate";
 import { projects } from "@/content/projects";
@@ -12,7 +14,7 @@ import { useLocale } from "@/i18n/useLocale";
 import { pageMeta } from "@/lib/seo";
 import NotFound from "./not-found";
 import type { Route } from "./+types/project";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 const reveal = {
   initial: { opacity: 0, y: 40 },
@@ -79,12 +81,16 @@ export default function Project() {
             <ProjectCover project={project} bare />
           </m.div>
           <div className="absolute inset-0 bg-background/30" />
+          {/* Keeps the period and stack legible over light screenshots, not only dark clips. */}
+          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-background via-background/70 to-transparent" />
 
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 z-10 px-4">
             {project.draft && <DraftBadge />}
             <h1 className="animate-fade-in-up text-display text-center leading-[1.05] max-md:text-[min(3.75rem,12vw)]">
               <NamePlate accent={project.accent}>{project.title}</NamePlate>
             </h1>
+            {/* Above the fold, so visitors can open the running project without scrolling. */}
+            <CaseLinks links={links} className="animate-fade-in-up mt-4 justify-center md:mt-8" />
           </div>
 
           <div className="absolute bottom-8 left-0 right-0 z-10 container-wide">
@@ -123,29 +129,10 @@ export default function Project() {
                 <dd className="text-xl">{project.period}</dd>
               </div>
               {links && (links.live || links.repo) && (
-                <div>
+                <div className="col-span-2 lg:col-span-1">
                   <dt className="text-label mb-3">{t("project.links")}</dt>
-                  <dd className="space-y-2 font-sans text-sm uppercase tracking-widest">
-                    {links.live && (
-                      <a
-                        href={links.live}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 hover:text-primary transition-colors"
-                      >
-                        {t("project.liveSite")} <ArrowUpRight size={14} />
-                      </a>
-                    )}
-                    {links.repo && (
-                      <a
-                        href={links.repo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 hover:text-primary transition-colors"
-                      >
-                        {t("project.sourceCode")} <ArrowUpRight size={14} />
-                      </a>
-                    )}
+                  <dd>
+                    <CaseLinks links={links} className="flex-col items-stretch sm:flex-row lg:flex-col" />
                   </dd>
                 </div>
               )}
@@ -168,6 +155,13 @@ export default function Project() {
             ))}
           </ul>
         </Section>
+
+        {project.gallery && project.gallery.length > 0 && (
+          <m.section {...reveal} className="container-wide py-20 md:py-28 border-t">
+            <h2 className="text-label mb-12">{t("project.gallery")}</h2>
+            <CaseGallery screenshots={project.gallery} />
+          </m.section>
+        )}
 
         {project.decisions && (
           <Section label={t("project.decisions")}>

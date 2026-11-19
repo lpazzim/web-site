@@ -8,7 +8,7 @@ import { Intro } from "@/components/tech/Intro";
 import { ParallaxText, TextReveal } from "@/components/tech/Reveal";
 import { ScrollCue } from "@/components/tech/ScrollCue";
 import { SectionLabel } from "@/components/tech/SectionLabel";
-import { projects } from "@/content/projects";
+import { MAX_FEATURED, projects } from "@/content/projects";
 import { profile } from "@/content/profile";
 import { FeaturedCarousel } from "@/components/FeaturedCarousel";
 import { useLocale } from "@/i18n/useLocale";
@@ -49,7 +49,7 @@ export default function Home() {
   const { t } = useTranslation();
   const locale = useLocale();
   const dateLocale = locale === "pt-BR" ? ptBR : enUS;
-  const featuredProjects = projects.filter((p) => p.featured).slice(0, 4);
+  const featuredProjects = projects.filter((p) => p.featured).slice(0, MAX_FEATURED);
   const keywords = t("home.keywords", { returnObjects: true }) as string[];
 
   // The hero fades and shrinks over a fixed scroll distance (so the tall pinned

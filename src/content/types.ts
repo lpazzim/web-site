@@ -21,6 +21,18 @@ export interface CaseVideo {
   poster: string;
 }
 
+export interface Screenshot {
+  /** WebP under public/images/projects/<case id>/. */
+  src: string;
+  /** Intrinsic size, so the page reserves the space before the image loads. */
+  width: number;
+  height: number;
+  /** Short name of the screen, used as the alt text. */
+  title: Localized;
+  /** What the screen shows. */
+  caption: Localized;
+}
+
 export interface CaseStudy {
   /** URL slug: /work/:id */
   id: string;
@@ -49,6 +61,8 @@ export interface CaseStudy {
   links?: { live?: string; repo?: string };
   /** Optional screenshot; a generative cover is drawn when absent. */
   cover?: string;
+  /** More screenshots, shown as a gallery on the case page. */
+  gallery?: Screenshot[];
   /** Looping background clip rendered by `pnpm video <id>`; takes precedence over `cover`. */
   video?: CaseVideo;
   /** HSL triplet ("211 100% 50%") tinting the generated cover. */

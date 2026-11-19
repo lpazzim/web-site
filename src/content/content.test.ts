@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { SUPPORTED_LANGUAGES } from "@/i18n";
 import { experience } from "./experience";
 import { profile } from "./profile";
-import { projects } from "./projects";
+import { MAX_FEATURED, projects } from "./projects";
 
 type Localizable = Record<string, unknown>;
 
@@ -59,8 +59,33 @@ describe("projects", () => {
     for (const id of ids) expect(id).toMatch(/^[a-z0-9-]+$/);
   });
 
-  it("feature at most four cases on the home page", () => {
-    expect(projects.filter((p) => p.featured).length).toBeLessThanOrEqual(4);
+  it(`feature at most ${MAX_FEATURED} cases on the home page`, () => {
+    expect(projects.filter((p) => p.featured).length).toBeLessThanOrEqual(MAX_FEATURED);
+  });
+
+  it("point screenshot covers and galleries at files that exist in public/", () => {
+    for (const { id, cover, gallery = [] } of projects) {
+      for (const file of [cover, ...gallery.map((shot) => shot.src)]) {
+        if (!file) continue;
+        expect(file, id).toMatch(/^\/images\//);
+        expect(existsSync(resolve(__dirname, "../../public", file.slice(1))), `${id}: ${file}`).toBe(true);
+      }
+    }
+  });
+
+  it("give gallery screenshots their size and no duplicates of the cover", () => {
+    for (const { id, cover, gallery = [] } of projects) {
+      const sources = gallery.map((shot) => shot.src);
+      expect(new Set(sources).size, id).toBe(sources.length);
+      if (cover) expect(sources, id).not.toContain(cover);
+      for (const { width, height } of gallery) expect(width > 0 && height > 0, id).toBe(true);
+    }
+  });
+
+  it("link only to https URLs", () => {
+    for (const { id, links } of projects) {
+      for (const url of Object.values(links ?? {})) expect(url, id).toMatch(/^https:\/\//);
+    }
   });
 
   it("use valid HSL accents", () => {
