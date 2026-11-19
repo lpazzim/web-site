@@ -149,7 +149,7 @@ function CarouselCard({ project, index, rotation, active, onFocus }: CarouselCar
         className="group relative block h-full w-full overflow-hidden border border-border"
         data-testid={`card-project-${project.id}`}
       >
-        <ProjectCover project={project} bare play="active" active={active} />
+        <ProjectCover project={project} bare play="active" active={active} loading="lazy" />
         <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/25 to-transparent" />
         <div className="absolute bottom-0 left-0 w-full p-6 md:p-10 text-white">
           <div className="flex items-end justify-between gap-4">

@@ -33,6 +33,16 @@ describe("ProjectCover", () => {
     expect(screen.getByRole("img", { name: "Demo case" })).toHaveAttribute("src", "/images/demo.png");
   });
 
+  it("lazy-loads the screenshot only when asked, so the case hero stays eager", () => {
+    const withCover = { ...project, cover: "/images/demo.png" };
+    const { unmount } = render(<ProjectCover project={withCover} loading="lazy" />);
+    expect(screen.getByRole("img", { name: "Demo case" })).toHaveAttribute("loading", "lazy");
+    unmount();
+
+    render(<ProjectCover project={withCover} />);
+    expect(screen.getByRole("img", { name: "Demo case" })).not.toHaveAttribute("loading");
+  });
+
   it("prefers the background clip over the screenshot and the generative art", () => {
     // jsdom has neither API; the clip only needs them to decide when to play.
     vi.stubGlobal("matchMedia", () => ({ matches: true, addEventListener() {}, removeEventListener() {} }));

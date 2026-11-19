@@ -12,15 +12,25 @@ interface ProjectCoverProps {
   play?: CoverVideoPlay;
   /** With play="active": whether this cover is the one in focus. */
   active?: boolean;
+  /** Screenshot covers below the fold pass "lazy"; the case hero keeps the default (it is the LCP). */
+  loading?: "eager" | "lazy";
   className?: string;
 }
 
 // Plays the project's background clip when there is one, then falls back to its
 // screenshot, then to a generative cover (see lib/cover-art.ts) tinted by the
 // project's accent color.
-export function ProjectCover({ project, bare = false, play, active, className }: ProjectCoverProps) {
+export function ProjectCover({ project, bare = false, play, active, loading, className }: ProjectCoverProps) {
   if (project.cover && !project.video) {
-    return <img src={project.cover} alt={project.title} className={cn("h-full w-full object-cover", className)} />;
+    return (
+      <img
+        src={project.cover}
+        alt={project.title}
+        loading={loading}
+        decoding="async"
+        className={cn("h-full w-full object-cover", className)}
+      />
+    );
   }
 
   const accent = project.accent ? `hsl(${project.accent})` : "var(--primary)";

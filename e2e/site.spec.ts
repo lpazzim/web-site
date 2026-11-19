@@ -6,9 +6,10 @@ test.describe("home", () => {
     await expect(page).toHaveTitle(/Lucas Pazzim/);
     await expect(page.getByRole("heading", { level: 1 }).first()).toContainText(/building/i);
 
-    await page.getByTestId("card-project-treeunfe").click();
-    await expect(page).toHaveURL(/\/work\/treeunfe$/);
-    await expect(page.getByRole("heading", { level: 1, name: "Treeunfe" })).toBeVisible();
+    // The personal projects lead the carousel, so the first card faces the viewer at scroll 0.
+    await page.getByTestId("card-project-ecos-do-destino").click();
+    await expect(page).toHaveURL(/\/work\/ecos-do-destino$/);
+    await expect(page.getByRole("heading", { level: 1, name: "Ecos do Destino" })).toBeVisible();
   });
 });
 
@@ -18,6 +19,34 @@ test.describe("case studies", () => {
     await page.getByRole("link", { name: /webmotors/i }).click();
     await expect(page).toHaveURL(/\/work\/webmotors$/);
     await expect(page.getByRole("heading", { name: /what i did/i })).toBeVisible();
+  });
+
+  test("personal projects show their screenshots and link to the live demo", async ({ page }) => {
+    for (const [path, title, live, screen] of [
+      ["/work/ecos-do-destino", "Ecos do Destino", "https://nes-rpg.vercel.app", "Real-time combat"],
+      ["/pt/work/render-lab", "Render Lab", "https://frontend-fundamentals-nine.vercel.app", "Catálogo do curso"],
+    ]) {
+      await page.goto(path);
+      await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+      const cover = page.getByRole("img", { name: title }).first();
+      await expect(cover).toBeVisible();
+      // naturalWidth is 0 when the file is missing or fails to decode.
+      await expect
+        .poll(() => cover.evaluate((img) => (img as unknown as { naturalWidth: number }).naturalWidth))
+        .toBeGreaterThan(0);
+      // The live demo is offered in the hero, before any scrolling, and again next to the case details.
+      const liveLinks = page.locator(`a[href="${live}"]`);
+      await expect(liveLinks).toHaveCount(2);
+      await expect(liveLinks.first()).toBeInViewport();
+
+      // Gallery screenshots are lazy: scroll one into view, then check it decoded.
+      const shot = page.getByRole("img", { name: screen });
+      await shot.scrollIntoViewIfNeeded();
+      await expect(shot).toBeVisible();
+      await expect
+        .poll(() => shot.evaluate((img) => (img as unknown as { naturalWidth: number }).naturalWidth))
+        .toBeGreaterThan(0);
+    }
   });
 
   test("show the not-found page for unknown cases", async ({ page }) => {

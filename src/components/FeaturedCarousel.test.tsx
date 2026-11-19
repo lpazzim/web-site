@@ -34,10 +34,10 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-const renderCarousel = () =>
+const renderCarousel = (list = featured) =>
   render(
     <MemoryRouter>
-      <FeaturedCarousel projects={featured} />
+      <FeaturedCarousel projects={list} />
     </MemoryRouter>,
   );
 
@@ -52,9 +52,17 @@ describe("FeaturedCarousel", () => {
   });
 
   it("plays only the clip of the card in focus", () => {
-    renderCarousel();
+    const withClips = featured.filter((p) => p.video);
+    renderCarousel(withClips);
 
-    expect(played).toEqual([featured[0].video?.src]);
+    expect(played).toEqual([withClips[0].video?.src]);
+  });
+
+  it("plays no clip while a screenshot card is in focus", () => {
+    const [screenshot] = featured.filter((p) => p.cover && !p.video);
+    renderCarousel([screenshot, ...featured.filter((p) => p.video)]);
+
+    expect(played).toEqual([]);
   });
 
   it("turns a card into focus when it receives keyboard focus", () => {

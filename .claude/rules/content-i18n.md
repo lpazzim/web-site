@@ -20,8 +20,9 @@ paths:
   wording and translate faithfully to Brazilian Portuguese; both arrays must have the same length.
 - `experience.ts`: most recent first; dates `"YYYY-MM"` (or `"YYYY"` when only the year is known); exactly one current
   position (no `end`).
-- `cases.ts` / `projects.ts`: unique URL-safe `id`, `accent` as an HSL triplet (`"211 100% 55%"`), at most four
-  `featured` cases (home page grid). `draft: true` marks placeholders: visible in dev, filtered out in production.
+- `cases.ts` / `projects.ts`: unique URL-safe `id`, `accent` as an HSL triplet (`"211 100% 55%"`), at most
+  `MAX_FEATURED` (6) `featured` cases (home page carousel). Personal projects come from their README; screenshot
+  covers go to `public/images/projects/` as WebP. `draft: true` marks placeholders: visible in dev, filtered out in production.
 - `src/content/content.test.ts` enforces all of the above. Keep it passing; extend it when adding fields.
 
 ## UI strings (`src/i18n/locales/*.json`)
