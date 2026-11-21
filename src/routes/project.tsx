@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Layout } from "@/components/Layout";
 import { CaseGallery } from "@/components/CaseGallery";
 import { CaseLinks } from "@/components/CaseLinks";
+import { LinkedText } from "@/components/LinkedText";
 import { ProjectCover, DraftBadge } from "@/components/ProjectCover";
 import { NamePlate } from "@/components/tech/NamePlate";
 import { projects } from "@/content/projects";
@@ -142,7 +143,9 @@ export default function Project() {
         </section>
 
         <Section label={t("project.context")}>
-          <p className="text-xl md:text-2xl leading-relaxed text-muted-foreground">{project.context[locale]}</p>
+          <p className="text-xl md:text-2xl leading-relaxed text-muted-foreground">
+            <LinkedText text={project.context[locale]} />
+          </p>
         </Section>
 
         <Section label={t("project.contributions")}>

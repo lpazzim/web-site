@@ -1,21 +1,9 @@
 import { Fragment, type CSSProperties, type ReactNode } from "react";
 import type { RichTextItemResponse } from "@notionhq/client";
 import type { NotionBlock } from "@/lib/blog";
-import { SITE_URL } from "@/lib/seo";
+import { safeHref } from "@/lib/safe-href";
 
 type ListBlock = Extract<NotionBlock, { type: "bulleted_list_item" | "numbered_list_item" }>;
-
-// Only allow link protocols that cannot execute script. Relative links resolve
-// against the site URL (not `window`), so pre-rendering and the browser agree.
-function safeHref(href: string | null | undefined): string | undefined {
-  if (!href) return undefined;
-  try {
-    const url = new URL(href, SITE_URL);
-    return ["http:", "https:", "mailto:"].includes(url.protocol) ? url.href : undefined;
-  } catch {
-    return undefined;
-  }
-}
 
 function colorStyle(color: string): CSSProperties | undefined {
   if (color === "default") return undefined;

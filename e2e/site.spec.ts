@@ -47,6 +47,15 @@ test.describe("case studies", () => {
         .poll(() => shot.evaluate((img) => (img as unknown as { naturalWidth: number }).naturalWidth))
         .toBeGreaterThan(0);
     }
+
+    // Render Lab visibly credits and links to Designed to Scale and Dilum Sanjaya.
+    await page.goto("/work/render-lab");
+    const dtsLink = page.getByRole("link", { name: "Designed to Scale" });
+    await expect(dtsLink).toHaveAttribute("href", "https://designed-to-scale.vercel.app/");
+    await expect(dtsLink).toHaveAttribute("target", "_blank");
+    const authorLink = page.getByRole("link", { name: "Dilum Sanjaya" });
+    await expect(authorLink).toHaveAttribute("href", "https://x.com/DilumSanjaya");
+    await expect(authorLink).toHaveAttribute("target", "_blank");
   });
 
   test("show the not-found page for unknown cases", async ({ page }) => {
