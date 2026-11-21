@@ -178,9 +178,9 @@ const renderLab: CaseStudy = {
     "Vercel",
   ],
   context: {
-    en: "Frontend fundamentals (reflow, the event loop, hydration, code splitting) are usually taught with static text and diagrams, which hides the thing that matters: how they change over time. Inspired by the visual approach of Designed to Scale, which does this for backend systems, I built the same kind of guided, step-by-step experience for frontend engineering.",
+    en: "Frontend fundamentals (reflow, the event loop, hydration, code splitting) are usually taught with static text and diagrams, which hides the thing that matters: how they change over time. Inspired by the visual approach of [Designed to Scale](https://designed-to-scale.vercel.app/) (created by [Dilum Sanjaya](https://x.com/DilumSanjaya)), which does this for backend systems, I built the same kind of guided, step-by-step experience for frontend engineering.",
     "pt-BR":
-      "Fundamentos de frontend (reflow, event loop, hidratação, code splitting) costumam ser ensinados com texto e diagramas estáticos, o que esconde o que importa: como eles mudam ao longo do tempo. Inspirado na abordagem visual do Designed to Scale, que faz isso para sistemas de backend, construí o mesmo tipo de experiência guiada, passo a passo, para engenharia frontend.",
+      "Fundamentos de frontend (reflow, event loop, hidratação, code splitting) costumam ser ensinados com texto e diagramas estáticos, o que esconde o que importa: como eles mudam ao longo do tempo. Inspirado na abordagem visual do [Designed to Scale](https://designed-to-scale.vercel.app/) (criado por [Dilum Sanjaya](https://x.com/DilumSanjaya)), que faz isso para sistemas de backend, construí o mesmo tipo de experiência guiada, passo a passo, para engenharia frontend.",
   },
   contributions: {
     en: [
