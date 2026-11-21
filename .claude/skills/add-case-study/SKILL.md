@@ -21,7 +21,7 @@ Add or update the case study / experience for: $ARGUMENTS
   role, set `end` on the previous current entry.
 - Case study: add an object to `professionalCases` in `src/content/cases.ts` with a unique kebab-case `id`, an HSL
   `accent` distinct from the other cases, `stack`, `context`, `contributions`, optional `decisions`, `results`.
-- Decide `featured` (home grid shows at most four); unfeature another case if needed and tell the user.
+- Decide `featured` (the home carousel shows at most `MAX_FEATURED`, from `src/content/projects.ts`); unfeature another case if needed and tell the user.
 - English close to the LinkedIn wording; Brazilian Portuguese as a faithful translation. Arrays must have the same
   length in both languages.
 
